@@ -1,0 +1,19 @@
+#Ignora compilati e cache di python
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+#Ignora le sessioni
+*.session
+*.session-journal
+
+#Ignora il file config.json e il file json_message.json
+config.json
+json_message.json
+
+#Ignora file .db
+*.db
+
+#ignora txt
+unknown_errors.txt

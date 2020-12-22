@@ -1,0 +1,18 @@
+{
+	"wiki":{
+		"wiki_default":"**/wiki 'keyword'** => ricerca in italiano di default.\n**/wiki 'lang' 'keyword'** => ricerca nella lingua richiesta.",
+		"wikiall":"**/wiki all 'keyword'** => ricerca in italiano mostrando 10 paragrafi.\n**/wiki 'lang' all 'keyword'** => ricerca nella lingua richiesta.",
+		"wikirandom":"**/wiki random** => una pagina casuale in italiano.\n**/wiki 'lang' random** => una pagina casuale nella lingua richiesta.",
+		"wikicomune":"**/wiki /comune** => cerca in Wikipedia la pagina di un comune/città/centro abitato/etc."
+	},
+	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.",
+	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.",
+	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
+	"atm":{
+		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito",
+		"edatm":"**/edatm 'stop_code'** => restituisce i dati relativi della rivendita associata al codice fermata inserito",
+		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito",
+		"searchatm":"**/searchatm 'line_number' 'direzione'**  => Restituisce tutte le fermate di una linea.\n__La direzione è 0 oppure 1__"
+	}
+
+}

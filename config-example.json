@@ -1,0 +1,15 @@
+{
+	"api_id": "YOUR API ID",
+	"api_hash": "YOUR API HASH",
+	"bot_token": "YOUR BOT TOKEN",
+	"api_url": "ATM MILANO API URL",
+	"api_get": "ANOTHER ATM API URL TO DO ONLY GET",
+	"id_super_admin": "ID_USER;NAME_USER;USERNAME_USER",
+	"path_db":"YOUR PATH/DATABASE.db",
+	"session_name":"YOUR SESSION NAME",
+	"commands":{
+		"user_commands":"COMMAND1;COMMAND2;COMMAND3;COMMAND_N",
+		"admin_commands":"ADMIN_COMMAND1;ADMIN_COMMAND2;ADMIN_COMMAND3;ADMIN_COMMAND_N",
+		"super_admin_commands":"SUPER_COMMAND1;SUPER_COMMAND2;SUPER_COMMAND3;SUPER_COMMAND_N"
+	}
+}
