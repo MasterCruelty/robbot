@@ -32,11 +32,6 @@ def fetch_command(match,query,client,message):
         return utils.sysfunctions.poll_function(client,message,query)
     if match == "/helprob":
         return utils.sysfunctions.help(client,message,query)
-    if match == "/searchmsg":
-        return utils.sysfunctions.search_msg(client,message,query)
-    if match == "/stopmsg":
-        return utils.dbfunctions.stop_msg_true()
-
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
