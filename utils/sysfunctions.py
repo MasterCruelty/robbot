@@ -6,29 +6,6 @@ import random
 import time
 
 """
-Ricerca ogni messaggio che matcha con la keyword richiesta nella chat in cui viene lanciato il comando
-"""
-@Client.on_message()
-def search_msg(client,message,search):
-    endsearchmsg = False
-    chat = utils.get_config.get_chat(message)
-    id_messaggio = utils.get_config.get_id_msg(message)
-    result = ""
-    client.send_message(chat,"Cerco i messaggi...","html",reply_to_message_id=id_messaggio)
-    count = 0
-    for message in client.search_messages(chat, query = search):
-        if not endsearchmsg and "/searchmsg" not in str(message):
-            id_msg =  message.message_id
-            if str(chat).startswith("-100"):
-                try:
-                    result += "<a href=\"https://t.me/c/"+str(chat).replace("-100","")+"/"+str(id_msg)+"\">"+ message.text[0:15]+"...</a>" + "\n"
-                    count += 1
-                    client.edit_message_text(chat,id_messaggio+1,"Cerco i messaggi...\n"+"Messaggi trovati: "+str(count))
-                except:
-                    continue
-    client.send_message(chat,"Trovati tutti i messaggi.\n"+ result,"html",False,False,id_messaggio)
-
-"""
 Lancia un sondaggio in automatico non anonimo
 """
 @Client.on_message()

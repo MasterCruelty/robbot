@@ -65,5 +65,7 @@ def print_updates(client,message):
         query = parser(messaggio)
         fetch_command(match[0],query,client,message)
         return
+    elif match[0] in lista_comandi:
+        app.send_message(chat,"Se vuoi usare uno dei miei comandi, devi essere registrato.\nContatta @MasterCruelty")
 
 app.run()
