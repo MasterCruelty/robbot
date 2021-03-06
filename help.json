@@ -10,7 +10,7 @@
 	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
 	"atm":{
 		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito",
-		"edatm":"**/edatm 'stop_code'** => restituisce i dati relativi della rivendita associata al codice fermata inserito",
+		"edatm":"**/edatm 'stop_code'** => restituisce i dati relativi della rivendita associata al codice fermata inserito.\n__Esempio codice: R107__",
 		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito",
 		"searchatm":"**/searchatm 'line_number' 'direzione'**  => Restituisce tutte le fermate di una linea.\n__La direzione è 0 oppure 1__"
 	}
