@@ -6,6 +6,7 @@ import modules.wiki
 import modules.lyrics
 import modules.atm_feature
 import modules.covid
+import modules.gmaps
 import utils.dbfunctions
 import utils.sysfunctions
 import utils.get_config
@@ -32,6 +33,10 @@ def fetch_command(match,query,client,message):
         return utils.sysfunctions.poll_function(client,message,query)
     if match == "/helprob":
         return utils.sysfunctions.help(client,message,query)
+    if match == "/map":
+        return modules.gmaps.showmaps(query,client,message)
+    if match == "/km":
+        return modules.gmaps.execute_km(query,client,message)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
