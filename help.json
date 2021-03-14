@@ -13,6 +13,10 @@
 		"edatm":"**/edatm 'stop_code'** => restituisce i dati relativi della rivendita associata al codice fermata inserito.\n__Esempio codice: R107__",
 		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito",
 		"searchatm":"**/searchatm 'line_number' 'direzione'**  => Restituisce tutte le fermate di una linea.\n__La direzione è 0 oppure 1__"
+	},
+	"mappe":{
+		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.",
+		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km."
 	}
 
 }
