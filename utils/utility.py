@@ -7,6 +7,7 @@ import modules.lyrics
 import modules.atm_feature
 import modules.covid
 import modules.gmaps
+import modules.weather
 import utils.dbfunctions
 import utils.sysfunctions
 import utils.get_config
@@ -37,6 +38,8 @@ def fetch_command(match,query,client,message):
         return modules.gmaps.showmaps(query,client,message)
     if match == "/km":
         return modules.gmaps.execute_km(query,client,message)
+    if match == "/weather":
+        return modules.weather.get_weather(client,message,query)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
