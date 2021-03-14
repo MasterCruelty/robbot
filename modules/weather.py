@@ -66,7 +66,39 @@ def get_today_forecasts(client,message,query):
         feels_temp = str(item["feels_like"]) + " C°"
         clouds = str(item["clouds"]) + "%"
         weather = item["weather"][0]["description"]
-        result += giorno + "\n**Meteo:** __" + weather + "__\n**Temperatura:** __" + temp + "__\n**Temperatura percepita:** __" + feels_temp + "__\n**Nuvole:** __" + clouds + "__\n************\n\n" 
+        result += giorno + "\n**Meteo:** __" + weather + "__\n**Temperatura:** __" + temp + "__\n**Temperatura percepita:** __" + feels_temp + "__\n**Nuvole:** __" + clouds + "__\n##################\n" 
     return sendMessage(client,message,result)
 
+"""
+    Json ottenuto in modo analogo a "get_weather" e vengono rilasciati i dati meteo principali della settimana che verrà.
+"""
+def get_future_forecasts(client,message,query):
+    data = call_api_weather(query)
+    array_daily = data["daily"]
+    result = "**" + query.title() + "**\n"
+    for item in array_daily:
+        giorno = str(dt.fromtimestamp(item["dt"],pytz.timezone('Europe/Rome')))[0:10]
+        sunset = str(dt.fromtimestamp(item["sunset"], pytz.timezone('Europe/Rome')))[10:]
+        sunrise = str(dt.fromtimestamp(item["sunrise"], pytz.timezone('Europe/Rome')))[10:]
+        morning = str(item["temp"]["morn"]) + " C°"
+        day = str(item["temp"]["day"]) + " C°"
+        evening = str(item["temp"]["eve"]) + " C°"
+        night = str(item["temp"]["night"]) + " C°"
+        feels_morning = str(item["feels_like"]["morn"]) + " C°"
+        feels_day = str(item["feels_like"]["day"]) + " C°"
+        feels_evening = str(item["feels_like"]["eve"]) + " C°"
+        feels_night = str(item["feels_like"]["night"]) + " C°"
+        temp_min = str(item["temp"]["min"])+ " C°"
+        temp_max = str(item["temp"]["max"])+ " C°"
+        umidita = str(item["humidity"]) + "%" # % of umidity
+        wind_speed = item["wind_speed"] * 3.6 #speed in m/s
+        wind_speed = str(round(wind_speed,2))
+        clouds = str(item["clouds"]) + "%"
+        weather = item["weather"][0]["description"]
+        result += "**__" + giorno + "**__\n**Meteo:** __" + weather + "__\n**Temperatura reale/percepita\n\nMattina:** __" + morning + " / " + feels_morning + "__\n**Giorno:** __" + day + " / " + feels_day + "__\n**Sera:** __" +  evening + " / " + feels_evening + "\n**Notte:** __" + night + " / " + feels_night + "\n**Minima:** __" + temp_min + "__\n**Massima:** __" + temp_max + "__\n**Umidità:** __" + umidita + "__\n**Velocità del vento:** __" + wind_speed + " km/h__\n**Nuvole:** __" + clouds + "__\n--**#################**--\n"
+    return sendMessage(client,message,result)
+
+
+        
+        
 
