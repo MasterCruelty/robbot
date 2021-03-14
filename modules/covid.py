@@ -5,24 +5,6 @@ import utils.get_config
 
 
 """
-funzione che controlla se è stato effettuato un nuovo commit su salute.gov.it(problema di cookies, non funziona correttamente)
-Viene controllato se l'ultimo hash commit è cambiato
-"""
-def check_covid():
-    file_commit = open('files/commit_covid.txt','r')
-    content = file_commit.read()
-    file_commit.close()
-    os.system("./commit.sh")
-    file_commit = open('files/commit_covid.txt','r')
-    content_new = file_commit.read()
-    file_commit.close()
-    if content == content_new:
-        return False
-    else:
-        return True
-
-
-"""
     funzione che prende ogni giorno il json aggiornato contenente i dati dei contagiati in Italia.
     Direttamente dal repository git di salute.gov.it
 """
