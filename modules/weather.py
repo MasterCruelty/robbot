@@ -1,4 +1,6 @@
-from gmaps import showmaps
+import sys
+sys.path.append(sys.path[0] + "/..")
+from modules.gmaps import showmaps
 import requests
 import json
 from datetime import datetime as dt
@@ -17,15 +19,19 @@ def get_weather(client,message,query):
     url = "https://api.openweathermap.org/data/2.5/onecall?lat=%s&lon=%s&appid=%s&units=metric" %(lat,lon,api_weather)
     response = requests.get(url)
     data = json.loads(response.text)
-    current_temp = data["current"]["temp"]
-    feels_temp = data["current"]["feels_like"]
-    umidita = data["current"]["humidity"] # % of umidity
-    clouds = data["current"]["clouds"]    # % of cloudiness
-    visibility = data["current"]["visibility"] # Visibility in metres
+    current_temp = str(data["current"]["temp"])
+    feels_temp = str(data["current"]["feels_like"])
+    umidita = str(data["current"]["humidity"]) # % of umidity
+    clouds = str(data["current"]["clouds"])    # % of cloudiness
+    visibility = str(data["current"]["visibility"]) # Visibility in metres
     wind_speed = data["current"]["wind_speed"] #speed in m/s
+    wind_speed = str(wind_speed * 3.6)
     weather = data["current"]["weather"][0]["description"]
     #sunrise and sunset UNIX time
     sunset = data["current"]["sunset"]
     sunrise = data["current"]["sunrise"]
-    sunset = dt.fromtimestamp(sunset, pytz.timezone('Europe/Rome'))
-    sunrise = dt.fromtimestamp(sunrise, pytz.timezone('Europe/Rome'))
+    sunset = str(dt.fromtimestamp(sunset, pytz.timezone('Europe/Rome')))[10:]
+    sunrise = str(dt.fromtimestamp(sunrise, pytz.timezone('Europe/Rome')))[10:]
+    result = "**" + query.title() + "**" + "\n**Temperatura attuale:** __" + current_temp + " C°__.\n**Temperatura percepita:** __" + feels_temp + " C°__.\n**Umidità:**__" + umidita + "%__.\n**Nuvole:** __" + clouds + "%__.\n**Visibilità:** __" + visibility + " metri__.\n**Velocità del vento:** __" + wind_speed + " km/h__.\n**Ora alba:** __" + sunrise + "__\n**Ora tramonto:** __" + sunset + "__"
+    return sendMessage(client,message,result)
+
