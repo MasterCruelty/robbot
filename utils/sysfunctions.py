@@ -64,8 +64,13 @@ def help(client,message,query):
         help_map = help_file["mappe"][0]
         help_km = help_file["mappe"][1]
         return utils.get_config.sendMessage(client,message,help_map+"\n\n" + help_km+"\n\n")
+    if "meteo" in query:
+        help_weather = help_file["meteo"][0]
+        help_forecastoday = help_file["meteo"][1]
+        help_forecastfuture = help_file["meteo"][2]
+        return utils.get_config.sendMessage(client,message,help_weather+"\n\n" + help_forecastoday+"\n\n"+help_forecastfuture)
     else:
-        return utils.get_config.sendMessage(client,message,"Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, poll, atm e mappe.__")
+        return utils.get_config.sendMessage(client,message,"Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, meteo, poll, atm e mappe.__")
 
 """
 Restituisce 6 numeri tutti diversi tra loro tutti nel range da 1 a 90
