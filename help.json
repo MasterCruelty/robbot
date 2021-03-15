@@ -17,6 +17,10 @@
 	"mappe":{
 		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.",
 		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km."
+	},
+	"meteo":{
+		"weather":"**/weather 'place'** => restituisce i dati meteo principali della città richiesta.",
+		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.",
+		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo."
 	}
-
 }
