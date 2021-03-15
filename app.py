@@ -1,6 +1,5 @@
 import time
 from datetime import date
-from datetimerange import DateTimeRange
 from pyrogram import Client 
 from utils.utility import *
 from utils.dbfunctions import *
@@ -16,7 +15,6 @@ comandi = config["commands"][0]
 comandi_admin = config["commands"][1]
 comandi_super = config["commands"][2]
 app = Client(session, api_id, api_hash,bot_token)
-time_range = DateTimeRange("16:40:00","17:20:00")
 
 @app.on_message()
 def print_updates(client,message):
@@ -27,7 +25,6 @@ def print_updates(client,message):
     nome_chat = message["chat"]["title"]
     nome_utente = get_first_name(message)
     time_message = time.strftime("%H:%M:%S")
-    file_id = "Nullo"
     username = get_username(message) 
     messaggio = get_text_message(message)
 
@@ -65,7 +62,7 @@ def print_updates(client,message):
         query = parser(messaggio)
         fetch_command(match[0],query,client,message)
         return
-    elif match[0] in lista_comandi:
+    elif match[0] in lista_comandi or messaggio == "/start":
         app.send_message(chat,"Se vuoi usare uno dei miei comandi, devi essere registrato.\nContatta @MasterCruelty")
 
 app.run()
