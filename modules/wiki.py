@@ -60,12 +60,14 @@ def exec_wiki_ita(query,client,message):
     else:
         return wiki(query,client,message)
 
-
 #data la lingua e la parola chiave da cercare, restituisce una frase della voce trovata
 def wiki(keyword,client,message,lang="it"):
    wikipedia.set_lang(lang)
-   result = wikipedia.summary(keyword,sentences = 1) 
-   result += "\n"+create_link(keyword,lang)
+   try:
+       result = wikipedia.summary(keyword,sentences = 1) 
+       result += "\n"+create_link(keyword,lang)
+   except wikipedia.exceptions.DisambiguationError as wd:
+       result =  "Forse volevi cercare: {0}".format(str(wd)[18:])
    return utils.get_config.sendMessage(client,message,result)
 #data la lingua e la parola chiave da cercare, restituisce il numero massimo di frasi(limite della libreria) della voce trovata
 def wikiall(keyword,client,message,lang="it"):
@@ -73,9 +75,12 @@ def wikiall(keyword,client,message,lang="it"):
    if "random" in keyword:
        result = wikirandom(10,client,message,lang)
        return result
-   result = wikipedia.summary(keyword,sentences = 10)
-   result = result.replace("==","****")
-   result += "\n"+create_link(keyword,lang)
+   try:
+       result = wikipedia.summary(keyword,sentences = 10)
+       result = result.replace("==","****")
+       result += "\n"+create_link(keyword,lang)
+   except wikipedia.exceptions.DisambiguationError as wd:
+       result =  "Forse volevi cercare: {0}".format(str(wd)[18:])
    return utils.get_config.sendMessage(client,message,result)
 #data la lingua restituisce una frase di una pagina wikipedia casuale
 def wikirandom(sents,boole,client,message,lang="it"):
