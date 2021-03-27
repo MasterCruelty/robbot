@@ -6,7 +6,7 @@
 		"wikicomune":"**/wiki /comune** => cerca in Wikipedia la pagina di un comune/città/centro abitato/etc."
 	},
 	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.",
-	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.",
+	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.\n**/covid 'region'** => restituisce i dati della regione.",
 	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
 	"atm":{
 		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito",
