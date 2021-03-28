@@ -8,6 +8,7 @@
 	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.",
 	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.\n**/covid 'region'** => restituisce i dati della regione.",
 	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
+	"reminder":"**/reminder 'tempo'/'messaggio'** => invia dopo il tempo indicato.\n__s = secondi\nm = minuti\nh = ore\ngg = giorni__\n\n**/reminder 50s ciao**",
 	"atm":{
 		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito",
 		"edatm":"**/edatm 'stop_code'** => restituisce i dati relativi della rivendita associata al codice fermata inserito.\n__Esempio codice: R107__",
