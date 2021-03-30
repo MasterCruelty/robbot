@@ -51,6 +51,9 @@ def help(client,message,query):
     if "covid" in query:
         help_covid = help_file["covid"]
         return utils.get_config.sendMessage(client,message,help_covid)
+    if "vaccine" in query:
+        help_vaccine = help_file["vaccine"]
+        return utils.get_config.sendMessage(client,message,help_vaccine)
     if "poll" in query:
         help_poll = help_file["poll"]
         return utils.get_config.sendMessage(client,message,help_poll)
