@@ -31,6 +31,8 @@ def fetch_command(match,query,client,message):
         return modules.atm_feature.search_line(client,message,query)
     if match == "/covid":
         return modules.covid.execute_covid(client,message,query)
+    if match == "/vaccine":
+        return modules.covid.vaccine(client,message,query)
     if match == "/poll":
         return utils.sysfunctions.poll_function(client,message,query)
     if match == "/helprob":

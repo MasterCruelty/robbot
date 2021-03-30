@@ -84,31 +84,50 @@ def format_values(number):
 
 """
     client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
+    query => regione richiesta, di default è l'Italia intera.
 
     Funzione che restituisce i dati italiani relativi ai vaccini covid19 in termini di dosi consegnate, somministrate e altri dati.
 """
-def vaccine(client,message):
+def vaccine(client,message,query):
     data_total = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.json')
     data_consegne_fornitori = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
     data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
     total_consegne = 0
     total_somm = 0
     for item in data_total:
-        total_consegne += item["dosi_consegnate"]
-        total_somm += item["dosi_somministrate"]
+        if(query == "/vaccine"):
+            total_consegne += item["dosi_consegnate"]
+            total_somm += item["dosi_somministrate"]
+            regione = "Italia"
+        else:
+            if(query.title()[0:4] in item["nome_area"]):
+                total_consegne += item["dosi_consegnate"]
+                total_somm += item["dosi_somministrate"]
+                regione = item["nome_area"]
     perc = str(round(((total_somm * 100) / total_consegne),2))
     giorno = str(data_total[0]["ultimo_aggiornamento"])[0:10]
     pfizer, moderna, astra = 0,0,0
     for item in data_consegne_fornitori:
-        if("Pfizer" in item["fornitore"]):
-            pfizer += item["numero_dosi"]
-        if("Moderna" in item["fornitore"]):
-            moderna += item["numero_dosi"]
-        if("AstraZeneca" in item["fornitore"]):
-            astra += item["numero_dosi"]
+        if(query == "/vaccine"):
+            if(("Pfizer" in item["fornitore"])):
+                pfizer += item["numero_dosi"]
+            if("Moderna" in item["fornitore"]):
+                moderna += item["numero_dosi"]
+            if("AstraZeneca" in item["fornitore"]):
+                astra += item["numero_dosi"]
+        else:
+            if(("Pfizer" in item["fornitore"]) and query.title()[0:4] in item["nome_area"]):
+                pfizer += item["numero_dosi"]
+            if("Moderna" in item["fornitore"] and query.title()[0:4] in item["nome_area"]):
+                moderna += item["numero_dosi"]
+            if("AstraZeneca" in item["fornitore"] and query.title()[0:4] in item["nome_area"]):
+                astra += item["numero_dosi"]
     over80 = 0
     for item in data_somministrazioni:
-        over80 += item["categoria_over80"]
-    result = "Dati complessivi sui vaccini in __**Italia**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "%__\n**Over 80 vaccinati:** __" + format_values(over80) +"__\n\nTra le dosi consegnate vi sono:\n**Pfizer-BioNtech:** __" + format_values(pfizer) + "__\n**Moderna:** __" + format_values(moderna) + "__\n**AstraZeneca:** __" + format_values(astra) +"__"
+        if(query =="/vaccine"):
+            over80 += item["categoria_over80"]
+        else:
+            if(query.title()[0:4] in item["nome_area"]):
+                over80 += item["categoria_over80"]
+    result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "%__\n**Over 80 vaccinati:** __" + format_values(over80) +"__\n\nTra le dosi consegnate vi sono:\n**Pfizer-BioNtech:** __" + format_values(pfizer) + "__\n**Moderna:** __" + format_values(moderna) + "__\n**AstraZeneca:** __" + format_values(astra) +"__"
     return utils.get_config.sendMessage(client,message,result)
-
