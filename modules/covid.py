@@ -34,12 +34,23 @@ def format_values(number):
     return formated
 
 """
+    repo => json ricavato dalla get al repo github 
+    se True il json è vuoto e quindi il problema è esterno al bot, altrimenti è tutto ok.
+"""
+def check_repo(repo):
+    if(repo == []):
+        return True
+    else:
+        return False
+"""
     Identica a covid_daily ma fornisce i dati della regione richiesta.
 """
 def covid_cases(client,message,query):
     regioni = covid_format_json('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json')
     italia  = covid_format_json('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json')
     trovata = False
+    if(check_repo(regioni) or check_repo(italia)):
+        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
     for item in regioni:
         if(query.title()[0:4] in item["denominazione_regione"]):
             regione = item["denominazione_regione"]
@@ -82,6 +93,8 @@ def vaccine(client,message,query):
     data_total = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.json')
     data_consegne_fornitori = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
     data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
+    if(check_repo(data_total)):
+        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
     total_consegne = 0
     total_somm = 0
     for item in data_total:
