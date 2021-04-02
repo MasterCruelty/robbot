@@ -106,27 +106,26 @@ def vaccine(client,message,query):
                 total_consegne += item["dosi_consegnate"]
                 total_somm += item["dosi_somministrate"]
                 regione = item["nome_area"]
-        else:
-            return utils.get_config.sendMessage(client,message,"__Regione non trovata__")
-
+    if(total_consegne == 0):
+        return utils.get_config.sendMessage(client,message,"__Regione non trovata__")
     perc = str(round(((total_somm * 100) / total_consegne),2))
     giorno = str(data_total[0]["ultimo_aggiornamento"])[0:10]
-    pfizer, moderna, astra = 0,0,0
+    fornitori = []
+    fornitori_somma = [0,0,0,0,0,0,0,0]
+    forn_str = ""
     for item in data_consegne_fornitori:
         if(query == "/vaccine"):
-            if(("Pfizer" in item["fornitore"])):
-                pfizer += item["numero_dosi"]
-            if("Moderna" in item["fornitore"]):
-                moderna += item["numero_dosi"]
-            if("AstraZeneca" in item["fornitore"]):
-                astra += item["numero_dosi"]
-        else:
-            if(("Pfizer" in item["fornitore"]) and query.title()[0:4] in item["nome_area"]):
-                pfizer += item["numero_dosi"]
-            if("Moderna" in item["fornitore"] and query.title()[0:4] in item["nome_area"]):
-                moderna += item["numero_dosi"]
-            if("AstraZeneca" in item["fornitore"] and query.title()[0:4] in item["nome_area"]):
-                astra += item["numero_dosi"]
+            if(item["fornitore"] in fornitori):
+                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+            else:
+                fornitori.append(item["fornitore"])
+                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+        elif(query.title()[0:4] in item["nome_area"]):
+            if(item["fornitore"] in fornitori):
+                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+            else:
+                fornitori.append(item["fornitore"])
+                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
     over80 = 0
     for item in data_somministrazioni:
         if(query =="/vaccine"):
@@ -134,5 +133,7 @@ def vaccine(client,message,query):
         else:
             if(query.title()[0:4] in item["nome_area"]):
                 over80 += item["categoria_over80"]
-    result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "%__\n**Over 80 vaccinati:** __" + format_values(over80) +"__\n\nTra le dosi consegnate vi sono:\n**Pfizer-BioNtech:** __" + format_values(pfizer) + "__\n**Moderna:** __" + format_values(moderna) + "__\n**AstraZeneca:** __" + format_values(astra) +"__"
+    for i in range(len(fornitori)):
+        forn_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma[i]) + "__\n"
+    result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "%__\n**Over 80 vaccinati:** __" + format_values(over80) +"__\n\nTra le dosi consegnate vi sono:\n" + forn_str
     return utils.get_config.sendMessage(client,message,result)
