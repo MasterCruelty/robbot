@@ -30,7 +30,7 @@ def fetch_command(match,query,client,message):
     if match == "/searchatm":
         return modules.atm_feature.search_line(client,message,query)
     if match == "/covid":
-        return modules.covid.execute_covid(client,message,query)
+        return modules.covid.covid_cases(client,message,query)
     if match == "/vaccine":
         return modules.covid.vaccine(client,message,query)
     if match == "/poll":

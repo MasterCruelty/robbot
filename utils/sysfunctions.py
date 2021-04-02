@@ -76,7 +76,7 @@ def help(client,message,query):
         help_reminder = help_file["reminder"]
         return utils.get_config.sendMessage(client,message,help_reminder)
     else:
-        return utils.get_config.sendMessage(client,message,"Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, meteo, poll, reminder atm e mappe.__")
+        return utils.get_config.sendMessage(client,message,"Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, poll, reminder atm e mappe.__")
 
 """
 Restituisce 6 numeri tutti diversi tra loro tutti nel range da 1 a 90
