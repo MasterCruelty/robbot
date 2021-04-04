@@ -1,6 +1,6 @@
-import os
 import requests
 import json
+from datetime import date
 import utils.get_config
 
 """
@@ -43,7 +43,10 @@ def check_repo(repo):
     else:
         return False
 """
-    Identica a covid_daily ma fornisce i dati della regione richiesta.
+    client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
+    query => regione richiesta, di default è l'Italia intera.
+
+    Restituisce i dati principali sui contagi da covid19.
 """
 def covid_cases(client,message,query):
     regioni = covid_format_json('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json')
@@ -87,9 +90,76 @@ def covid_cases(client,message,query):
     client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
     query => regione richiesta, di default è l'Italia intera.
 
+    Restituisce i dati sui vaccini nella data odierna
+"""
+def vaccinetoday(client,message,query):
+    data_consegne = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
+    data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
+    if(check_repo(data_consegne)):
+        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
+    today = date.today()
+    today = today.strftime("%Y/%m/%d").replace("/","-")
+    str_consegne = str_somm = forncons_str = fornsomm_str = regione = ""
+    prima_dose = seconda_dose = 0
+    fornitori = []
+    fornitori_somma_consegne = [0,0,0,0,0,0,0]
+    fornitori_somma_somminis = [0,0,0,0,0,0,0]
+    for item in data_consegne:
+        if(today == item["data_consegna"][0:10] and query == "today"):
+            regione = "Italia"
+            if(item["fornitore"] in fornitori):
+                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+            else:
+                fornitori.append(item["fornitore"])
+                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+        elif(today == item["data_consegna"][0:10] and query[6:10].title() in item["nome_area"]):
+            regione = item["nome_area"]
+            if(item["fornitore"] in fornitori):
+                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+            else:
+                fornitori.append(item["fornitore"])
+                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+    for item in data_somministrazioni:
+        if(today == item["data_somministrazione"][0:10] and query == "today"):
+            if(item["fornitore"] in fornitori):
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_maschile"]
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_femminile"]
+                prima_dose += item["prima_dose"]
+                seconda_dose += item["seconda_dose"]
+        if(today == item["data_somministrazione"][0:10] and query[6:10].title() in item["nome_area"]):
+            if(item["fornitore"] in fornitori):
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_maschile"]
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_femminile"]
+                prima_dose += item["prima_dose"]
+                seconda_dose += item["seconda_dose"]
+    check_consegne = check_somm = 0
+    for i in range(len(fornitori)):
+        forncons_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma_consegne[i]) + "__\n\n"
+        check_consegne += fornitori_somma_consegne[i]
+    if(check_consegne == 0):
+        result = "__Nessuna dose consegnata oggi__\n" 
+    else:
+        result = "Dati odierni sui vaccini in __**" + regione + "**__\n__Dosi consegnate:__\n" 
+    for i in range(len(fornitori)):
+        fornsomm_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma_somminis[i]) + "__\n"
+        check_somm += fornitori_somma_somminis[i]
+    if(check_somm == 0):
+        result += forncons_str + "__Dati odierni sulle somministrazioni non ancora disponibili__"
+        return utils.get_config.sendMessage(client,message,result)
+    else:
+        result += forncons_str + "__Dosi somministrate:__\n"
+    result += fornsomm_str + "**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__"
+    return utils.get_config.sendMessage(client,message,result)
+
+"""
+    client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
+    query => regione richiesta, di default è l'Italia intera.
+
     Funzione che restituisce i dati italiani relativi ai vaccini covid19 in termini di dosi consegnate, somministrate e altri dati.
 """
 def vaccine(client,message,query):
+    if("today" in query):
+        return vaccinetoday(client,message,query)
     data_total = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.json')
     data_consegne_fornitori = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
     data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
@@ -113,6 +183,7 @@ def vaccine(client,message,query):
     fornitori = []
     fornitori_somma = [0,0,0,0,0,0,0,0]
     forn_str = ""
+    over80 = prima_dose = seconda_dose = 0
     for item in data_consegne_fornitori:
         if(query == "/vaccine"):
             if(item["fornitore"] in fornitori):
@@ -126,14 +197,17 @@ def vaccine(client,message,query):
             else:
                 fornitori.append(item["fornitore"])
                 fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-    over80 = 0
     for item in data_somministrazioni:
         if(query =="/vaccine"):
             over80 += item["categoria_over80"]
+            prima_dose += item["prima_dose"]
+            seconda_dose += item["seconda_dose"]
         else:
             if(query.title()[0:4] in item["nome_area"]):
                 over80 += item["categoria_over80"]
+                prima_dose += item["prima_dose"]
+                seconda_dose += item["seconda_dose"]
     for i in range(len(fornitori)):
         forn_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma[i]) + "__\n"
-    result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "%__\n**Over 80 vaccinati:** __" + format_values(over80) +"__\n\nTra le dosi consegnate vi sono:\n" + forn_str
+    result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "%__\n**Over 80 vaccinati:** __" + format_values(over80) +"__\n**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__\n\nTra le dosi consegnate vi sono:\n" + forn_str
     return utils.get_config.sendMessage(client,message,result)
