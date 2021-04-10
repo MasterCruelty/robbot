@@ -43,6 +43,26 @@ def check_repo(repo):
         return True
     else:
         return False
+
+"""
+    client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
+    query => il tipo di richiesta che farà decidere quale funzione vaccine eseguire.
+
+    Funzione che controlla il parametro query e in funzione di quello decide quale delle funzioni vaccine sarà eseguita.
+
+"""
+def check_vaccine_function(client,message,query):
+    split_query = query.split(" ")
+    try:
+        if(datetime.datetime.strptime(split_query[0],"%Y-%m-%d")):
+            return vaccinedate(client,message,split_query)
+    except ValueError:
+        if split_query[0].lower() == "punti":
+            return vaccinepoints(client,message,split_query)
+        else:
+            return vaccine(client,message,query)
+
+
 """
     client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
     query => regione richiesta, di default è l'Italia intera.
@@ -125,6 +145,12 @@ def vaccinedate(client,message,query):
                 fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_femminile"]
                 prima_dose += item["prima_dose"]
                 seconda_dose += item["seconda_dose"]
+            else:
+                fornitori.append(item["fornitore"])
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_maschile"]
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_femminile"]
+                prima_dose += item["prima_dose"]
+                seconda_dose += item["seconda_dose"]
         elif(query[0] == item["data_somministrazione"][0:10] and query[1][0:4].title() in item["nome_area"]):
             if(item["fornitore"] in fornitori):
                 fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_maschile"]
@@ -134,7 +160,7 @@ def vaccinedate(client,message,query):
     #variabili per controllare se sono stati trovati dei dati di consegne o somministrazioni.
     check_consegne = check_somm = 0
     for i in range(len(fornitori)):
-        forncons_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma_consegne[i]) + "__\n\n"
+        forncons_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma_consegne[i]) + "__\n"
         check_consegne += fornitori_somma_consegne[i]
     if(check_consegne == 0):
         result = "__Nessuna dose consegnata nella data richiesta__\n" 
@@ -147,8 +173,29 @@ def vaccinedate(client,message,query):
         result += forncons_str + "__Dati sulle somministrazioni non disponibili nella data richiesta__"
         return utils.get_config.sendMessage(client,message,result)
     else:
-        result += forncons_str + "__Dosi somministrate:__\n"
+        result += forncons_str + "\n__Dosi somministrate:__\n"
     result += fornsomm_str + "**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__"
+    return utils.get_config.sendMessage(client,message,result)
+
+"""
+    client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
+    split_query => array composto da punti in posizione [0] e la provincia richiesta in posizione [1]
+
+    Funzione che restituisce la lista di punti di somministrazione vaccini nella provincia richiesta mostrandone anche il comune relativo.
+"""
+def vaccinepoints(client,message,split_query):
+    if(len(split_query) == 1):
+        return utils.get_config.sendMessage(client,message,"__Errore formato.\n/helprob vaccine per più dettagli sul comando.__")
+    data_points = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-latest.json')
+    if(check_repo(data_points)):
+        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
+    result = "__**Punti di somministrazione trovati nella provincia di " + split_query[1].title() + "__**\n"
+    str_points = ""
+    provincia = split_query[1]
+    for item in data_points:
+        if(provincia[0:6].title() in item["provincia"].title()):
+            str_points += "**Punto:**  __" + item["presidio_ospedaliero"].title() + "__ **(" + item["comune"].title() + ")**\n"
+    result += str_points
     return utils.get_config.sendMessage(client,message,result)
 
 """
@@ -158,12 +205,6 @@ def vaccinedate(client,message,query):
     Funzione che restituisce i dati italiani relativi ai vaccini covid19 in termini di dosi consegnate, somministrate e altri dati.
 """
 def vaccine(client,message,query):
-    split_date = query.split(" ")
-    try:
-        if(datetime.datetime.strptime(split_date[0],"%Y-%m-%d")):
-            return vaccinedate(client,message,split_date)
-    except ValueError:
-        print("Eseguo vaccine normale")
     data_total = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.json')
     data_consegne_fornitori = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
     data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
