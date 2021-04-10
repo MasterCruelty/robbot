@@ -32,7 +32,7 @@ def fetch_command(match,query,client,message):
     if match == "/covid":
         return modules.covid.covid_cases(client,message,query)
     if match == "/vaccine":
-        return modules.covid.vaccine(client,message,query)
+        return modules.covid.check_vaccine_function(client,message,query)
     if match == "/poll":
         return utils.sysfunctions.poll_function(client,message,query)
     if match == "/helprob":
