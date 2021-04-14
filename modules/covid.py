@@ -76,7 +76,7 @@ def covid_cases(client,message,query):
     if(check_repo(regioni) or check_repo(italia)):
         return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
     for item in regioni:
-        if(query.title()[0:4] in item["denominazione_regione"]):
+        if(query.title()[0:5] in item["denominazione_regione"]):
             regione = item["denominazione_regione"]
             nuovi_positivi = str(item["nuovi_positivi"])
             var_positivi = str(item["variazione_totale_positivi"])
