@@ -1,3 +1,12 @@
+![License](https://img.shields.io/github/license/MasterCruelty/robbot)
+[![image](https://img.shields.io/github/stars/MasterCruelty/robbot)](https://github.com/MasterCruelty/robbot/stargazers)
+[![image](https://img.shields.io/github/forks/MasterCruelty/robbot)](https://github.com/MasterCruelty/robbot/network/members)
+![CodeSize](https://img.shields.io/github/languages/code-size/MasterCruelty/robbot)
+[![image](https://img.shields.io/github/issues/MasterCruelty/robbot)](https://github.com/MasterCruelty/robbot/issues)
+![image](https://img.shields.io/github/languages/top/MasterCruelty/robbot)
+![image](https://img.shields.io/github/commit-activity/w/MasterCruelty/robbot)
+
+# Robbot
 **IT/ENG**
 
 
