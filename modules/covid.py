@@ -20,8 +20,12 @@ def covid_format_json(url):
     Funzione di supporto che prende il json e lo formatta per la funzione vaccine.
 """
 def vaccine_format_json(url):
-    resp = requests.get(url)
-    data = json.loads(resp.text)
+    try:
+        resp = requests.get(url)
+        data = json.loads(resp.text)
+    except:
+        data = []
+        return data
     return data["data"]
 
 """
@@ -194,8 +198,11 @@ def vaccinepoints(client,message,split_query):
     provincia = split_query[1]
     for item in data_points:
         if(provincia[0:6].title() in item["provincia"].title()):
-            str_points += "**Punto:**  __" + item["presidio_ospedaliero"].title() + "__ **(" + item["comune"].title() + ")**\n"
-    result += str_points
+            str_points += "**Punto:**  __" + str(item["presidio_ospedaliero"]).title() + "__ **(" + str(item["comune"]).title() + ")**\n"
+    if(str_points == ""):
+        result = "__**Nessun punto di somministrazione trovato**__"
+    else:
+        result += str_points
     return utils.get_config.sendMessage(client,message,result)
 
 """
