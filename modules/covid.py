@@ -244,15 +244,13 @@ def vaccine(client,message,query):
                 fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
     for item in data_somministrazioni:
         if(query =="/vaccine"):
-            over80 += item["categoria_over80"]
             prima_dose += item["prima_dose"]
             seconda_dose += item["seconda_dose"]
         else:
             if(query.title()[0:4] in item["nome_area"]):
-                over80 += item["categoria_over80"]
                 prima_dose += item["prima_dose"]
                 seconda_dose += item["seconda_dose"]
     for i in range(len(fornitori)):
         forn_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma[i]) + "__\n"
-    result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "%__\n**Over 80 vaccinati:** __" + format_values(over80) +"__\n**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__\n\nTra le dosi consegnate vi sono:\n" + forn_str
+    result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n**Percentuale dosi somministrate:** __" + str(perc) + "__\n**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__\n\nTra le dosi consegnate vi sono:\n" + forn_str
     return utils.get_config.sendMessage(client,message,result)
