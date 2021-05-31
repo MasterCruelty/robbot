@@ -1,27 +1,38 @@
 import time
 import utils.get_config
 
+
 """
     query => tempo nella forma "ns" "nm" "nh" "ngg" dove n è il numero di secondi/minuti/ore/giorni
     funzione di supporto che converte il tempo dalla forma astratta del messaggio in secondi effettivi.
 """
-def setTime(query):
-    if "s" in query:
-        return int(query.replace("s",""))
-    if "m" in query:
-        query = query.replace("m","")
-        query = int(query) * 60
-        return query
-    if "h" in query:
-        query = query.replace("h","")
-        query = int(query) * 3600
-        return query
-    if "gg" in query:
-        query = query.replace("gg","")
-        query = int(query) * 86400
-        return query
-    else:
-        return utils.get_config.sendMessage(client,message,"__formato non valido__")
+def setTime(client,message,query):
+    result = 0
+    temp = []
+    while("s" in query or "m" in query or "h" in query or "gg" in query):
+        try:
+            if "gg" in query:
+                temp = query.split("gg")
+                result += int(temp[0]) * 86400
+                query = temp[1]
+            if "h" in query:
+                temp = query.split("h")
+                result += int(temp[0]) * 3600
+                query = temp[1]
+            if "m" in query:
+                temp = query.split("m")
+                result += int(temp[0]) * 60
+                query = temp[1]
+            if "s" in query:
+                temp = query.split("s")
+                result += int(temp[0])
+                query = temp[1]
+        except:
+            return utils.get_config.sendMessage(client,message,"__formato non valido__")
+    if(checktime(result)):
+        return utils.get_config.sendMessage(client,message,"__Range tempo promemoria non valido__")
+    return result
+
 
 """
     countdown => tempo in secondi
@@ -39,9 +50,9 @@ def checktime(countdown):
 """
 def set_reminder(client,message,query):
     split = query.split("/")
-    countdown = setTime(split[0])
-    if(checktime(countdown)):
-        return utils.get_config.sendMessage(client,message,"__Range tempo promemoria non valido__")
+    countdown = setTime(client,message,split[0])
+    if(countdown is None):
+        return
     msg = split[1]
     utils.get_config.sendMessage(client,message,"Te lo ricorderò!")
     time.sleep(countdown)

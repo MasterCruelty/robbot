@@ -67,7 +67,9 @@ def wiki(keyword,client,message,lang="it"):
        result = wikipedia.summary(keyword,sentences = 1) 
        result += "\n"+create_link(keyword,lang)
    except wikipedia.exceptions.DisambiguationError as wd:
-       result =  "Forse volevi cercare: {0}".format(str(wd)[18:])
+       result =  str(wd)
+   except wikipedia.exceptions.PageError as err:
+       result = str(err)
    return utils.get_config.sendMessage(client,message,result)
 #data la lingua e la parola chiave da cercare, restituisce il numero massimo di frasi(limite della libreria) della voce trovata
 def wikiall(keyword,client,message,lang="it"):
@@ -81,6 +83,8 @@ def wikiall(keyword,client,message,lang="it"):
        result += "\n"+create_link(keyword,lang)
    except wikipedia.exceptions.DisambiguationError as wd:
        result =  "Forse volevi cercare: {0}".format(str(wd)[18:])
+   except wikipedia.exceptions.PageError as err:
+       result = str(err)
    return utils.get_config.sendMessage(client,message,result)
 #data la lingua restituisce una frase di una pagina wikipedia casuale
 def wikirandom(sents,boole,client,message,lang="it"):
