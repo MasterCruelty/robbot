@@ -28,6 +28,11 @@ Per un corretto funzionamento è necessario compilare a dovere il file ```config
 I dati del super admin servono a colui che potrà usare le funzioni di interazione con il database e altre funzioni particolari.
 I nomi dei comandi da inserire nel ```config.json``` possono essere ricopiati dal codice oppure possono essere modificati sul codice e poi ricopiati nel file json.	
 
+### Come funzionano i comandi del bot
+
+Il funzionamento dei comandi è spiegato all'interno del file ```help.json```. Si tratta del file che viene usato dal bot per rispondere al comando ```/helprob <nome comando>```.
+Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lingua sostituendo i campi della struttura dati oppure addirittura renderlo multilingua, ma in quel caso c'è da sviluppare la componente che rende possibile il cambio di lingua.
+
 ### Dipendenze
 
 * Pyrogram
@@ -53,6 +58,11 @@ The correct way to setup this bot is to compile the file  ```config.json```. So 
 
 Data of super admin is needed because he's the only one who can use db functions and other special functions.
 Name of commands to put inside ```config.json``` can be copied from source code or renamed inside source code and then copied in json file.	
+
+### How the bot's commands works
+
+The features of the commands are explained inside ```help.json```. It is the file which is used by the bot to reply at ```/helprob <command name>```.
+This json file is only in Italian, but you can translate it in every languages by changing the correct fields with your translations or even making the bot multi-language but in that case you have to develop the component for change the language runtime.
 
 ### Dependencies
 
