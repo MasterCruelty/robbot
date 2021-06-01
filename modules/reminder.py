@@ -39,7 +39,7 @@ def setTime(client,message,query):
     Funzione di supporto che controlla il range di tempo richiesto per il promemoria se negativo o troppo alto.
 """
 def checktime(countdown):
-    if(countdown < 0 or countdown > 86400*7):
+    if(countdown < 0 or countdown > 86400*7 or countdown == 0):
         return True
     else:
         return False
