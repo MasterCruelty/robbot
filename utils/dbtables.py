@@ -18,16 +18,8 @@ class User(BaseModel):
     id_user = IntegerField(unique = True)
     name = CharField()
     username = CharField()
-
-class Admin(BaseModel):
-    id_user = IntegerField(unique = True)
-    name = CharField()
-    username = CharField()
-
-class SuperAdmin(BaseModel):
-    id_user = CharField()
-    name = CharField()
-    username = CharField()
+    admin = BooleanField(default=False)
+    superadmin = BooleanField(default=False)
 
 class Group(BaseModel):
     id_group = IntegerField(unique = True)
@@ -35,9 +27,12 @@ class Group(BaseModel):
 
 
 db.connect()
-db.create_tables([User,Admin,SuperAdmin])
+db.create_tables([User])
 
 #Inizializzo il super admin da file di configurazione
-overlord = SuperAdmin(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2])
-overlord.save()
+overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)
+try:
+    overlord.save()
+except:
+    db.close()
 db.close()
