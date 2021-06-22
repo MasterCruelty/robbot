@@ -59,7 +59,7 @@ def list_user(client,message):
     result = "Lista utenti salvati:\n\n"
     query = User.select()
     for user in query:
-        result += str(user.id_user) + ";" + user.name + ";" + user.username + "\n"
+        result += str(user.id_user) + ";" + user.name + ";" + user.username + ";Admin: " + str(user.admin) + "\n"
     return sendMessage(client,message,result)
 
 """
@@ -118,29 +118,6 @@ def isUser(id_utente):
         return False
 
 """
-questa funzione fa una select dalla tabella Admin e restituisce i dati di tutti gli admin
-"""
-
-def list_admin(client,message):
-    result = "Lista admin salvati:\n\n"
-    query = Admin.select()
-    for admin in query:
-        result += str(admin.id_user) + ";" + admin.name + ";" + admin.username + "\n"
-    return sendMessage(client,message,result)
-
-"""
-questa funzione è simile a list_admin ma restituisce solo il numero degli utenti registrati nella tabella Admin
-"""
-
-def all_admin(client,message):
-    count = 0
-    query = Admin.select()
-    for admin in query:
-        count += 1
-    result = "Totale admin registrati: " + str(count)
-    return sendMessage(client,message,result)
-
-"""
 questa funzione permette di registrare un nuovo admin nella tabella Admin
 """
 @Client.on_message()
@@ -149,12 +126,13 @@ def set_admin(client,message,query):
     userid = json_user["id"]
     nome_utente = json_user["first_name"]
     username_utente = "@" + str(json_user["username"])
-    admin = Admin(id_user = userid, name = nome_utente, username = username_utente)
+    admin = User(id_user = userid, name = nome_utente, username = username_utente, admin = True)
     try:
         admin.save()
     except:
-        return sendMessage(client,message,"Admin già registrato")
-    query = Admin.select().where(Admin.id_user == userid)
+        admin = User.update({User.admin: True}).where(User.id_user == userid).execute()
+        return sendMessage(client,message,"Permessi admin aggiunti a " + str(userid))
+    query = User.select().where(User.id_user == userid)
     for admin in query:
         result = "Admin " + str(admin.id_user) + " salvato!"
     return sendMessage(client,message,result)
@@ -166,8 +144,8 @@ Questa funzione elimina un admin  dalla tabella Admin
 def del_admin(client,message,query):
     json_user = client.get_users(query)
     userid = json_user["id"]
-    query = Admin.delete().where(Admin.id_user == userid).execute()
-    result = "Admin " + str(userid) + " eliminato."
+    query = User.update({User.admin: False}).where(User.id_user == userid).execute()
+    result = "Admin " + str(userid) + " revocato."
     return sendMessage(client,message,result) 
 
 """
@@ -178,7 +156,7 @@ def isAdmin(id_utente):
     if isSuper(id_utente):
         return True
     else:
-        check = Admin.select().where(Admin.id_user == id_utente)
+        check = User.select().where(User.id_user == id_utente and User.admin == True)
         for admin in check:
             return True
         return False
@@ -188,7 +166,7 @@ Questa funzione controlla se un certo utente Telegram è SuperAdmin
 """
 
 def isSuper(id_utente):
-    check = SuperAdmin.select().where(SuperAdmin.id_user == id_utente)
+    check = User.select().where(User.id_user == id_utente and (User.superadmin == True or User.admin == True))
     for superadmin in check:
         return True
     return False
