@@ -79,10 +79,6 @@ def fetch_super_command(match,query,client,message):
         return utils.dbfunctions.set_admin(client,message,query)
     if match == "/delrobadmin":
         return utils.dbfunctions.del_admin(client,message,query)
-    if match == "/listrobadmin":
-        return utils.dbfunctions.list_admin(client,message)
-    if match == "/allrobadmin":
-        return utils.dbfunctions.all_admin(client,message)
     
 """
 funzione che aiuta a parsare i comandi nel sorgente principale senza sporcare troppo in giro
