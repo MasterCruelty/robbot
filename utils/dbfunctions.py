@@ -156,7 +156,8 @@ def isAdmin(id_utente):
     if isSuper(id_utente):
         return True
     else:
-        check = User.select().where(User.id_user == id_utente and User.admin == True)
+        check = User.select().where((User.id_user == id_utente) & 
+        (User.admin == True))
         for admin in check:
             return True
         return False
@@ -166,7 +167,9 @@ Questa funzione controlla se un certo utente Telegram è SuperAdmin
 """
 
 def isSuper(id_utente):
-    check = User.select().where(User.id_user == id_utente and (User.superadmin == True or User.admin == True))
+    check = User.select().where((User.id_user == id_utente) &
+            ((User.superadmin == True)| 
+            (User.admin == True)))
     for superadmin in check:
         return True
     return False
