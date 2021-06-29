@@ -40,7 +40,7 @@ def execute_wiki(query,client,message):
             client.edit_message_text(utils.get_config.get_chat(message),id_messaggio+1,"Operazione fallita")
             return
     lingua = get_lang(query)
-    if len(lingua) > 3 or lingua == "all":
+    if not(lingua in wikipedia.languages()) or lingua == "all":
         return exec_wiki_ita(query,client,message)
     word = get_keyword(query)
     if " all " in query:
