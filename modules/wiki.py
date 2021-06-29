@@ -23,10 +23,9 @@ def get_keyword(query):
 
 #genero il link alla pagina wikipedia della pagina richiesta per saperne di più
 def create_link(keyword,lang):
+    wikipedia.set_lang(lang)
     page = wikipedia.page(keyword)
-    keyword = page.title
-    keyword = keyword.replace(" ","_")
-    link = "<a href=\"https://"+lang+".wikipedia.org/wiki/"+keyword+"\">Guarda su Wikipedia</a>"
+    link = "<a href="+page.url+">Guarda su Wikipedia</a>"
     return link
 
 #Questa funzione esegue il comando wiki richiesto dall'app principale fetchato tramite la funzione in system.py
@@ -40,7 +39,7 @@ def execute_wiki(query,client,message):
             client.edit_message_text(utils.get_config.get_chat(message),id_messaggio+1,"Operazione fallita")
             return
     lingua = get_lang(query)
-    if len(lingua) > 3 or lingua == "all":
+    if not(lingua in wikipedia.languages()) or lingua == "all":
         return exec_wiki_ita(query,client,message)
     word = get_keyword(query)
     if " all " in query:
@@ -117,8 +116,8 @@ def comune(client,message):
         if (("è un comune" in result or "città" in result or "centro abitato" in result or "è una frazione" in result)):
             page = wikipedia.page(random)
             title = page.title
-            page = page.html()
-            zuppa = BeautifulSoup(page,"html.parser")
+            page_source = page.html()
+            zuppa = BeautifulSoup(page_source,"html.parser")
             table = zuppa.find('table',attrs={"class": 'sinottico'})
             text = table.get_text()
             text = text.split("\n")
@@ -134,6 +133,6 @@ def comune(client,message):
             break
     result = "**" + title + "**" + "\n" + result + "\n\n" + "**" + "Abitanti:** " + "**" + abitanti + "**" + "\n\n__Voci consultate:__ " + str(count)
     title = title.replace(" ","_")
-    link = "<a href=\"https://it.wikipedia.org/wiki/"+title+"\">Guarda su Wikipedia</a>"
+    link = "<a href="+page.url+">Guarda su Wikipedia</a>"
     client.edit_message_text(chat,id_messaggio+1,result + "\n" + link,disable_web_page_preview=True)
     return
