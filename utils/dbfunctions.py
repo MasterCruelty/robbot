@@ -29,7 +29,7 @@ def show_stats(client,message,id_utente):
     result = "Le tue statistiche\n"
     query = Stats.select().join(User, on=(User.id_user == Stats.id_user)).where(Stats.id_user == id_utente)
     for item in query:
-        result += item.command + ": Usato "  + str(item.times) + "\n"
+        result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
     return sendMessage(client,message,result)
 
 
