@@ -21,13 +21,18 @@ class User(BaseModel):
     admin = BooleanField(default=False)
     superadmin = BooleanField(default=False)
 
+class Stats(BaseModel):
+    id_user = ForeignKeyField(User)
+    command = CharField()
+    times = IntegerField(default = 0)
+
 class Group(BaseModel):
     id_group = IntegerField(unique = True)
     title = CharField()
 
 
 db.connect()
-db.create_tables([User])
+db.create_tables([User,Stats])
 
 #Inizializzo il super admin da file di configurazione
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)
