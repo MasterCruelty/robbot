@@ -17,6 +17,7 @@ import utils.get_config
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
 def fetch_command(match,query,client,message):
+    utils.dbfunctions.update_stats(utils.get_config.get_id_user(message),match)
     if match == "/wiki" :
         return modules.wiki.execute_wiki(query,client,message)
     if match == "/lyrics":
@@ -49,6 +50,8 @@ def fetch_command(match,query,client,message):
         return modules.weather.get_future_forecasts(client,message,query)
     if match == "/reminder":
         return modules.reminder.set_reminder(client,message,query)
+    if match == "/mystat":
+        return utils.dbfunctions.show_stats(client,message,utils.get_config.get_id_user(message))
 
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
