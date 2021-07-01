@@ -7,6 +7,32 @@ from utils.get_config import *
 #Inizio della connessione con il db
 db.connect()
 
+
+"""
+    @params utente, comando
+
+    dato un id utente e un comando, la funzione aggiorna il conteggio delle volte in cui l'utente ha usato quel comando.
+"""
+def update_stats(utente,comando):
+    query = (Stats.update({Stats.times: Stats.times + 1}).where((Stats.id_user == utente) & (Stats.command == comando))).execute()
+    if(query == 0):
+        stat = Stats(id_user = utente,command = comando,times = 1)
+        stat.save()
+    return
+
+"""
+    @params client,message,id_utente
+
+    La funzione restituisce tutti i dati sulle statistiche dei comandi usati dall'utente.
+"""
+def show_stats(client,message,id_utente):
+    result = "Le tue statistiche\n"
+    query = Stats.select().join(User, on=(User.id_user == Stats.id_user)).where(Stats.id_user == id_utente)
+    for item in query:
+        result += item.command + ": Usato "  + str(item.times) + "\n"
+    return sendMessage(client,message,result)
+
+
 """
 questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
 """
