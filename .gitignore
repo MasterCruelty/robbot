@@ -14,6 +14,3 @@ json_message.json
 
 #Ignora file .db
 *.db
-
-#ignora txt
-unknown_errors.txt
