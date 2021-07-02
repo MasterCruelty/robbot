@@ -1,3 +1,5 @@
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=MasterCruelty_robbot&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=MasterCruelty_robbot)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=MasterCruelty_robbot&metric=ncloc)](https://sonarcloud.io/dashboard?id=MasterCruelty_robbot)
 ![License](https://img.shields.io/github/license/MasterCruelty/robbot)
 [![image](https://img.shields.io/github/stars/MasterCruelty/robbot)](https://github.com/MasterCruelty/robbot/stargazers)
 [![image](https://img.shields.io/github/forks/MasterCruelty/robbot)](https://github.com/MasterCruelty/robbot/network/members)
