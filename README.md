@@ -7,6 +7,7 @@
 [![image](https://img.shields.io/github/issues/MasterCruelty/robbot)](https://github.com/MasterCruelty/robbot/issues)
 ![image](https://img.shields.io/github/languages/top/MasterCruelty/robbot)
 ![image](https://img.shields.io/github/commit-activity/w/MasterCruelty/robbot)
+![image](https://img.shields.io/github/contributors/MasterCruelty/robbot)
 
 # Robbot
 **IT/ENG**
