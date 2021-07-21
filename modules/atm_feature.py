@@ -65,23 +65,6 @@ def get_stop_info(stop_code,client,message):
     return sendMessage(client,message,result)
 
 """
-Restituisce i dati della rivendita richiesta.
-"""
-def get_rivendita_info(stop_code,client,message):
-    resp = get_json_atm(stop_code)
-    data_json = handle_except(resp)
-    if str(data_json).startswith("404"):
-        return sendMessage(client,message,data_json)
-    descrizione = data_json["Description"]
-    address = data_json["Address"]
-    comune = data_json["Municipality"]
-    dettagli = data_json["Details"]
-    chiusura = dettagli["Giorno chiusura"]["Info"]
-    servizi = dettagli["Servizi"]["Info"]
-    result = "**"+descrizione+" "+address+" ("+comune+")**"+"\n"+"Giorno di chiusura: "+"**"+chiusura+"**"+"\n"+"Servizi: "+"**"+servizi+"**"
-    return sendMessage(client,message,result)
-
-"""
 dato un codice fermata, fornisce le coordinate geografiche di quella fermata.
 Funziona con qualsiasi tipo di oggetto, dalla fermata del bus al parchimetro.
 """
