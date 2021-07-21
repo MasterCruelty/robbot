@@ -12,9 +12,15 @@ db.connect()
     @params utente, comando
 
     dato un id utente e un comando, la funzione aggiorna il conteggio delle volte in cui l'utente ha usato quel comando.
+    se il comando è mystat fa subito una return perché lo escludiamo.
 """
 def update_stats(utente,comando):
-    query = (Stats.update({Stats.times: Stats.times + 1}).where((Stats.id_user == utente) & (Stats.command == comando))).execute()
+    if(comando == "/mystat"):
+        return
+    query = (Stats
+             .update({Stats.times: Stats.times + 1})
+             .where((Stats.id_user == utente) & 
+                    (Stats.command == comando))).execute()
     if(query == 0):
         stat = Stats(id_user = utente,command = comando,times = 1)
         stat.save()
@@ -27,7 +33,11 @@ def update_stats(utente,comando):
 """
 def show_stats(client,message,id_utente):
     result = "Le tue statistiche\n"
-    query = Stats.select().join(User, on=(User.id_user == Stats.id_user)).where(Stats.id_user == id_utente)
+    query = (Stats
+             .select()
+             .join(User, on=(User.id_user == Stats.id_user))
+             .where(Stats.id_user == id_utente)
+             .order_by(Stats.times.desc()))
     for item in query:
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
     return sendMessage(client,message,result)
@@ -46,46 +56,23 @@ def list_id_users():
     return result
 
 """
-questa funzione fa una select dalla tabella Group e restituisce gli id di tutti i gruppi registratii dentro una lista di int
+questa funzione fa una select dalla tabella User e restituisce i dati di tutti gli utenti in un dato gruppo.
+Oppure tutti gli utenti se dato il comando in chat privata
 """
-def list_group_id():
-    result = []
-    query = Group.select()
-    for group in query:
-        result.append(group.id_group)
-    return result
-
-"""
-questa funzione fa una select dalla tabella Group e restituisce i dati di tutti i gruppi
-"""
-def list_group(client,message):
-    result = "Lista gruppi salvati:\n\n"
-    query = Group.select()
-    for group in query:
-        result += str(group.id_group) + ";" + group.title
-    return sendMessage(client,message,result)
-
-"""
-questa funzione è simile a list_user ma restituisce solo il numero degli utenti registrati nella tabella User
-"""
-
-def all_group(client,message):
-    count = 0
-    query = Group.select()
-    for group in query:
-        count += 1
-    result = "Totale utenti registrati: " + str(count)
-    return sendMessage(client,message,result)
-
-"""
-questa funzione fa una select dalla tabella User e restituisce i dati di tutti gli utenti
-"""
-
+@Client.on_message()
 def list_user(client,message):
     result = "Lista utenti salvati:\n\n"
     query = User.select()
-    for user in query:
-        result += str(user.id_user) + ";" + user.name + ";" + user.username + ";Admin: " + str(user.admin) + "\n"
+    if(get_chat(message) != 96000757):
+        for user in query:
+            try:
+                client.get_chat_member(get_chat(message),user.id_user)
+                result += str(user.id_user) + ";" + user.name + ";" + user.username + ";Admin: " + str(user.admin) + "\n"
+            except:
+                continue
+    else:
+        for user in query:
+            result += str(user.id_user) + ";" + user.name + ";" + user.username + ";Admin: " + str(user.admin) + "\n"
     return sendMessage(client,message,result)
 
 """

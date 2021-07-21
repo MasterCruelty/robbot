@@ -29,7 +29,7 @@ def setTime(client,message,query):
                 query = temp[1]
         except:
             return utils.get_config.sendMessage(client,message,"__formato non valido__")
-    if(checktime(result)):
+    if(checktime(result) or result == 0):
         return utils.get_config.sendMessage(client,message,"__Range tempo promemoria non valido__")
     return result
 
