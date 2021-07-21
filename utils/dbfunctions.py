@@ -12,9 +12,15 @@ db.connect()
     @params utente, comando
 
     dato un id utente e un comando, la funzione aggiorna il conteggio delle volte in cui l'utente ha usato quel comando.
+    se il comando è mystat fa subito una return perché lo escludiamo.
 """
 def update_stats(utente,comando):
-    query = (Stats.update({Stats.times: Stats.times + 1}).where((Stats.id_user == utente) & (Stats.command == comando))).execute()
+    if(comando == "/mystat"):
+        return
+    query = (Stats
+             .update({Stats.times: Stats.times + 1})
+             .where((Stats.id_user == utente) & 
+                    (Stats.command == comando))).execute()
     if(query == 0):
         stat = Stats(id_user = utente,command = comando,times = 1)
         stat.save()
@@ -27,7 +33,11 @@ def update_stats(utente,comando):
 """
 def show_stats(client,message,id_utente):
     result = "Le tue statistiche\n"
-    query = Stats.select().join(User, on=(User.id_user == Stats.id_user)).where(Stats.id_user == id_utente)
+    query = (Stats
+             .select()
+             .join(User, on=(User.id_user == Stats.id_user))
+             .where(Stats.id_user == id_utente)
+             .order_by(Stats.times.desc()))
     for item in query:
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
     return sendMessage(client,message,result)
