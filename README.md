@@ -45,6 +45,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * revocare i privilegi admin: ```/delrobadmin``` <id_utente> (l'utente sarà comunque ancora tra i registrati ma senza i poteri admin)
 * mostrare tutti gli utenti registrati: ```/listrobuser```
 * mostrare il numero di utenti registrati: ```/allrobuser```
+* verificare se il bot è online: ```/pingrob```
 
 ### Dipendenze
 
@@ -85,6 +86,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * delete an admin: ```/delrobadmin``` <id_user> (it will just revoke the admin power, it doesn't delete the user)
 * How to list all user registered: ```/listrobuser``` 
 * How to show ho many users are registered: ```/allrobuser```
+* check if the bot is online: ```/pingrob```
 
 
 ### Dependencies
