@@ -9,7 +9,7 @@ import time
 Lancia un sondaggio in automatico non anonimo
 """
 @Client.on_message()
-def poll_function(client,message,query):
+def poll_function(query,client,message):
     chat = utils.get_config.get_chat(message)
     id_messaggio = utils.get_config.get_id_msg(message)
     poll = query.split("/")
@@ -37,7 +37,7 @@ def ping(client,message):
 """
 documentazione dei comandi utente direttamente su Telegram
 """
-def help(client,message,query):
+def help(query,client,message):
     help_file = utils.get_config.get_config_file("help.json")
     if "wiki" in query:
         help_wiki = help_file["wiki"][0]

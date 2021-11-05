@@ -31,7 +31,8 @@ def update_stats(utente,comando):
 
     La funzione restituisce tutti i dati sulle statistiche dei comandi usati dall'utente.
 """
-def show_stats(client,message,id_utente):
+def show_stats(id_utente,client,message):
+    id_utente = get_id_user(message)
     result = "Le tue statistiche\n"
     query = (Stats
              .select()
