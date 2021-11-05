@@ -13,96 +13,59 @@ import utils.dbfunctions
 import utils.sysfunctions
 import utils.get_config
 
-dictionary = {      '/wiki'       : modules.wiki.execute_wiki,
-                    '/map'        : modules.gmaps.showmaps,
-                    '/km'         : modules.gmaps.execute_km,
-                    '/lyrics'     : modules.lyrics.execute_lyrics,
-                    '/atm'        : modules.atm_feature.get_stop_info,
-                    '/geoatm'     : modules.atm_feature.geodata_stop,
-                    '/searchatm'  : modules.atm_feature.search_line,
-                    '/covid'      : modules.covid.covid_cases,
-                    '/poll'       : utils.sysfunctions.poll_function,
-                    '/helprob'    : utils.sysfunctions.help}
+dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
+                    '/map'            : modules.gmaps.showmaps,
+                    '/km'             : modules.gmaps.execute_km,
+                    '/lyrics'         : modules.lyrics.execute_lyrics,
+                    '/atm'            : modules.atm_feature.get_stop_info,
+                    '/geoatm'         : modules.atm_feature.geodata_stop,
+                    '/searchatm'      : modules.atm_feature.search_line,
+                    '/covid'          : modules.covid.covid_cases,
+                    '/vaccine'        : modules.covid.check_vaccine_function,
+                    '/poll'           : utils.sysfunctions.poll_function,
+                    '/weather'        : modules.weather.get_weather,
+                    'forecastoday'    : modules.weather.get_today_forecasts,
+                    '/forecastfuture' : modules.weather.get_future_forecasts,
+                    'reminder'        : modules.reminder.set_reminder,
+                    '/mystat'         : utils.dbfunctions.show_stats,
+                    '/helprob'        : utils.sysfunctions.help}
 
-dictionary_admin = {'/getmessage' : utils.sysfunctions.get_message,
-                    '/playlotto'  : utils.sysfunctions.play_lotto,
-                    '/pingrob'       : utils.sysfunctions.ping}
+dictionary_admin = {'/getmessage'     : utils.sysfunctions.get_message,
+                    '/playlotto'      : utils.sysfunctions.play_lotto,
+                    '/pingrob'        : utils.sysfunctions.ping}
 
-dictionary_super = {'/setrobuser'    : utils.dbfunctions.set_user,
-                    '/delrobuser'    : utils.dbfunctions.del_user,
-                    '/listrobuser'   : utils.dbfunctions.list_user,
-                    '/allrobuser'    : utils.dbfunctions.all_user,
-                    '/setrobadmin'   : utils.dbfunctions.set_admin,
-                    '/delrobadmin'   : utils.dbfunctions.del_admin}
+dictionary_super = {'/setrobuser'     : utils.dbfunctions.set_user,
+                    '/delrobuser'     : utils.dbfunctions.del_user,
+                    '/listrobuser'    : utils.dbfunctions.list_user,
+                    '/allrobuser'     : utils.dbfunctions.all_user,
+                    '/setrobadmin'    : utils.dbfunctions.set_admin,
+                    '/delrobadmin'    : utils.dbfunctions.del_admin}
 
 """
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
 def fetch_command(match,query,client,message):
     utils.dbfunctions.update_stats(utils.get_config.get_id_user(message),match)
-    if match == "/wiki" :
-        return modules.wiki.execute_wiki(query,client,message)
-    if match == "/lyrics":
-        return modules.lyrics.execute_lyrics(query,client,message)
-    if match == "/atm":
-        return modules.atm_feature.get_stop_info(query,client,message)
-    if match == "/geoatm":
-        return modules.atm_feature.geodata_stop(query,client,message)
-    if match == "/searchatm":
-        return modules.atm_feature.search_line(client,message,query)
-    if match == "/covid":
-        return modules.covid.covid_cases(client,message,query)
-    if match == "/vaccine":
-        return modules.covid.check_vaccine_function(client,message,query)
-    if match == "/poll":
-        return utils.sysfunctions.poll_function(client,message,query)
-    if match == "/helprob":
-        return utils.sysfunctions.help(client,message,query)
-    if match == "/map":
-        return modules.gmaps.showmaps(query,client,message)
-    if match == "/km":
-        return modules.gmaps.execute_km(query,client,message)
-    if match == "/weather":
-        return modules.weather.get_weather(client,message,query)
-    if match == "/forecastoday":
-        return modules.weather.get_today_forecasts(client,message,query)
-    if match == "/forecastfuture":
-        return modules.weather.get_future_forecasts(client,message,query)
-    if match == "/reminder":
-        return modules.reminder.set_reminder(client,message,query)
-    if match == "/mystat":
-        return utils.dbfunctions.show_stats(client,message,utils.get_config.get_id_user(message))
-
+    if match in dictionary:
+        dictionary[match](query,client,message)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
 def fetch_admin_command(match,query,client,message):
     #system functions
-    if match == "/getmessage":
-        return utils.sysfunctions.get_message(client,message)
-    if match == "/playlotto":
-        return utils.sysfunctions.play_lotto(client,message)
-    if match == "/pingrob":
-        return utils.sysfunctions.ping(client,message)
+    if match in dictionary_admin:
+        dictionary_admin[match](client,message)
 
 """
 Analogamente a fetch_command ma per i comandi esclusivi del super admin
 """
 def fetch_super_command(match,query,client,message):
     #db functions
-    if match == "/setrobuser":
-        return utils.dbfunctions.set_user(client,message,query)
-    if match == "/delrobuser":
-        return utils.dbfunctions.del_user(client,message,query)
-    if match == "/listrobuser":
-        return utils.dbfunctions.list_user(client,message)
-    if match == "/allrobuser":
-        return utils.dbfunctions.all_user(client,message)
-    if match == "/setrobadmin":
-        return utils.dbfunctions.set_admin(client,message,query)
-    if match == "/delrobadmin":
-        return utils.dbfunctions.del_admin(client,message,query)
-    
+    if match in dictionary_super:
+        try:
+            dictionary_super[match](client,message,query)
+        except:
+            dictionary_super[match](client,message)
 """
 funzione che aiuta a parsare i comandi nel sorgente principale senza sporcare troppo in giro
 """
