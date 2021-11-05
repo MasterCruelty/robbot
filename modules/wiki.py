@@ -2,7 +2,7 @@ import wikipedia
 import re
 from pyrogram import Client
 import utils.get_config
-import utils.utility
+import utils.controller
 from bs4 import BeautifulSoup
 
 
@@ -52,7 +52,7 @@ def execute_wiki(query,client,message):
 #Esegue le funzioni wiki ma con lingua italiana come default
 def exec_wiki_ita(query,client,message):
     if "all " in query:
-        query = utils.utility.parser(query)
+        query = utils.controller.parser(query)
         return wikiall(query,client,message)
     if "random" in query:
         return wikirandom(1,False,client,message)
