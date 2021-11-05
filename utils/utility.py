@@ -13,6 +13,28 @@ import utils.dbfunctions
 import utils.sysfunctions
 import utils.get_config
 
+dictionary = {      '/wiki'       : modules.wiki.execute_wiki,
+                    '/map'        : modules.gmaps.showmaps,
+                    '/km'         : modules.gmaps.execute_km,
+                    '/lyrics'     : modules.lyrics.execute_lyrics,
+                    '/atm'        : modules.atm_feature.get_stop_info,
+                    '/geoatm'     : modules.atm_feature.geodata_stop,
+                    '/searchatm'  : modules.atm_feature.search_line,
+                    '/covid'      : modules.covid.covid_cases,
+                    '/poll'       : utils.sysfunctions.poll_function,
+                    '/helprob'    : utils.sysfunctions.help}
+
+dictionary_admin = {'/getmessage' : utils.sysfunctions.get_message,
+                    '/playlotto'  : utils.sysfunctions.play_lotto,
+                    '/pingrob'       : utils.sysfunctions.ping}
+
+dictionary_super = {'/setrobuser'    : utils.dbfunctions.set_user,
+                    '/delrobuser'    : utils.dbfunctions.del_user,
+                    '/listrobuser'   : utils.dbfunctions.list_user,
+                    '/allrobuser'    : utils.dbfunctions.all_user,
+                    '/setrobadmin'   : utils.dbfunctions.set_admin,
+                    '/delrobadmin'   : utils.dbfunctions.del_admin}
+
 """
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
