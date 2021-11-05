@@ -55,7 +55,7 @@ def check_repo(repo):
     Funzione che controlla il parametro query e in funzione di quello decide quale delle funzioni vaccine sarà eseguita.
 
 """
-def check_vaccine_function(client,message,query):
+def check_vaccine_function(query,client,message):
     split_query = query.split(" ")
     try:
         if(datetime.datetime.strptime(split_query[0],"%Y-%m-%d")):
@@ -73,7 +73,7 @@ def check_vaccine_function(client,message,query):
 
     Restituisce i dati principali sui contagi da covid19.
 """
-def covid_cases(client,message,query):
+def covid_cases(query,client,message):
     regioni = covid_format_json('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json')
     italia  = covid_format_json('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json')
     trovata = False

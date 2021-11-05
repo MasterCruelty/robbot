@@ -13,7 +13,7 @@ api_get = config["api_get"]
 """
 Restituisce l'elenco di tutte le fermate della linea richiesta con i codici corrispondenti
 """
-def search_line(client,message,line_number):
+def search_line(line_number,client,message):
     line = line_number.split(" ")
     line_number = line[0]
     try:

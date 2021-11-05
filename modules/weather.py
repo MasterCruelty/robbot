@@ -55,7 +55,7 @@ def check_airQualityCode(air_quality):
     Dato il nome di una città, viene usata la funzione "showmaps" del modulo gmaps per ricavarne le coordinate. Dopo di che viene fatta la richiesta diretta a 
     OpenWeatherMap tramite la funzione "call_api_weather" rilasciando i dati meteo principali relativi al giorno corrente.
 """
-def get_weather(client,message,query):
+def get_weather(query,client,message):
     data = call_api_weather(query)
     data_air = call_api_airPollution(query)
     current_temp = str(data["current"]["temp"])
@@ -85,7 +85,7 @@ def get_weather(client,message,query):
 """
     Json ottenuto in modo analogo a "get_weather" e vengono rilasciati i dati meteo principali del giorno corrente distanziati di ora in ora.
 """
-def get_today_forecasts(client,message,query):
+def get_today_forecasts(query,client,message):
     data = call_api_weather(query)
     array_hourly = data["hourly"]
     today = date.today()
@@ -106,7 +106,7 @@ def get_today_forecasts(client,message,query):
 """
     Json ottenuto in modo analogo a "get_weather" e vengono rilasciati i dati meteo principali della settimana che verrà.
 """
-def get_future_forecasts(client,message,query):
+def get_future_forecasts(query,client,message):
     data = call_api_weather(query)
     array_daily = data["daily"]
     result = "**" + query.title() + "**\n"
