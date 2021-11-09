@@ -66,7 +66,7 @@ def list_user(client,message):
     query = User.select()
     config = get_config_file("config.json")
     id_super_admin = config["id_super_admin"].split(";")
-    if(get_chat(message) != id_super_admin[0]):
+    if(int(get_chat(message)) != int(id_super_admin[0])):
         for user in query:
             try:
                 client.get_chat_member(get_chat(message),user.id_user)
