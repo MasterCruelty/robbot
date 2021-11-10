@@ -24,9 +24,9 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/vaccine'        : modules.covid.check_vaccine_function,
                     '/poll'           : utils.sysfunctions.poll_function,
                     '/weather'        : modules.weather.get_weather,
-                    'forecastoday'    : modules.weather.get_today_forecasts,
+                    '/forecastoday'   : modules.weather.get_today_forecasts,
                     '/forecastfuture' : modules.weather.get_future_forecasts,
-                    '/reminder'        : modules.reminder.set_reminder,
+                    '/reminder'       : modules.reminder.set_reminder,
                     '/mystat'         : utils.dbfunctions.show_stats,
                     '/helprob'        : utils.sysfunctions.help}
 
