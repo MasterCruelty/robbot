@@ -59,10 +59,9 @@ def help(query,client,message):
         return utils.get_config.sendMessage(client,message,help_poll)
     if "atm" in query:
         help_atm = help_file["atm"][0]
-        help_edatm = help_file["atm"][1]
-        help_geoatm = help_file["atm"][2]
-        help_searchatm = help_file["atm"][3]
-        return utils.get_config.sendMessage(client,message,help_atm+"\n\n"+help_edatm+"\n\n"+help_geoatm+"\n\n"+help_searchatm)
+        help_geoatm = help_file["atm"][1]
+        help_searchatm = help_file["atm"][2]
+        return utils.get_config.sendMessage(client,message,help_atm+"\n\n"+help_geoatm+"\n\n"+help_searchatm)
     if "mappe" in query:
         help_map = help_file["mappe"][0]
         help_km = help_file["mappe"][1]
