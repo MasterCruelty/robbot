@@ -53,7 +53,10 @@ def set_reminder(query,client,message):
     countdown = setTime(client,message,split[0])
     if(countdown is None):
         return
-    msg = split[1]
+    try:
+        msg = split[1]
+    except:
+        return utils.get_config.sendMessage(client,message,"__formato non valido__")
     utils.get_config.sendMessage(client,message,"Te lo ricorderò!")
     time.sleep(countdown)
     return utils.get_config.sendMessage(client,message,msg)
