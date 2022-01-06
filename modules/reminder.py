@@ -49,7 +49,7 @@ def checktime(countdown):
     Funzione che dato un parametro di tempo e un messaggio da inviare, calcola il countdown nel quale stare fermo in sleep e successivamente invia il messaggio.
 """
 def set_reminder(query,client,message):
-    split = query.split("/")
+    split = query.split(";")
     countdown = setTime(client,message,split[0])
     if(countdown is None):
         return
