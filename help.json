@@ -13,7 +13,7 @@
 	"atm":{
 		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito",
 		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito",
-		"searchatm":"**/searchatm 'line_number' 'direzione'**  => Restituisce tutte le fermate di una linea.\n__La direzione è 0 oppure 1__"
+		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__"
 	},
 	"mappe":{
 		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.",
