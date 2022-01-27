@@ -8,29 +8,22 @@ from pyrogram import Client
 config = get_config_file("config.json")
 api_url = config["api_url"]
 api_get = config["api_get"]
-
+headers = { "Origin": "https://giromilano.atm.it/",
+            "Referer": "https://giromilano.atm.it/",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
+          }
 
 """
-Restituisce l'elenco di tutte le fermate della linea richiesta con i codici corrispondenti
+Restituisce l'elenco delle fermate dato l'indirizzo richiesto con i codici fermata corrispondenti
 """
 def search_line(line_number,client,message):
-    line = line_number.split(" ")
-    line_number = line[0]
-    try:
-        direction = line[1]
-    except:
-        return sendMessage(client,message,"__Parametro direzione mancante__")
-    request = "tpl/journeyPatterns/" + str(line_number) + "|" + direction
-    get = api_get + "" + request
-    resp = requests.get(get)
-    data_json = handle_except(resp)
-    if str(data_json).startswith("404"):
-        return sendMessage(client,message,data_json)
-    fermate = data_json["Stops"]
-    description = data_json["Line"]["LineDescription"]
-    result = "Linea **" + description + "** :\n\n<i>digita /atm 'codice' per sapere i dettagli di una fermata in particolare.</i>\n\n"
-    for item in fermate:
-        result += "**" + item["Description"] + "**" + " | codice: " + "<code>" + item["Code"] + "</code>\n\n"
+    stops = search_stop(line_number)
+    result = str(len(stops)) + " risultati:\n<i>digita /atm 'codice' per sapere i dettagli di una fermata in particolare.</i>\n\n"
+    for item in stops:
+        if item["Lines"] == []:
+            result += "**" + item["Description"] + "(" + item["Municipality"] + ")**" + " | codice: " + "<code>" + item["CustomerCode"] + "</code>\n\n"
+        result += "__**Linea " + item["Lines"][0]["Line"]["LineCode"]  + " " + item["Lines"][0]["Line"]["LineDescription"]+"__**\n"
+        result += "**" + item["Description"] + "(" + item["Municipality"] + ")**" + " | codice: " + "<code>" + item["CustomerCode"] + "</code>\n\n"
     return sendMessage(client,message,result)
 
 
@@ -85,8 +78,18 @@ Fa la richiesta al server atm e restituisce il json corrispondente.
 """
 def get_json_atm(stop_code):
     data = {"url": "tpPortal/geodata/pois/stops/" + stop_code + "?lang=it".format()}
-    resp = requests.post(api_url,data = data)
+    resp = requests.post(api_url,data = data,headers = headers)
     return resp
+
+"""
+cerca qualsiasi fermata esistente a partire da un indirizzo
+"""
+def search_stop(query):
+    data = {"url": "tpPortal/tpl/stops/search/" + query + "".format()}
+    stops = []
+    for stop in (requests.post(api_url,data = data,headers = headers)).json():
+        stops.append(stop)
+    return stops
 
 """
 Controlla se un campo estratto del json è nullo per evitare eccezioni sul concatenamento di stringhe.
