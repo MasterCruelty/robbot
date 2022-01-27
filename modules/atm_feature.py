@@ -22,6 +22,7 @@ def search_line(line_number,client,message):
     for item in stops:
         if item["Lines"] == []:
             result += "**" + item["Description"] + "(" + item["Municipality"] + ")**" + " | codice: " + "<code>" + item["CustomerCode"] + "</code>\n\n"
+            continue
         result += "__**Linea " + item["Lines"][0]["Line"]["LineCode"]  + " " + item["Lines"][0]["Line"]["LineDescription"]+"__**\n"
         result += "**" + item["Description"] + "(" + item["Municipality"] + ")**" + " | codice: " + "<code>" + item["CustomerCode"] + "</code>\n\n"
     return sendMessage(client,message,result)
