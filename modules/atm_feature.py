@@ -8,7 +8,10 @@ from pyrogram import Client
 config = get_config_file("config.json")
 api_url = config["api_url"]
 api_get = config["api_get"]
-
+headers = { "Origin": "https://giromilano.atm.it",
+            "Referer": "https://giromilano.atm.it",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
+          }
 
 """
 Restituisce l'elenco di tutte le fermate della linea richiesta con i codici corrispondenti
@@ -22,7 +25,7 @@ def search_line(line_number,client,message):
         return sendMessage(client,message,"__Parametro direzione mancante__")
     request = "tpl/journeyPatterns/" + str(line_number) + "|" + direction
     get = api_get + "" + request
-    resp = requests.get(get)
+    resp = requests.get(get,headers = headers)
     data_json = handle_except(resp)
     if str(data_json).startswith("404"):
         return sendMessage(client,message,data_json)
@@ -85,7 +88,7 @@ Fa la richiesta al server atm e restituisce il json corrispondente.
 """
 def get_json_atm(stop_code):
     data = {"url": "tpPortal/geodata/pois/stops/" + stop_code + "?lang=it".format()}
-    resp = requests.post(api_url,data = data)
+    resp = requests.post(api_url,data = data,headers = headers)
     return resp
 
 """
