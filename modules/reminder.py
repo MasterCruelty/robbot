@@ -1,5 +1,5 @@
 import time
-import utils.get_config
+import utils.get_config as ugc
 
 
 """
@@ -28,9 +28,9 @@ def setTime(client,message,query):
                 result += int(temp[0])
                 query = temp[1]
         except:
-            return utils.get_config.sendMessage(client,message,"__formato non valido__")
+            return ugc.sendMessage(client,message,"__formato non valido__")
     if(checktime(result) or result == 0):
-        return utils.get_config.sendMessage(client,message,"__Range tempo promemoria non valido__")
+        return ugc.sendMessage(client,message,"__Range tempo promemoria non valido__")
     return result
 
 
@@ -56,7 +56,7 @@ def set_reminder(query,client,message):
     try:
         msg = split[1]
     except:
-        return utils.get_config.sendMessage(client,message,"__formato non valido__")
+        return ugc.sendMessage(client,message,"__formato non valido__")
     utils.get_config.sendMessage(client,message,"Te lo ricorderò!")
     time.sleep(countdown)
-    return utils.get_config.sendMessage(client,message,msg)
+    return ugc.sendMessage(client,message,msg)

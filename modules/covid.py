@@ -2,7 +2,7 @@ import requests
 import json
 from datetime import date
 import datetime
-import utils.get_config
+import utils.get_config as ugc
 
 """
     url => url github da cui recuperare il json
@@ -78,7 +78,7 @@ def covid_cases(query,client,message):
     italia  = covid_format_json('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json')
     trovata = False
     if(check_repo(regioni) or check_repo(italia)):
-        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
+        return ugc.sendMessage(client,message,"__Errore repository sorgente__")
     for item in regioni:
         if(query.title()[0:5] in item["denominazione_regione"]):
             regione = item["denominazione_regione"]
@@ -107,9 +107,9 @@ def covid_cases(query,client,message):
             break
     if(trovata):
         result = "I nuovi positivi in data **" + giorno +"** in __**" + regione + "**__  sono: **" + format_values(nuovi_positivi) + "**\nAttualmente vi sono:\n\n __pazienti ricoverati con sintomi:__ **" +format_values(ricoverati) +"**\n __pazienti in terapia intensiva:__ **" + format_values(terapia_intensiva) + "**\n __pazienti in isolamento domiciliare:__ **" + format_values(isolamento) + "**\n __pazienti deceduti:__ **" + format_values(deceduti) + "**\n\n" + "__ingressi t.i. :__ **" + format_values(ingressi_ti) + "**\n__variazione positivi:__ **" + format_values(var_positivi) + "**"
-        return utils.get_config.sendMessage(client,message,result)
+        return ugc.sendMessage(client,message,result)
     else:
-        return utils.get_config.sendMessage(client,message,"__Regione non trovata__")
+        return ugc.sendMessage(client,message,"__Regione non trovata__")
 
 """
     client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
@@ -121,7 +121,7 @@ def vaccinedate(client,message,query):
     data_consegne = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
     data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
     if(check_repo(data_consegne)):
-        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
+        return ugc.sendMessage(client,message,"__Errore repository sorgente__")
     str_consegne = str_somm = forncons_str = fornsomm_str = regione = ""
     prima_dose = seconda_dose = dose_booster = 0
     fornitori = []
@@ -178,11 +178,11 @@ def vaccinedate(client,message,query):
         check_somm += fornitori_somma_somminis[i]
     if(check_somm == 0):
         result += forncons_str + "__Dati sulle somministrazioni non disponibili nella data richiesta__"
-        return utils.get_config.sendMessage(client,message,result)
+        return ugc.sendMessage(client,message,result)
     else:
         result += forncons_str + "\n__Dosi somministrate:__\n"
     result += fornsomm_str + "**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__\n**Totale dosi booster:** __" + format_values(dose_booster) + "__"
-    return utils.get_config.sendMessage(client,message,result)
+    return ugc.sendMessage(client,message,result)
 
 """
     client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
@@ -192,10 +192,10 @@ def vaccinedate(client,message,query):
 """
 def vaccinepoints(client,message,split_query):
     if(len(split_query) == 1):
-        return utils.get_config.sendMessage(client,message,"__Errore formato.\n/helprob vaccine per più dettagli sul comando.__")
+        return ugc.sendMessage(client,message,"__Errore formato.\n/helprob vaccine per più dettagli sul comando.__")
     data_points = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-latest.json')
     if(check_repo(data_points)):
-        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
+        return ugc.sendMessage(client,message,"__Errore repository sorgente__")
     result = "__**Punti di somministrazione trovati nella provincia di " + split_query[1].title() + "__**\n"
     str_points = ""
     provincia = split_query[1]
@@ -206,7 +206,7 @@ def vaccinepoints(client,message,split_query):
         result = "__**Nessun punto di somministrazione trovato**__"
     else:
         result += str_points
-    return utils.get_config.sendMessage(client,message,result)
+    return ugc.sendMessage(client,message,result)
 
 """
     client,message => parametri necessari per poter usare sendMessage del modulo 'get_config'
@@ -219,7 +219,7 @@ def vaccine(client,message,query):
     data_consegne_fornitori = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
     data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
     if(check_repo(data_total)):
-        return utils.get_config.sendMessage(client,message,"__Errore repository sorgente__")
+        return ugc.sendMessage(client,message,"__Errore repository sorgente__")
     total_consegne = 0
     total_somm = 0
     for item in data_total:
@@ -232,7 +232,7 @@ def vaccine(client,message,query):
                 total_somm += item["dosi_somministrate"]
                 regione = item["nome_area"]
     if(total_consegne == 0):
-        return utils.get_config.sendMessage(client,message,"__Errore formato.\n/helprob vaccine per più dettagli sul comando.__")
+        return ugc.sendMessage(client,message,"__Errore formato.\n/helprob vaccine per più dettagli sul comando.__")
     perc = str(round(((total_somm * 100) / total_consegne),2))
     giorno = str(data_total[0]["ultimo_aggiornamento"])[0:10]
     fornitori = []
@@ -265,4 +265,4 @@ def vaccine(client,message,query):
     for i in range(len(fornitori)):
         forn_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma[i]) + "__\n"
     result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n\n**Percentuale dosi somministrate:** __" + str(perc) + "__\n**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__\n**Totale dosi booster:** __" + format_values(dose_booster) + "__\n\nTra le dosi consegnate vi sono:\n" + forn_str
-    return utils.get_config.sendMessage(client,message,result)
+    return ugc.sendMessage(client,message,result)

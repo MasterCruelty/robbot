@@ -1,8 +1,8 @@
 import wikipedia
 import re
 from pyrogram import Client
-import utils.get_config
-import utils.controller
+import utils.get_config as ugc
+import utils.controller as uct
 from bs4 import BeautifulSoup
 
 
@@ -35,8 +35,8 @@ def execute_wiki(query,client,message):
         try:
             return comune(client,message)
         except:
-            id_messaggio = utils.get_config.get_id_msg(message)
-            client.edit_message_text(utils.get_config.get_chat(message),id_messaggio+1,"Operazione fallita")
+            id_messaggio = ugc.get_id_msg(message)
+            client.edit_message_text(ugc.get_chat(message),id_messaggio+1,"Operazione fallita")
             return
     lingua = get_lang(query)
     if not(lingua in wikipedia.languages()) or lingua == "all":
@@ -52,7 +52,7 @@ def execute_wiki(query,client,message):
 #Esegue le funzioni wiki ma con lingua italiana come default
 def exec_wiki_ita(query,client,message):
     if "all " in query:
-        query = utils.controller.parser(query)
+        query = uct.parser(query)
         return wikiall(query,client,message)
     if "random" in query:
         return wikirandom(1,False,client,message)
@@ -69,7 +69,7 @@ def wiki(keyword,client,message,lang="it"):
        result =  str(wd)
    except wikipedia.exceptions.PageError as err:
        result = str(err)
-   return utils.get_config.sendMessage(client,message,result)
+   return ugc.sendMessage(client,message,result)
 #data la lingua e la parola chiave da cercare, restituisce il numero massimo di frasi(limite della libreria) della voce trovata
 def wikiall(keyword,client,message,lang="it"):
    wikipedia.set_lang(lang)
@@ -84,7 +84,7 @@ def wikiall(keyword,client,message,lang="it"):
        result =  "Forse volevi cercare: {0}".format(str(wd)[18:])
    except wikipedia.exceptions.PageError as err:
        result = str(err)
-   return utils.get_config.sendMessage(client,message,result)
+   return ugc.sendMessage(client,message,result)
 #data la lingua restituisce una frase di una pagina wikipedia casuale
 def wikirandom(sents,boole,client,message,lang="it"):
     wikipedia.set_lang(lang)
@@ -95,13 +95,13 @@ def wikirandom(sents,boole,client,message,lang="it"):
         return result
     else:
         result += "\n"+create_link(random,lang)
-        return utils.get_config.sendMessage(client,message,result)
+        return ugc.sendMessage(client,message,result)
 #Simpatica funzione che cerca un comune su Wikipedia e ne restituisce i dati evidenziando numero abitanti e numero pagine visitate per trovarlo.
 #Il numero di abitanti viene recuperato direttamente dalla pagina html tramite l'uso della zuppa
 @Client.on_message()
 def comune(client,message):
-    chat = utils.get_config.get_chat(message)
-    id_messaggio = utils.get_config.get_id_msg(message)
+    chat = ugc.get_chat(message)
+    id_messaggio = ugc.get_id_msg(message)
     count = 0
     client.send_message(chat,"Cerco un comune...","html",reply_to_message_id=id_messaggio)
     wikipedia.set_lang("it")
