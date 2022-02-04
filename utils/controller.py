@@ -9,9 +9,9 @@ import modules.covid
 import modules.gmaps
 import modules.weather
 import modules.reminder
-import utils.dbfunctions
-import utils.sysfunctions
-import utils.get_config
+import utils.dbfunctions as udb
+import utils.sysfunctions as usys
+import utils.get_config as ugc
 
 dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/map'            : modules.gmaps.showmaps,
@@ -22,50 +22,47 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/searchatm'      : modules.atm_feature.search_line,
                     '/covid'          : modules.covid.covid_cases,
                     '/vaccine'        : modules.covid.check_vaccine_function,
-                    '/poll'           : utils.sysfunctions.poll_function,
+                    '/poll'           : usys.poll_function,
                     '/weather'        : modules.weather.get_weather,
                     '/forecastoday'   : modules.weather.get_today_forecasts,
                     '/forecastfuture' : modules.weather.get_future_forecasts,
                     '/reminder'       : modules.reminder.set_reminder,
-                    '/mystat'         : utils.dbfunctions.show_stats,
-                    '/helprob'        : utils.sysfunctions.help}
+                    '/mystat'         : udb.show_stats,
+                    '/helprob'        : usys.help}
 
-dictionary_admin = {'/getmessage'     : utils.sysfunctions.get_message,
-                    '/playlotto'      : utils.sysfunctions.play_lotto,
-                    '/pingrob'        : utils.sysfunctions.ping}
+dictionary_admin = {'/getmessage'     : usys.get_message,
+                    '/playlotto'      : usys.play_lotto,
+                    '/pingrob'        : usys.ping}
 
-dictionary_super = {'/setrobuser'     : utils.dbfunctions.set_user,
-                    '/delrobuser'     : utils.dbfunctions.del_user,
-                    '/listrobuser'    : utils.dbfunctions.list_user,
-                    '/allrobuser'     : utils.dbfunctions.all_user,
-                    '/setrobadmin'    : utils.dbfunctions.set_admin,
-                    '/delrobadmin'    : utils.dbfunctions.del_admin}
+dictionary_super = {'/setrobuser'     : udb.set_user,
+                    '/delrobuser'     : udb.del_user,
+                    '/listrobuser'    : udb.list_user,
+                    '/allrobuser'     : udb.all_user,
+                    '/setrobadmin'    : udb.set_admin,
+                    '/delrobadmin'    : udb.del_admin}
 
 """
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
 def fetch_command(match,query,client,message):
-    utils.dbfunctions.update_stats(utils.get_config.get_id_user(message),match)
-    if match in dictionary:
-        dictionary[match](query,client,message)
+    udb.update_stats(ugc.get_id_user(message),match)
+    dictionary[match](query,client,message)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
 def fetch_admin_command(match,query,client,message):
     #system functions
-    if match in dictionary_admin:
-        dictionary_admin[match](client,message)
+    dictionary_admin[match](client,message)
 
 """
 Analogamente a fetch_command ma per i comandi esclusivi del super admin
 """
 def fetch_super_command(match,query,client,message):
     #db functions
-    if match in dictionary_super:
-        try:
-            dictionary_super[match](client,message,query)
-        except:
-            dictionary_super[match](client,message)
+    try:
+        dictionary_super[match](client,message,query)
+    except:
+        dictionary_super[match](client,message)
 """
 funzione che aiuta a parsare i comandi nel sorgente principale senza sporcare troppo in giro
 """
