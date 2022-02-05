@@ -2,6 +2,7 @@ import sys
 sys.path.append(sys.path[0] + "/..")
 from modules.gmaps import showmaps
 import requests
+import shutil
 import json
 from datetime import date,datetime as dt
 import pytz
@@ -136,7 +137,13 @@ def get_future_forecasts(query,client,message):
         i += 1
     return sendMessage(client,message,result)
 
-
-        
-        
-
+"""
+Data una richiesta, restituisce l'immagine della mappa corrispondente con il meteo attuale offerto da wttr.in
+"""
+def wttrin_map(query,client,message):
+    data = "https://v3.wttr.in/" + query + ".png"
+    resp = requests.get(data,stream=True)
+    with open('img.png','wb') as output:
+        shutil.copyfileobj(resp.raw,output)
+    del resp
+    return sendPhoto(client,message,'img.png')
