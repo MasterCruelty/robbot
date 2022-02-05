@@ -16,6 +16,9 @@ def sendMessage(client,message,result):
     client.send_message(get_chat(message),result,disable_web_page_preview=True,reply_to_message_id=get_id_msg(message))
     return
 
+@Client.on_message()
+def sendPhoto(client,message,result):
+    client.send_photo(get_chat(message),result,reply_to_message_id=get_id_msg(message))
 """
 Restituisce l'id utente
 """
