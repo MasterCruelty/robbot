@@ -21,6 +21,7 @@
 	},
 	"meteo":{
 		"weather":"**/weather 'place'** => restituisce i dati meteo principali della città richiesta.",
+		"weathermap": "**/weathermap 'area' ** => Restituisce un'immagine della mappa dell'area scelta",
 		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.",
 		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo."
 	}

@@ -69,7 +69,8 @@ def help(query,client,message):
         help_weather = help_file["meteo"][0]
         help_forecastoday = help_file["meteo"][1]
         help_forecastfuture = help_file["meteo"][2]
-        return ugc.sendMessage(client,message,help_weather+"\n\n" + help_forecastoday+"\n\n"+help_forecastfuture)
+        help_weathermap = help_file["meteo"][3]
+        return ugc.sendMessage(client,message,help_weather+"\n\n" + help_forecastoday+"\n\n"+help_forecastfuture+"\n\n"+help_weathermap)
     if "reminder" in query:
         help_reminder = help_file["reminder"]
         return ugc.sendMessage(client,message,help_reminder)
