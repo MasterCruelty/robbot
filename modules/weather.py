@@ -17,6 +17,8 @@ api_weather = config_file["api_weather"]
 """
 def call_api_weather(query):
     coordinates = showmaps(query,"client","message") #showmaps will raise an exception and return only coordinates
+    if("404" in str(coordinates)):
+        return coordinates
     lat = coordinates[0]
     lon = coordinates[1]
     url = "https://api.openweathermap.org/data/2.5/onecall?lat=%s&lon=%s&lang=it&appid=%s&units=metric" %(lat,lon,api_weather)
@@ -58,6 +60,8 @@ def check_airQualityCode(air_quality):
 """
 def get_weather(query,client,message):
     data = call_api_weather(query)
+    if("404" in str(data)):
+        return sendMessage(client,message,data)
     data_air = call_api_airPollution(query)
     current_temp = str(data["current"]["temp"])
     feels_temp = str(data["current"]["feels_like"])
@@ -146,4 +150,7 @@ def wttrin_map(query,client,message):
     with open('img.png','wb') as output:
         shutil.copyfileobj(resp.raw,output)
     del resp
-    return sendPhoto(client,message,'img.png')
+    try:
+        return sendPhoto(client,message,'img.png',caption="__Area **"+query+"** come richiesto.__")
+    except:
+        return sendMessage(client,message,"__404: page not found__")
