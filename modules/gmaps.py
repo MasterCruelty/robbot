@@ -39,8 +39,8 @@ def showmaps(address,client,message):
     try:
         coordinates.append(location.latitude)
         coordinates.append(location.longitude)
-    except:
-        return sendMessage(client,message,"__Error 404: not found__")
+    except AttributeError:
+        return "__Error 404: not found__"
     try:
         client.send_location(get_chat(message),coordinates[0],coordinates[1],reply_to_message_id=get_id_msg(message))
     except:
