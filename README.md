@@ -63,6 +63,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Geopy](https://github.com/geopy/geopy)
 * [Wikipedia wrapper](https://github.com/goldsmith/Wikipedia)
 * [Peewee](https://github.com/coleifer/peewee)
+* [wttr.in](https://github.com/chubin/wttr.in)
 
 # **[ENG]**
 
@@ -115,3 +116,4 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Geopy](https://github.com/geopy/geopy)
 * [Wikipedia wrapper](https://github.com/goldsmith/Wikipedia)
 * [Peewee](https://github.com/coleifer/peewee)
+* [wttr.in](https://github.com/chubin/wttr.in)
