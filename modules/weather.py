@@ -17,7 +17,7 @@ api_weather = config_file["api_weather"]
 """
 def call_api_weather(query):
     coordinates = showmaps(query,"client","message") #showmaps will raise an exception and return only coordinates
-    if("404" in str(coordinates)):
+    if("404:" in str(coordinates)):
         return coordinates
     lat = coordinates[0]
     lon = coordinates[1]
@@ -60,7 +60,7 @@ def check_airQualityCode(air_quality):
 """
 def get_weather(query,client,message):
     data = call_api_weather(query)
-    if("404" in str(data)):
+    if("404:" in str(data)):
         return sendMessage(client,message,data)
     data_air = call_api_airPollution(query)
     current_temp = str(data["current"]["temp"])
