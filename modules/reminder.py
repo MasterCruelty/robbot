@@ -2,6 +2,13 @@ import time
 import utils.get_config as ugc
 
 
+
+#mi definisco i valori da moltiplicare per calcolare il tempo del promemoria
+time_dict = { "gg": 86400,
+              "h" :  3600,
+              "m" :    60,
+              "s" :     1
+            }
 """
     query => tempo nella forma "ns" "nm" "nh" "ngg" dove n è il numero di secondi/minuti/ore/giorni
     funzione di supporto che converte il tempo dalla forma astratta del messaggio in secondi effettivi.
@@ -13,19 +20,19 @@ def setTime(client,message,query):
         try:
             if "gg" in query:
                 temp = query.split("gg")
-                result += int(temp[0]) * 86400
+                result += int(temp[0]) * time_dict["gg"]
                 query = temp[1]
             if "h" in query:
                 temp = query.split("h")
-                result += int(temp[0]) * 3600
+                result += int(temp[0]) * time_dict["h"]
                 query = temp[1]
             if "m" in query:
                 temp = query.split("m")
-                result += int(temp[0]) * 60
+                result += int(temp[0]) * time_dict["m"]
                 query = temp[1]
             if "s" in query:
                 temp = query.split("s")
-                result += int(temp[0])
+                result += int(temp[0]) * time_dict["s"]
                 query = temp[1]
         except:
             return ugc.sendMessage(client,message,"__formato non valido__")
@@ -57,6 +64,6 @@ def set_reminder(query,client,message):
         msg = split[1]
     except:
         return ugc.sendMessage(client,message,"__formato non valido__")
-    utils.get_config.sendMessage(client,message,"Te lo ricorderò!")
+    ugc.sendMessage(client,message,"Te lo ricorderò!")
     time.sleep(countdown)
     return ugc.sendMessage(client,message,msg)
