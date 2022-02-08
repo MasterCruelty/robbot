@@ -57,6 +57,6 @@ def set_reminder(query,client,message):
         msg = split[1]
     except:
         return ugc.sendMessage(client,message,"__formato non valido__")
-    utils.get_config.sendMessage(client,message,"Te lo ricorderò!")
+    ugc.sendMessage(client,message,"Te lo ricorderò!")
     time.sleep(countdown)
     return ugc.sendMessage(client,message,msg)
