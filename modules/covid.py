@@ -3,6 +3,7 @@ import json
 from datetime import date
 import datetime
 import utils.get_config as ugc
+import pandas as pd
 
 """
     url => url github da cui recuperare il json
@@ -118,52 +119,51 @@ def covid_cases(query,client,message):
     Restituisce i dati sui vaccini nella data odierna
 """
 def vaccinedate(client,message,query):
-    data_consegne = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
-    data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
-    if(check_repo(data_consegne)):
-        return ugc.sendMessage(client,message,"__Errore repository sorgente__")
+    data_consegne = pd.read_csv('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv')
+    data_somministrazioni = pd.read_csv('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv')
     str_consegne = str_somm = forncons_str = fornsomm_str = regione = ""
     prima_dose = seconda_dose = dose_booster = 0
     fornitori = []
     fornitori_somma_consegne = [0,0,0,0,0,0,0]
     fornitori_somma_somminis = [0,0,0,0,0,0,0]
-    for item in data_consegne:
-        if(query[0] == item["data_consegna"][0:10] and len(query) == 1):
-            regione = "Italia"
-            if(item["fornitore"] in fornitori):
-                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
+    if(query[0] == data_consegne["data_consegna"][0:10] and len(query) == 1):
+        regione = "Italia"
+    elif(query[0] == data_consegne["data_consegna"][0:10] and query[1][0:4].title() in data_consegne["nome_area"]):
+        regione = item["nome_area"]
+        for row in data_consegne:
+            if(row["fornitore"] in fornitori):
+                fornitori_somma_consegne[fornitori.index(row["fornitore"])] += row["numero_dosi"]
             else:
-                fornitori.append(item["fornitore"])
-                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-        elif(query[0] == item["data_consegna"][0:10] and query[1][0:4].title() in item["nome_area"]):
-            regione = item["nome_area"]
-            if(item["fornitore"] in fornitori):
-                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-            else:
-                fornitori.append(item["fornitore"])
-                fornitori_somma_consegne[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-    for item in data_somministrazioni:
+                fornitori.append(row["fornitore"])
+                fornitori_somma_consegne[fornitori.index(row["fornitore"])] += row["numero_dosi"]
+    for row in data_consegne:
+        if(row["fornitore"] in fornitori):
+            fornitori_somma_consegne[fornitori.index(row["fornitore"])] += row["numero_dosi"]
+        else:
+            fornitori.append(row["fornitore"])
+            fornitori_somma_consegne[fornitori.index(row["fornitore"])] += row["numero_dosi"]
+    for row in data_somministrazioni:
         if(query[0] == item["data_somministrazione"][0:10] and len(query) == 1):
-            if(item["fornitore"] in fornitori):
-                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_maschile"]
-                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_femminile"]
-                prima_dose += item["prima_dose"]
-                seconda_dose += item["seconda_dose"]
-                dose_booster += item["dose_addizionale_booster"]
+            if(row["fornitore"] in fornitori):
+                fornitori_somma_somminis[fornitori.index(row["fornitore"])] += row["sesso_maschile"]
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += row["sesso_femminile"]
+                prima_dose += row["prima_dose"]
+                seconda_dose += row["seconda_dose"]
+                dose_booster += row["dose_addizionale_booster"]
             else:
-                fornitori.append(item["fornitore"])
-                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_maschile"]
-                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_femminile"]
-                prima_dose += item["prima_dose"]
-                seconda_dose += item["seconda_dose"]
-                dose_booster += item["dose_addizionale_booster"]
-        elif(query[0] == item["data_somministrazione"][0:10] and query[1][0:4].title() in item["nome_area"]):
+                fornitori.append(row["fornitore"])
+                fornitori_somma_somminis[fornitori.index(row["fornitore"])] += row["sesso_maschile"]
+                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += row["sesso_femminile"]
+                prima_dose += row["prima_dose"]
+                seconda_dose += row["seconda_dose"]
+                dose_booster += row["dose_addizionale_booster"]
+        elif(query[0] == row["data_somministrazione"][0:10] and query[1][0:4].title() in row["nome_area"]):
             if(item["fornitore"] in fornitori):
-                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_maschile"]
-                fornitori_somma_somminis[fornitori.index(item["fornitore"])] += item["sesso_femminile"]
-                prima_dose += item["prima_dose"]
-                seconda_dose += item["seconda_dose"]
-                dose_booster += item["dose_addizionale_booster"]
+                fornitori_somma_somminis[fornitori.index(row["fornitore"])] += row["sesso_maschile"]
+                fornitori_somma_somminis[fornitori.index(row["fornitore"])] += row["sesso_femminile"]
+                prima_dose += row["prima_dose"]
+                seconda_dose += row["seconda_dose"]
+                dose_booster += row["dose_addizionale_booster"]
     #variabili per controllare se sono stati trovati dei dati di consegne o somministrazioni.
     check_consegne = check_somm = 0
     for i in range(len(fornitori)):
@@ -215,54 +215,52 @@ def vaccinepoints(client,message,split_query):
     Funzione che restituisce i dati italiani relativi ai vaccini covid19 in termini di dosi consegnate, somministrate e altri dati.
 """
 def vaccine(client,message,query):
-    data_total = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.json')
-    data_consegne_fornitori = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.json')
-    data_somministrazioni = vaccine_format_json('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.json')
-    if(check_repo(data_total)):
-        return ugc.sendMessage(client,message,"__Errore repository sorgente__")
+    data_total = pd.read_csv('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv')
+    data_consegne_fornitori = pd.read_csv('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv')
+    data_somministrazioni = pd.read_csv('https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv')
     total_consegne = 0
     total_somm = 0
-    for item in data_total:
-        if(query == "/vaccine"):
-            total_consegne += item["dosi_consegnate"]
-            total_somm += item["dosi_somministrate"]
-            regione = "Italia"
-        elif(query.title()[0:4] in item["nome_area"]):
-                total_consegne += item["dosi_consegnate"]
-                total_somm += item["dosi_somministrate"]
-                regione = item["nome_area"]
+    if(query == "/vaccine"):
+        total_consegne = sum(data_total["dosi_consegnate"])
+        total_somm = sum(data_total["dosi_somministrate"])
+        regione = "Italia"
+    elif(query.title()[0:4] in data_total["nome_area"]):
+        total_consegne = sum(data_total["dosi_consegnate"])
+        total_somm = sum(data_total["dosi_somministrate"])
+        regione = data_total["nome_area"]
     if(total_consegne == 0):
         return ugc.sendMessage(client,message,"__Errore formato.\n/helprob vaccine per più dettagli sul comando.__")
     perc = str(round(((total_somm * 100) / total_consegne),2))
-    giorno = str(data_total[0]["ultimo_aggiornamento"])[0:10]
+    giorno = str(data_total["ultimo_aggiornamento"])[0:10]
     fornitori = []
     fornitori_somma = [0,0,0,0,0,0,0,0]
     forn_str = ""
     over80 = prima_dose = seconda_dose = dose_booster = 0
-    for item in data_consegne_fornitori:
-        if(query == "/vaccine"):
-            if(item["fornitore"] in fornitori):
-                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-            else:
-                fornitori.append(item["fornitore"])
-                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-        elif(query.title()[0:4] in item["nome_area"]):
-            if(item["fornitore"] in fornitori):
-                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-            else:
-                fornitori.append(item["fornitore"])
-                fornitori_somma[fornitori.index(item["fornitore"])] += item["numero_dosi"]
-    for item in data_somministrazioni:
-        if(query =="/vaccine"):
-            prima_dose += item["prima_dose"]
-            seconda_dose += item["seconda_dose"]
-            dose_booster += item["dose_addizionale_booster"]
+    if(query == "/vaccine"):
+        if(data_consegne_fornitori["fornitore"] in fornitori):
+            fornitori_somma[fornitori.index(data_consegne_fornitori["fornitore"])] = sum(data_consegne_fornitori["numero_dosi"])
         else:
-            if(query.title()[0:4] in item["nome_area"]):
-                prima_dose += item["prima_dose"]
-                seconda_dose += item["seconda_dose"]
-                dose_booster += item["dose_addizionale_booster"]
+            fornitori.append(data_consegne_fornitori["fornitore"])
+            fornitori_somma[fornitori.index(data_consegne_fornitori["fornitore"])] = sum(data_consegne_fornitori["numero_dosi"])
+    elif(query.title()[0:4] in data_consegne_fornitori["nome_area"]):
+        if(data_consegne_fornitori["fornitore"] in fornitori):
+            fornitori_somma[fornitori.index(data_consegne_fornitori["fornitore"])] = sum(data_consegne_fornitori["numero_dosi"])
+        else:
+            fornitori.append(data_consegne_fornitori["fornitore"])
+            fornitori_somma[fornitori.index(data_consegne_fornitori["fornitore"])] = sum(data_consegne_fornitori["numero_dosi"])
+    if(query =="/vaccine"):
+        prima_dose = sum(data_somministrazioni["prima_dose"])
+        seconda_dose = sum(data_somministrazioni["seconda_dose"])
+        dose_booster = sum(data_somministrazioni["dose_addizionale_booster"])
+    else:
+        if(query.title()[0:4] in data_somministrazioni["nome_area"]):
+            prima_dose = sum(data_somministrazioni["prima_dose"])
+            seconda_dose = sum(data_somministrazioni["seconda_dose"])
+            dose_booster = sum(data_somministrazioni["dose_addizionale_booster"])
     for i in range(len(fornitori)):
         forn_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma[i]) + "__\n"
+    print(total_consegne)
+    print(regione)
+    print(total_somm)
     result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n\n**Percentuale dosi somministrate:** __" + str(perc) + "__\n**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__\n**Totale dosi booster:** __" + format_values(dose_booster) + "__\n\nTra le dosi consegnate vi sono:\n" + forn_str
     return ugc.sendMessage(client,message,result)
