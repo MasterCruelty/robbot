@@ -24,7 +24,6 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/vaccine'        : modules.covid.check_vaccine_function,
                     '/poll'           : usys.poll_function,
                     '/weather'        : modules.weather.get_weather,
-                    '/weathermap'     : modules.weather.wttrin_map,
                     '/forecastoday'   : modules.weather.get_today_forecasts,
                     '/forecastfuture' : modules.weather.get_future_forecasts,
                     '/reminder'       : modules.reminder.set_reminder,
@@ -33,6 +32,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/playlotto'      : usys.play_lotto,
+                    '/weathermap'     : modules.weather.wttrin_map,
                     '/pingrob'        : usys.ping}
 
 dictionary_super = {'/setrobuser'     : udb.set_user,
@@ -53,7 +53,7 @@ Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
 def fetch_admin_command(match,query,client,message):
     #system functions
-    dictionary_admin[match](client,message)
+    dictionary_admin[match](query,client,message)
 
 """
 Analogamente a fetch_command ma per i comandi esclusivi del super admin

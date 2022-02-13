@@ -31,7 +31,7 @@ def print_updates(client,message):
     
     #Restituisce il json del messaggio
     if "/getmessage" in str(message) and (isAdmin(utente) or isSuper(utente)):
-        return get_message(client,message)
+        return get_message("",client,message)
 
     #funzionalità super admin
     cmd_super = comandi_super.split(";")

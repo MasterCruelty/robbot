@@ -22,7 +22,7 @@ def poll_function(query,client,message):
 Restituisce il json intero di un messaggio. Se il json supera la capacità di un messaggio Telegram, viene inviato sotto forma di file.
 """
 @Client.on_message()
-def get_message(client,message):
+def get_message(query,client,message):
     chat = ugc.get_chat(message)
     uct.save_json(message)
     client.send_document(chat,document = "json_message.json",caption = "__Ecco il json prodotto dal messaggio__",reply_to_message_id=message["message_id"])
@@ -30,7 +30,7 @@ def get_message(client,message):
 """
 Veloce controllo se l'app è online
 """
-def ping(client,message):
+def ping(query,client,message):
     return ugc.sendMessage(client,message,"pong")
 
 """
@@ -75,13 +75,13 @@ def help(query,client,message):
         help_reminder = help_file["reminder"]
         return ugc.sendMessage(client,message,help_reminder)
     else:
-        return ugc.sendMessage(client,message,"Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, poll, reminder atm e mappe.__")
+        return ugc.sendMessage(client,message,"Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, poll, reminder, atm e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__")
 
 """
 Restituisce 6 numeri tutti diversi tra loro tutti nel range da 1 a 90
 """
 @Client.on_message()
-def play_lotto(client,message):
+def play_lotto(query,client,message):
     numbers = []
     while len(numbers) < 6:
         n = random.randint(1,90)
