@@ -53,6 +53,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * geopy
 * bs4
 * wikipedia
+* pandas
 
 ### Progetti esterni usati
 
@@ -105,6 +106,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * geopy
 * bs4
 * wikipedia
+* pandas
 
 
 ### External projects used
