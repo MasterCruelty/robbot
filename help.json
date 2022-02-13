@@ -7,7 +7,7 @@
 	},
 	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.",
 	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.\n**/covid 'region'** => restituisce i dati della regione.",
-	"vaccine":"**/vaccine** => restituisce i dati relativi ai vaccini in Italia.\n**/vaccine 'region'** => restituisce i dati della regione.\n**/vaccine yyyy-mm-dd** => restituisce i dati nella data richiesta. \n__Aggiungere la regione dopo la data per i dati sulla regione.__\n**/vaccine punti 'provincia'** => restituisce la lista dei punti di somministrazione nella provincia richiesta.",
+	"vaccine":"**/vaccine** => restituisce i dati relativi ai vaccini in Italia.\n**/vaccine 'region'** => restituisce i dati della regione.\n**/vaccine punti 'provincia'** => restituisce la lista dei punti di somministrazione nella provincia richiesta.",
 	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
 	"reminder":"**/reminder 'tempo';'messaggio'** => invia dopo il tempo indicato.\n__s = secondi\nm = minuti\nh = ore\ngg = giorni__\n\n**/reminder 1m50s;ciao\n/reminder 1h10m;ciao\n/reminder 1gg5h10m;ciao.**",
 	"atm":{
