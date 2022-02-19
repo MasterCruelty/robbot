@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{amsmath} % import of math elements
+\usepackage{mathtools} %import of other math elements
+
+%-------------------------------------------------------
+% Document information
+%-------------------------------------------------------
+
+\title{Robbot project documentation} %Title 
+
+\author{Roberto \textsc{Antoniello}} %author name
+
+\begin{document}
+\maketitle % show the title and author and date
+%-------------------------------------------------------
+%Introduction
+%-------------------------------------------------------
+
+\begin{center} In this file I resume how Robbot works with more details than the README file you can find in the repository.
+Robbot is a Telegram bot with a bunch of different features. Some of them extend the use of Telegram you usually do, some of them are just funny features.\\
+The bot is written in Python and it is running in Python3.8 at the moment.\end{center}
+
+%-------------------------------------------------------
+%First section about configuration file
+%-------------------------------------------------------
+\section{Configuration file}
+
+The configuration file is the first thing you must check because without it well compiled, the bot won't run at all. This file is also well explained in README file so I won't spend a lot of words on it.
+\begin{center} $config-example.json \Rightarrow config.json$ \end{center}
+
+\subsection{DB path}
+The .db file will be saved in the directory you choose and set in config.json file
+\begin{center} $"path-db" \Rightarrow config.json$ \end{center}
+
+\subsection{Super admin data}
+In this section we put our Telegram data as super admin(the only one) of the bot. The super admin is able to manage the db changes such as adding users, promote to admin and deleting users/revoke admin powers.
+\begin{center} $"id-super-admin" \Rightarrow config.json$ \end{center}
+
+\subsection{commands,admin commands and super}
+Here we put the name of commands the bot is able to recognize and execute. For example if we don't want to execute the weather we just don't put it on user-commands field. It's the same for admin and super commands.
+\begin{center} $"user-commands" \Rightarrow config.json$ \\
+               $"admin-commands" \Rightarrow config.json$ \\
+               $"super-admin-commands" \Rightarrow config.json$
+\end{center}
+
+\section{main}
+app.py is the main source file. It creates the session, it connects with Telegram API using Pyrogram Client class and it's in constant wait for arriving messages.
+First of all it fetches the information from configuration file, then it starts the connection.
+While waiting, the bot will ignore any messages it doesn't recognize as a known command. Otherwise if it's a known command, it checks for permission to the user launched that command. If it's a recognized user, the entire message will be managed by a parser function and passed to a specific fetch function written inside controller.py.
+\begin{center} $app.py \xrightarrow{\text{command}} controller.py$ \end{center}
+
+\subsection{parser function}
+
+
+
+\end{document}

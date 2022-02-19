@@ -17,3 +17,7 @@ json_message.json
 
 #Ignora file img
 img.png
+
+#Ignora log e aux file
+*.aux
+*.log
