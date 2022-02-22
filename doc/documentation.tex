@@ -43,14 +43,49 @@ Here we put the name of commands the bot is able to recognize and execute. For e
                $"super-admin-commands" \Rightarrow config.json$
 \end{center}
 
-\section{main}
+%-------------------------------------------------------
+%Second section about app.py(main)
+%-------------------------------------------------------
+\section{Main}
 app.py is the main source file. It creates the session, it connects with Telegram API using Pyrogram Client class and it's in constant wait for arriving messages.
 First of all it fetches the information from configuration file, then it starts the connection.
 While waiting, the bot will ignore any messages it doesn't recognize as a known command. Otherwise if it's a known command, it checks for permission to the user launched that command. If it's a recognized user, the entire message will be managed by a parser function and passed to a specific fetch function written inside controller.py.
+If a command isn't launched by a registered user, the bot will reply with a default message.
 \begin{center} $app.py \xrightarrow{\text{command}} controller.py$ \end{center}
 
-\subsection{parser function}
+%-------------------------------------------------------
+%Third section about the controller
+%-------------------------------------------------------
+\section{Controller}
+Just like in the MVC design pattern, this controller takes the input arriving from the main and it calls the right function in the right source file in $utils$ and $modules$ folders. How it works? \\
+There are three dictionaries dedicated to the three types of command(user,admin,super). The key is the command and the value is the path of function it executes. As said in Main section, here we have the fetch command functions matched with the dictionaries mentioned in the previous row. The specific function will return a sendMessage and then the main will wait for the next command.
+\begin{center} $controller.py \xrightarrow{\text{command fetched}} (modules \ or \ utils)$ \end{center}
 
+\subsection{parser function}
+This simple function mentioned in the first section takes the input message as argument and it deletes the command at the beginning, returning then just the query that will be sended by the controller to the right module which will manage and execute it.
+
+\subsection{other details}
+Inside the controller there is also a small function(visualizza) which print the current state of the incoming message on terminal such as a live log. \\
+
+%-------------------------------------------------------
+%4th section about the get_config source file
+%-------------------------------------------------------
+\section{get-config}
+this source file contains some support functions that are often used in many situations. The first one return in a variable the content of the configuration file to get the fields easily. \\
+The remaining functions are all about Telegram features such as getting information from the json message or renaming for example the send-message of Pyrogram to avoid including the decorator in every source file and just call this one by including get-config.
+\begin{center} $app.py \xrightarrow{\text{get-config-file()}} running$ \end{center}
+
+%-------------------------------------------------------
+%5th section about the sysfunctions source file
+%-------------------------------------------------------
+\section{sysfunctions}
+This file contains functions using directly Telegram features such as the poll function or get-message. It also includes the help function.
+
+\section{Summary till now}
+\begin{center} $app.py \xrightarrow{\text{get-config-file()}} running$ \end{center}
+\begin{center} $app.py \xrightarrow{\text{command}} controller.py$ \end{center}
+\begin{center} $controller.py \xrightarrow{\text{command fetched}} (modules \ or  \ utils)$ \end{center}
+\begin{center} $(modules \ or \ utils) \xrightarrow{\text{return}} app.py$ \end{center}
 
 
 \end{document}
