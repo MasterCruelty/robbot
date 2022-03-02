@@ -15,8 +15,9 @@ json_message.json
 #Ignora file .db
 *.db
 
-#Ignora file img
+#Ignora file img e sat24.gif
 img.png
+sat24.gif
 
 #Ignora log e aux file
 *.aux
