@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage{amsmath} % import of math elements
 \usepackage{mathtools} %import of other math elements
+\usepackage{tikz} 
+\usetikzlibrary{shapes,positioning,calc} 
 
 %-------------------------------------------------------
 % Document information
@@ -85,7 +87,37 @@ This file contains functions using directly Telegram features such as the poll f
 \begin{center} $app.py \xrightarrow{\text{get-config-file()}} running$ \end{center}
 \begin{center} $app.py \xrightarrow{\text{command}} controller.py$ \end{center}
 \begin{center} $controller.py \xrightarrow{\text{command fetched}} (modules \ or  \ utils)$ \end{center}
-\begin{center} $(modules \ or \ utils) \xrightarrow{\text{return}} app.py$ \end{center}
+\begin{center} $(modules \ or \ utils) \xrightarrow{\text{return message}} app.py$ \end{center}
+\begin{center} $app.py \xrightarrow{\text{waiting for the next command}} app.py$ \end{center}
+
+%-------------------------------------------------------
+%6th section about database
+%-------------------------------------------------------
+\section{Database}
+In this section we'll focus about the database structure. There are two main table: User and Stats. \\ 
+the first one saves data of users such as Telegram id(to check if it's registered) and a couple of boolean fields for admin rights.\\
+The Stats table is linked to the User one by the id field and it saves information about how many times a command is used by every users.
+There's also a Group table but it's not used at the moment, maybe in the future or not at all and it will be deleted in that case.\\
+
+\begin{tikzpicture}[relation/.style={rectangle split, rectangle split parts=#1, rectangle split part align=base, draw, anchor= center, align=center, text height=3mm, text centered}]\hspace*{-0.3cm}
+
+\node (usertitle) {\textbf{User}};
+\node [relation=5, rectangle split horizontal, rectangle split part fill={lightgray!50}, anchor= north west, below=0.6cm of usertitle.west,anchor=west] (user)
+	{\underline{id\_user} 
+	\nodepart{two} name
+	\nodepart{three} username
+	\nodepart{four} admin
+	\nodepart{five} superadmin};
+
+\node [below=1.3cm of user.west,anchor=west] (statstitle) {\textbf{Stats}};
+\node [relation=3,rectangle split horizontal, rectangle split part fill ={lightgray!50}, below=0.6cm of statstitle.west,anchor=west] (stats)
+	{\nodepart{one} id\_user
+	 \nodepart{two} command
+	 \nodepart{three} times };
+
+\draw[-latex] (stats.one south) -- ++(0,-0.2) -| ($(stats.one south) + (4,0)$) |- ($(user.one south) + (0.25,-0.50)$) -| ($(user.one south) + (0.25,0)$);
+
+\end{tikzpicture}
 
 
 \end{document}
