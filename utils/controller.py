@@ -33,6 +33,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
 dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/playlotto'      : usys.play_lotto,
                     '/weathermap'     : modules.weather.wttrin_map,
+                    '/weathersat'     : modules.weather.sat24_map,
                     '/pingrob'        : usys.ping}
 
 dictionary_super = {'/setrobuser'     : udb.set_user,

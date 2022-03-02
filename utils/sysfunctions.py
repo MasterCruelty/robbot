@@ -87,5 +87,7 @@ def play_lotto(query,client,message):
         n = random.randint(1,90)
         if n not in numbers:
             numbers.append(n)
-    result = ' '.join(str(n) for n in numbers)
+    result = '<code> '
+    result += ' '.join(str(n) for n in numbers)
+    result += ' </code>'
     return ugc.sendMessage(client,message,result)

@@ -16,9 +16,19 @@ def sendMessage(client,message,result):
     client.send_message(get_chat(message),result,disable_web_page_preview=True,reply_to_message_id=get_id_msg(message))
     return
 
+"""
+funzione d'appoggio per inviare immagini
+"""
 @Client.on_message()
 def sendPhoto(client,message,result,caption):
     client.send_photo(get_chat(message),result,caption=caption,reply_to_message_id=get_id_msg(message))
+
+"""
+funzione d'appoggio per inviare gif
+"""
+@Client.on_message()
+def sendGIF(client,message,result,caption):
+    client.send_animation(get_chat(message),result,caption=caption,reply_to_message_id=get_id_msg(message))
 """
 Restituisce l'id utente
 """

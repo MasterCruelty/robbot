@@ -12,6 +12,12 @@ from pyrogram import Client
 config_file = get_config_file("../config.json")
 api_weather = config_file["api_weather"]
 
+#dizionario per i codici di visualizzazione delle mappe satellitari
+sat24_codes = {"pioggia"    : "rainTMC",
+               "sole"       : "visual",
+               "infrarossi" : "infraPolair",
+               "neve"       : "snow"
+              }
 """
     Funzione di supporto che chiama le api di OpenWeatherMap(Dati principali meteo)
 """
@@ -154,3 +160,21 @@ def wttrin_map(query,client,message):
         return sendPhoto(client,message,'img.png',caption="__Area **"+query+"** come richiesto.__")
     except:
         return sendMessage(client,message,"__404: page not found__")
+
+"""
+Data una richiesta, restituisce l'immagine gif satellitare dell'area.
+"""
+def sat24_map(query,client,message):
+    query = query.split(",")
+    try:
+        area = query[0]
+        code = query[1].replace(" ","")
+        data = "https://api.sat24.com/animated/"+ area + "/"+ sat24_codes[code] + "/2/Central%20European%20Standard%20Time/6030397'%20width=400%20height=291"
+        resp = requests.get(data,stream=True)
+        with open('sat24.gif','wb') as output:
+            shutil.copyfileobj(resp.raw,output)
+        del resp
+        return sendGIF(client,message,'sat24.gif',caption="__Ecco la mappa satellitare richiesta.__")
+    except:
+        return sendMessage(client,message,"__Mappa non trovata o richiesta errata.\n Consulta **/helprob meteo** per più informazioni.__")
+
