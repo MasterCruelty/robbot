@@ -171,6 +171,8 @@ def sat24_map(query,client,message):
         code = query[1].replace(" ","")
         data = "https://api.sat24.com/animated/"+ area + "/"+ sat24_codes[code] + "/2/Central%20European%20Standard%20Time/6030397'%20width=400%20height=291"
         resp = requests.get(data,stream=True)
+        if "notfound" in resp.text:
+            return sendMessage(client,message,"__Mappa non trovata.\nConsulta **/helprob meteo** per più informazioni.__")
         with open('sat24.gif','wb') as output:
             shutil.copyfileobj(resp.raw,output)
         del resp
