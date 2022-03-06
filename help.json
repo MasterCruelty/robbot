@@ -5,7 +5,7 @@
 		"wikirandom":"**/wiki random** => una pagina casuale in italiano.\n**/wiki 'lang' random** => una pagina casuale nella lingua richiesta.",
 		"wikicomune":"**/wiki /comune** => cerca in Wikipedia la pagina di un comune/città/centro abitato/etc."
 	},
-	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.",
+	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.\n**/searchsongs ' artist' ** => restituisce l'elenco di tutti i brani dell'artista richiesto.",
 	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.\n**/covid 'region'** => restituisce i dati della regione.",
 	"vaccine":"**/vaccine** => restituisce i dati relativi ai vaccini in Italia.\n**/vaccine 'region'** => restituisce i dati della regione.\n**/vaccine punti 'provincia'** => restituisce la lista dei punti di somministrazione nella provincia richiesta.",
 	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
