@@ -5,7 +5,10 @@ from utils.get_config import sendMessage
 
 def execute_lyrics(query,client,message):
     parametri = query.split(",")
-    result = get_lyrics_formated(parametri[0],parametri[1])
+    if len(parametri) > 1:
+        result = get_lyrics_formated(parametri[0],parametri[1])
+    else:
+        result = search_songs(parametri[0])
     return sendMessage(client,message,result)
 
 """
@@ -25,6 +28,25 @@ def get_lyrics_formated(artista,canzone):
     result = "\n".join(lyrics)
     return result
 
+"""
+dato l'artista, restituisce tutti i suoi brani
+"""
+def search_songs(artista):
+    artista = format_input(artista)
+    url = "https://azlyrics.com/" + artista[0] + "/" + artista + ".html"
+    page = handle_except(url)
+    if "404" in str(page):
+        return page
+    zuppa = BeautifulSoup(page,"html.parser")
+    results_tags = zuppa.find_all("div",attrs={"class": None,"id": "listAlbum"})
+    results = [tag.getText() for tag in results_tags]
+    results = "__" + "\n".join(results) + "__"
+    result = ""
+    for word in results.split("\n"):
+        if word.startswith("album"):
+            word = "++++++++++++++++++++++\n**" + word + "**" + "\n"
+        result += word + "\n"
+    return result
 """
 Questa funzione formatta una stringa in modo che sia pronta per essere usata in get_lyrics_formated
 """
