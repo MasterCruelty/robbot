@@ -25,5 +25,6 @@
 		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__modalità esistenti: pioggia,sole,neve,infrarossi.\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__",
 		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.",
 		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo."
-	}
+	},
+	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI"
 }
