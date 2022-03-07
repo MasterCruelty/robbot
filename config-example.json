@@ -5,6 +5,7 @@
 	"api_url": "ATM MILANO API URL",
 	"api_get": "ANOTHER ATM API URL TO DO ONLY GET",
 	"api_weather":"OPEN WEATHER MAP API",
+	"api_openai":"OPENAI API KEY",
 	"id_super_admin": "ID_USER;NAME_USER;USERNAME_USER",
 	"path_db":"YOUR PATH/DATABASE.db",
 	"session_name":"YOUR SESSION NAME",
