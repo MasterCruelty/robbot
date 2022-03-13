@@ -26,5 +26,6 @@
 		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.",
 		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo."
 	},
-	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI"
+	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI",
+        "default": "Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, poll, reminder, atm e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, ai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
