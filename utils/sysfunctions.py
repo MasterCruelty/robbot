@@ -74,8 +74,12 @@ def help(query,client,message):
     if "reminder" in query:
         help_reminder = help_file["reminder"]
         return ugc.sendMessage(client,message,help_reminder)
+    if "openai" in query:
+        help_openai = help_file["openai"]
+        return ugc.sendMessage(client,message,help_openai)
     else:
-        return ugc.sendMessage(client,message,"Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, poll, reminder, atm e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__")
+        help_default = help_file["default"]
+        return ugc.sendMessage(client,message,help_default)
 
 """
 Restituisce 6 numeri tutti diversi tra loro tutti nel range da 1 a 90

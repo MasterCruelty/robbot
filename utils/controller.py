@@ -9,6 +9,7 @@ import modules.covid
 import modules.gmaps
 import modules.weather
 import modules.reminder
+import modules.openai
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -35,6 +36,7 @@ dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/playlotto'      : usys.play_lotto,
                     '/weathermap'     : modules.weather.wttrin_map,
                     '/weathersat'     : modules.weather.sat24_map,
+                    '/ai'             : modules.openai.openai_completion,
                     '/pingrob'        : usys.ping}
 
 dictionary_super = {'/setrobuser'     : udb.set_user,
