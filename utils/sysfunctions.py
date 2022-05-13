@@ -2,7 +2,6 @@ from pyrogram import Client
 import utils.controller as uct
 import utils.get_config as ugc
 import random
-import time
 
 """
 Lancia un sondaggio in automatico non anonimo
@@ -35,6 +34,7 @@ def ping(query,client,message):
 
 """
 documentazione dei comandi utente direttamente su Telegram
+TO DO: rifattorizzare usando un dizionario
 """
 def help(query,client,message):
     help_file = ugc.get_config_file("help.json")

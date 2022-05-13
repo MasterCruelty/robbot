@@ -1,5 +1,3 @@
-import time
-from datetime import date
 from pyrogram import Client 
 from utils.controller import *
 from utils.dbfunctions import *
@@ -24,7 +22,6 @@ def print_updates(client,message):
     utente = get_id_user(message)
     nome_chat = message["chat"]["title"]
     nome_utente = get_first_name(message)
-    time_message = time.strftime("%H:%M:%S")
     username = get_username(message) 
     messaggio = get_text_message(message)
 

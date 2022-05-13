@@ -1,5 +1,4 @@
 import wikipedia
-import re
 from pyrogram import Client
 import utils.get_config as ugc
 import utils.controller as uct
