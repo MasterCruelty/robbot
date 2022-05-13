@@ -1,5 +1,3 @@
-import time
-import os
 from pyrogram import Client
 import utils_config
 import modules.wiki

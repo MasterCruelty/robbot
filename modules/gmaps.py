@@ -1,7 +1,6 @@
 from geopy.geocoders import Nominatim
 from geopy.distance  import geodesic
 from pyrogram import Client
-import time
 import json
 import sys
 sys.path.append(sys.path[0] + "/..")

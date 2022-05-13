@@ -1,7 +1,5 @@
 import requests
 import json
-from datetime import date
-import datetime
 import utils.get_config as ugc
 import pandas as pd
 

@@ -1,5 +1,4 @@
 import wikipedia
-import re
 from pyrogram import Client
 import utils.get_config as ugc
 import utils.controller as uct
@@ -39,7 +38,7 @@ def execute_wiki(query,client,message):
             client.edit_message_text(ugc.get_chat(message),id_messaggio+1,"Operazione fallita")
             return
     lingua = get_lang(query)
-    if not(lingua in wikipedia.languages()) or lingua == "all":
+    if (lingua not in wikipedia.languages()) or lingua == "all":
         return exec_wiki_ita(query,client,message)
     word = get_keyword(query)
     if " all " in query:
