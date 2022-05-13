@@ -30,7 +30,7 @@ def get_message(query,client,message):
 Veloce controllo se l'app è online
 """
 def ping(query,client,message):
-    return ugc.sendMessage(client,message,"pong")
+    return ugc.sendMessage(client,message,"pong" + query)
 
 """
 documentazione dei comandi utente direttamente su Telegram
