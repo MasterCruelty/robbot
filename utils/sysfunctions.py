@@ -77,6 +77,9 @@ def help(query,client,message):
     if "openai" in query:
         help_openai = help_file["openai"]
         return ugc.sendMessage(client,message,help_openai)
+    if "urban" in query:
+        help_urban = help_file["urban"]
+        return ugc.sendMessage(client,message,help_urban)
     else:
         help_default = help_file["default"]
         return ugc.sendMessage(client,message,help_default)
