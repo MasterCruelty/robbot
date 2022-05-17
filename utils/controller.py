@@ -8,6 +8,7 @@ import modules.gmaps
 import modules.weather
 import modules.reminder
 import modules.openai
+import modules.urban
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
