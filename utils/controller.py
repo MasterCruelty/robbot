@@ -8,6 +8,7 @@ import modules.gmaps
 import modules.weather
 import modules.reminder
 import modules.openai
+import modules.urban
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -27,6 +28,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/forecastoday'   : modules.weather.get_today_forecasts,
                     '/forecastfuture' : modules.weather.get_future_forecasts,
                     '/reminder'       : modules.reminder.set_reminder,
+                    '/urban'          : modules.urban.urban_search,
                     '/mystat'         : udb.show_stats,
                     '/helprob'        : usys.help}
 
