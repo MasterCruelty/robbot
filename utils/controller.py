@@ -27,6 +27,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/forecastoday'   : modules.weather.get_today_forecasts,
                     '/forecastfuture' : modules.weather.get_future_forecasts,
                     '/reminder'       : modules.reminder.set_reminder,
+                    '/urban'          : modules.urban.urban_search,
                     '/mystat'         : udb.show_stats,
                     '/helprob'        : usys.help}
 
