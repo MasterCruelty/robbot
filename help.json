@@ -1,9 +1,9 @@
 {
 	"wiki":{
-		"wiki_default":"**/wiki 'keyword'** => ricerca in italiano di default.\n**/wiki 'lang' 'keyword'** => ricerca nella lingua richiesta.",
-		"wikiall":"**/wiki all 'keyword'** => ricerca in italiano mostrando 10 paragrafi.\n**/wiki 'lang' all 'keyword'** => ricerca nella lingua richiesta.",
-		"wikirandom":"**/wiki random** => una pagina casuale in italiano.\n**/wiki 'lang' random** => una pagina casuale nella lingua richiesta.",
-		"wikicomune":"**/wiki /comune** => cerca in Wikipedia la pagina di un comune/città/centro abitato/etc."
+		"wiki_default":"**/wiki 'keyword'** => ricerca in italiano di default.\n**/wiki 'lang' 'keyword'** => ricerca nella lingua richiesta.\n",
+		"wikiall":"**/wiki all 'keyword'** => ricerca in italiano mostrando 10 paragrafi.\n**/wiki 'lang' all 'keyword'** => ricerca nella lingua richiesta.\n",
+		"wikirandom":"**/wiki random** => una pagina casuale in italiano.\n**/wiki 'lang' random** => una pagina casuale nella lingua richiesta.\n",
+		"wikicomune":"**/wiki /comune** => cerca in Wikipedia la pagina di un comune/città/centro abitato/etc.\n"
 	},
 	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.\n**/searchsongs ' artist' ** => restituisce l'elenco di tutti i brani dell'artista richiesto.",
 	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.\n**/covid 'region'** => restituisce i dati della regione.",
@@ -11,20 +11,20 @@
 	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
 	"reminder":"**/reminder 'tempo';'messaggio'** => invia dopo il tempo indicato.\n__s = secondi\nm = minuti\nh = ore\ngg = giorni__\n\n**/reminder 1m50s;ciao\n/reminder 1h10m;ciao\n/reminder 1gg5h10m;ciao.**",
 	"atm":{
-		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito",
-		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito",
-		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__"
+		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito\n",
+		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito\n",
+		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__\n"
 	},
 	"mappe":{
-		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.",
-		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km."
+		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.\n",
+		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km.\n"
 	},
 	"meteo":{
-		"weather":"**/weather 'place'** => restituisce i dati meteo principali della città richiesta.",
-		"weathermap": "**/weathermap 'area' ** => Restituisce un'immagine della mappa dell'area scelta",
-		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__modalità esistenti: pioggia,sole,neve,infrarossi.\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__",
-		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.",
-		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo."
+		"weather":"**/weather 'place'** => restituisce i dati meteo principali della città richiesta.\n",
+		"weathermap": "**/weathermap 'area' ** => Restituisce un'immagine della mappa dell'area scelta\n",
+		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__modalità esistenti: pioggia,sole,neve,infrarossi.\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__\n",
+		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.\n",
+		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo.\n"
 	},
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI",
 	"urban": "**/urban 'word0 ** => restituisce la definizione di urban dictionary per la parola richiesta",
