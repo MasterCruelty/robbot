@@ -32,13 +32,34 @@ Veloce controllo se l'app è online
 def ping(query,client,message):
     return ugc.sendMessage(client,message,"pong " + query.replace("/pingrob",""))
 
+
+
+#dizionario per filtrare il comando richiesto nel file help.json
+help_dict = {"wiki"    : help_file["wiki"],
+             "lyrics"  : help_file["lyrics"],
+             "covid"   : help_file["covid"],
+             "vaccine" : help_file["vaccine"],
+             "poll"    : help_file["poll"],
+             "atm"     : help_file["atm"],
+             "mappe"   : help_file["mappe"],
+             "meteo"   : help_file["meteo"],
+             "reminder": help_file["reminder"],
+             "openai"  : help_file["openai"],
+             "urban"   : help_file["urban"],
+             "default" : help_file["default"] }
+
 """
 documentazione dei comandi utente direttamente su Telegram
-TO DO: rifattorizzare usando un dizionario
 """
 def help(query,client,message):
     help_file = ugc.get_config_file("help.json")
-    if "wiki" in query:
+    if query in help_dict:
+        help_request = help_file[query]
+        return ugc.sendMessage(client,message,help_request)
+    else:
+        help_request = help_file["default"]
+        return ugc.sendMessage(client,message,help_request)
+    """if "wiki" in query:
         help_wiki = help_file["wiki"][0]
         help_wikiall = help_file["wiki"][1]
         help_wikirandom = help_file["wiki"][2]
@@ -82,7 +103,7 @@ def help(query,client,message):
         return ugc.sendMessage(client,message,help_urban)
     else:
         help_default = help_file["default"]
-        return ugc.sendMessage(client,message,help_default)
+        return ugc.sendMessage(client,message,help_default)"""
 
 """
 Restituisce 6 numeri tutti diversi tra loro tutti nel range da 1 a 90
