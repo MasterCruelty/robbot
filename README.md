@@ -56,6 +56,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * wikipedia
 * pandas
 * openai
+* urbandictionary
 
 ### Progetti esterni usati
 
@@ -68,6 +69,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Peewee](https://github.com/coleifer/peewee)
 * [wttr.in](https://github.com/chubin/wttr.in)
 * [OpenAI](https://www.openai.com)
+* [Urban Dictionary](https://www.github.com/bocong/urbandictionary-py)
 
 # **[ENG]**
 
@@ -112,6 +114,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * wikipedia
 * pandas
 * openai
+* urbandictionary
 
 
 ### External projects used
@@ -125,3 +128,4 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Peewee](https://github.com/coleifer/peewee)
 * [wttr.in](https://github.com/chubin/wttr.in)
 * [OpenAI](https://www.openai.com)
+* [Urban Dictionary](https://www.github.com/bocong/urbandictionary-py)
