@@ -34,26 +34,14 @@ def ping(query,client,message):
 
 
 
-#dizionario per filtrare il comando richiesto nel file help.json
-help_dict = {"wiki"    : help_file["wiki"],
-             "lyrics"  : help_file["lyrics"],
-             "covid"   : help_file["covid"],
-             "vaccine" : help_file["vaccine"],
-             "poll"    : help_file["poll"],
-             "atm"     : help_file["atm"],
-             "mappe"   : help_file["mappe"],
-             "meteo"   : help_file["meteo"],
-             "reminder": help_file["reminder"],
-             "openai"  : help_file["openai"],
-             "urban"   : help_file["urban"],
-             "default" : help_file["default"] }
-
 """
 documentazione dei comandi utente direttamente su Telegram
 """
+#array per filtrare il comando help richiesto in help.json
+help_array = ["wiki","lyrics","covid","vaccine","poll","atm","mappe","meteo","reminder","openai","urban"]
 def help(query,client,message):
     help_file = ugc.get_config_file("help.json")
-    if query in help_dict:
+    if query in help_array:
         help_request = help_file[query]
         return ugc.sendMessage(client,message,help_request)
     else:
