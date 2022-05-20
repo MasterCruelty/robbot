@@ -42,56 +42,12 @@ help_array = ["wiki","lyrics","covid","vaccine","poll","atm","mappe","meteo","re
 def help(query,client,message):
     help_file = ugc.get_config_file("help.json")
     if query in help_array:
-        help_request = help_file[query]
+        help_request = help_file[query][0:]
+        help_request = str(help_request).replace("(","").replace(")","").replace('"','').replace(",","").replace(r'\n','\n')
         return ugc.sendMessage(client,message,help_request)
     else:
         help_request = help_file["default"]
         return ugc.sendMessage(client,message,help_request)
-    """if "wiki" in query:
-        help_wiki = help_file["wiki"][0]
-        help_wikiall = help_file["wiki"][1]
-        help_wikirandom = help_file["wiki"][2]
-        help_comune = help_file["wiki"][3]
-        return ugc.sendMessage(client,message,help_wiki+"\n\n"+help_wikiall+"\n\n"+help_wikirandom+"\n\n"+help_comune)
-    if "lyrics" in query:
-        help_lyrics = help_file["lyrics"]
-        return ugc.sendMessage(client,message,help_lyrics)
-    if "covid" in query:
-        help_covid = help_file["covid"]
-        return ugc.sendMessage(client,message,help_covid)
-    if "vaccine" in query:
-        help_vaccine = help_file["vaccine"]
-        return ugc.sendMessage(client,message,help_vaccine)
-    if "poll" in query:
-        help_poll = help_file["poll"]
-        return ugc.sendMessage(client,message,help_poll)
-    if "atm" in query:
-        help_atm = help_file["atm"][0]
-        help_geoatm = help_file["atm"][1]
-        help_searchatm = help_file["atm"][2]
-        return ugc.sendMessage(client,message,help_atm+"\n\n"+help_geoatm+"\n\n"+help_searchatm)
-    if "mappe" in query:
-        help_map = help_file["mappe"][0]
-        help_km = help_file["mappe"][1]
-        return ugc.sendMessage(client,message,help_map+"\n\n" + help_km+"\n\n")
-    if "meteo" in query:
-        help_weather = help_file["meteo"][0]
-        help_forecastoday = help_file["meteo"][1]
-        help_forecastfuture = help_file["meteo"][2]
-        help_weathermap = help_file["meteo"][3]
-        return ugc.sendMessage(client,message,help_weather+"\n\n" + help_forecastoday+"\n\n"+help_forecastfuture+"\n\n"+help_weathermap)
-    if "reminder" in query:
-        help_reminder = help_file["reminder"]
-        return ugc.sendMessage(client,message,help_reminder)
-    if "openai" in query:
-        help_openai = help_file["openai"]
-        return ugc.sendMessage(client,message,help_openai)
-    if "urban" in query:
-        help_urban = help_file["urban"]
-        return ugc.sendMessage(client,message,help_urban)
-    else:
-        help_default = help_file["default"]
-        return ugc.sendMessage(client,message,help_default)"""
 
 """
 Restituisce 6 numeri tutti diversi tra loro tutti nel range da 1 a 90
