@@ -62,7 +62,7 @@ def exec_wiki_ita(query,client,message):
 def wiki(keyword,client,message,lang="it"):
    wikipedia.set_lang(lang)
    try:
-       result = wikipedia.summary(keyword,sentences = 1) 
+       result = wikipedia.summary(keyword,sentences = 1,auto_suggest=False) 
        result += "\n"+create_link(keyword,lang)
    except wikipedia.exceptions.DisambiguationError as wd:
        result =  str(wd)
@@ -76,7 +76,7 @@ def wikiall(keyword,client,message,lang="it"):
        result = wikirandom(10,client,message,lang)
        return result
    try:
-       result = wikipedia.summary(keyword,sentences = 10)
+       result = wikipedia.summary(keyword,sentences = 10,auto_suggest=False)
        result = result.replace("==","****")
        result += "\n"+create_link(keyword,lang)
    except wikipedia.exceptions.DisambiguationError as wd:
@@ -89,7 +89,7 @@ def wikirandom(sents,boole,client,message,lang="it"):
     wikipedia.set_lang(lang)
     wikipedia.set_rate_limiting(rate_limit = True)
     random = wikipedia.random()
-    result = wikipedia.summary(random,sentences=sents)
+    result = wikipedia.summary(random,sentences=sents,auto_suggest=False)
     if boole:
         return result
     else:
@@ -109,7 +109,7 @@ def comune(client,message):
         client.edit_message_text(chat,id_messaggio+1,"Cerco un comune...\nVoci consultate: " + str(count))
         try:
             random = wikipedia.random()
-            result = wikipedia.summary(random,1)
+            result = wikipedia.summary(random,1,auto_suggest=False)
         except:
             continue 
         if (("è un comune" in result or "città" in result or "centro abitato" in result or "è una frazione" in result)):
