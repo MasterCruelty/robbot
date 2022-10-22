@@ -24,7 +24,7 @@ Restituisce il json intero di un messaggio. Se il json supera la capacità di un
 def get_message(query,client,message):
     chat = ugc.get_chat(message)
     uct.save_json(message)
-    client.send_document(chat,document = "json_message.json",caption = "__Ecco il json prodotto dal messaggio__",reply_to_message_id=message["message_id"])
+    client.send_document(chat,document = "json_message.json",caption = "__Ecco il json prodotto dal messaggio__",reply_to_message_id=message.id)
 
 """
 Veloce controllo se l'app è online
