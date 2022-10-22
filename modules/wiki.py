@@ -34,8 +34,7 @@ def execute_wiki(query,client,message):
         try:
             return comune(client,message)
         except:
-            id_messaggio = ugc.get_id_msg(message)
-            client.edit_message_text(ugc.get_chat(message),id_messaggio+1,"Operazione fallita")
+            client.edit_message_text(ugc.get_chat(message),message.id+1,"Operazione fallita")
             return
     lingua = get_lang(query)
     if (lingua not in wikipedia.languages()) or lingua == "all":
@@ -102,7 +101,7 @@ def comune(client,message):
     chat = ugc.get_chat(message)
     id_messaggio = ugc.get_id_msg(message)
     count = 0
-    client.send_message(chat,"Cerco un comune...","html",reply_to_message_id=id_messaggio)
+    client.send_message(chat,"Cerco un comune...",reply_to_message_id=id_messaggio)
     wikipedia.set_lang("it")
     while(True):
         count += 1
