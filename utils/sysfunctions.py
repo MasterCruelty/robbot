@@ -43,7 +43,7 @@ def help(query,client,message):
     help_file = ugc.get_config_file("help.json")
     if query in help_array:
         help_request = help_file[query][0:]
-        help_request = str(help_request).replace("(","").replace(")","").replace('"','').replace(",","").replace(r'\n','\n')
+        help_request = str(help_request).replace("(","").replace(")","").replace('"','').replace(r'\n','\n')
         return ugc.sendMessage(client,message,help_request)
     else:
         help_request = help_file["default"]
