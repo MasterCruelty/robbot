@@ -34,21 +34,21 @@ Restituisce l'id utente
 """
 def get_id_user(message):
     try:
-        return message["from_user"]["id"]
+        return message.from_user.id
     except:
         return "id utente non disponibile"
 """
 Restituisce l'id della chat
 """
 def get_chat(message):
-    return message["chat"]["id"]
+    return message.chat.id
 
 """
 Restituisce il nome utente
 """
 def get_first_name(message):
     try:
-        return message["from_user"]["first_name"]
+        return message.from_user.first_name
     except:
         return "Nome utente non disponibile"
 """
@@ -56,7 +56,7 @@ Restituisce username dell'utente
 """
 def get_username(message):
     try:
-        return "@" + message["from_user"]["username"]
+        return "@" + message.from_user.username
     except:
         return "Non impostato"
 
@@ -64,12 +64,12 @@ def get_username(message):
 Restituisce il campo testo del messaggio
 """
 def get_text_message(message):
-    if message["text"] is None:
+    if message.text is None:
         return "File multimediale"
     else:
-        return message["text"]
+        return message.text
 """
 Restituisce l'id del messaggio
 """
 def get_id_msg(message):
-    return message["message_id"]
+    return message.id

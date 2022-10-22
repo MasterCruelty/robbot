@@ -22,7 +22,7 @@
 	"meteo":{
 		"weather":"**/weather 'place'** => restituisce i dati meteo principali della città richiesta.\n",
 		"weathermap": "**/weathermap 'area' ** => Restituisce un'immagine della mappa dell'area scelta\n",
-		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__modalità esistenti: pioggia,sole,neve,infrarossi.\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__\n",
+		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__**modalità esistenti: pioggia/sole/neve/infrarossi.**\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__\n",
 		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.\n",
 		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo.\n"
 	},

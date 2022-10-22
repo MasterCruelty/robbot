@@ -13,14 +13,14 @@ comandi = config["commands"][0]
 comandi_admin = config["commands"][1]
 comandi_super = config["commands"][2]
 app = Client(session, api_id, api_hash,bot_token)
-
+print("RobBot 1.0.6 is running...")
 @app.on_message()
 def print_updates(client,message):
     #recupero parametri principali del messaggio dal json
     chat = get_chat(message)
     id_messaggio = get_id_msg(message)
     utente = get_id_user(message)
-    nome_chat = message["chat"]["title"]
+    nome_chat = message.chat.title
     nome_utente = get_first_name(message)
     username = get_username(message) 
     messaggio = get_text_message(message)
