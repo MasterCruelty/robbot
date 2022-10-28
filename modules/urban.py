@@ -24,10 +24,8 @@ def urban_search(query,client,message):
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Next",callback_data="Prossima deifinizione")] ])
     client.send_message(get_chat(message),definitions[i],reply_markup=kb)
-    while i < len(definitions):
-        i = i + 1
-        client.edit_message_text(get_chat(message),id_msg+1,definitions[i],reply_markup=kb)
-    #press_button(client,message,kb,definitions,message.id)
+    #client.edit_message_text(get_chat(message),id_msg+1,definitions[i],reply_markup=kb)
+    press_button(client,message,kb,definitions,message.id)
     #CallbackQuery.edit_message_text(get_chat(message),message.id+1,definitions[i+1],reply_markup=kb)
 
 
