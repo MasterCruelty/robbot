@@ -1,6 +1,6 @@
 import urbandictionary as ud
 from utils.get_config import * 
-from pyrogram import Client
+from pyrogram import Client,filters
 from pyrogram.types import (InlineKeyboardButton,InlineKeyboardMarkup,CallbackQuery)
 
 
@@ -22,15 +22,15 @@ def urban_search(query,client,message):
     
     i = 0
     kb = InlineKeyboardMarkup([[
-        InlineKeyboardButton("Next",callback_data="Prossima deifinizione")] ])
+        InlineKeyboardButton("Next",callback_data="NEXT")] ])
     client.send_message(get_chat(message),definitions[i],reply_markup=kb)
     #client.edit_message_text(get_chat(message),id_msg+1,definitions[i],reply_markup=kb)
-    press_button(client,message,kb,definitions,message.id)
+    #press_button(client,message,kb,definitions,message.id)
     #CallbackQuery.edit_message_text(get_chat(message),message.id+1,definitions[i+1],reply_markup=kb)
 
 
-@Client.on_callback_query()
+@Client.on_callback_query(filters.regex("NEXT"))
 def press_button(client,message,kb,definitions,id_msg):
     i = 1
-    client.edit_message_text(get_chat(message),id_msg+1,definitions[i],reply_markup=kb)
+    message.edit_message_text(get_chat(message),id_msg+1,definitions[i],reply_markup=kb)
     i = i + 1
