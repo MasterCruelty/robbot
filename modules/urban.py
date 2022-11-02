@@ -32,10 +32,10 @@ def urban_search(query,client,message):
     #Uso una globale così posso usarla anche dentro press_button
     pages = definitions
     #Aggiungo il callback handler così che Client sappia che al premere del bottone deve richiamare la funzione passata come argomento.
-    client.add_handler(CallbackQueryHandler(callback=press_button))
+    client.add_handler(CallbackQueryHandler(callback=press_button,filters= filters.regex("NEXT")))
     #Mando il messaggio con la prima pagina
     k = 0
-    client.send_message(get_chat(message),pages[k],reply_markup=kb)
+    client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
 
 """
     Funzione che viene chiamata quando il bottone costruito alla funzione urban_search viene premuto.

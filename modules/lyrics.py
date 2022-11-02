@@ -70,7 +70,7 @@ def search_songs(client,message,artista):
         InlineKeyboardButton("Prossimo Album",callback_data="next_album")]])
 
     #aggiungo l'handler callbackquery per far catturare l'evento del bottone premuto alla funzione press_next_album
-    client.add_handler(CallbackQueryHandler(callback=press_next_album))
+    client.add_handler(CallbackQueryHandler(callback=press_next_album,filters=filters.regex("next_album")))
 
     #mando il messaggio con la prima pagina
     k = 0

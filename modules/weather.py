@@ -99,19 +99,19 @@ def get_weather(query,client,message):
 """
     Json ottenuto in modo analogo a "get_weather" e vengono rilasciati i dati meteo principali del giorno corrente distanziati di ora in ora.
 """
-global pages #usata per popolare la lista che si andrà a scorrere tramite i bottoni inline
-global k #indice globale per gestire gli elementi di pages da restituire premendo il bottone inline
+global pages_t #usata per popolare la lista che si andrà a scorrere tramite i bottoni inline
+global k1 #indice globale per gestire gli elementi di pages da restituire premendo il bottone inline
 
 @Client.on_message()
 def get_today_forecasts(query,client,message):
-    global pages
-    global k
+    global pages_t
+    global k1
     data = call_api_weather(query)
     array_hourly = data["hourly"]
     today = date.today()
     today = str(today.strftime("%Y-%m-%d"))
     result = "**" + query.title() + "** __" + str(today) + "__\n\n"
-    pages = []
+    pages_t = []
     z = 0 #variabile ausiliaria locale per popolare pages
     
 
@@ -128,10 +128,10 @@ def get_today_forecasts(query,client,message):
         result += giorno + "\n**Meteo:** __" + weather + "__\n**Temperatura:** __" + temp + "__\n**Temperatura percepita:** __" + feels_temp + "__\n**Nuvole:** __" + clouds + "__\n##################\n\n" 
         z = z + 1
         if(z % 2 == 0):
-            pages.append(result)
+            pages_t.append(result)
             result = "**" + query.title() + "** __" + str(today) + "__\n\n"
         elif("23" in giorno):
-            pages.append(result)
+            pages_t.append(result)
             result = "**" + query.title() + "** __" + str(today) + "__\n\n"
 
 
@@ -139,9 +139,9 @@ def get_today_forecasts(query,client,message):
     #Tiro su la tastiera e aggiungo l'handler
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Prossima fascia oraria",callback_data="forecastoday")]])
-    client.add_handler(CallbackQueryHandler(callback=press_forecastoday))
-    k = 0
-    client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
+    client.add_handler(CallbackQueryHandler(callback=press_forecastoday,filters= filters.regex("forecastoday")))
+    k1 = 0
+    client.send_message(get_chat(message),pages_t[k1],reply_markup=kb,reply_to_message_id=get_id_msg(message))
 
 """
     Funzione che viene chiamata quando è premuto il bottone associato alla funzione get_today_forecasts.
@@ -149,12 +149,12 @@ def get_today_forecasts(query,client,message):
 """
 @Client.on_callback_query(filters = filters.regex("forecastoday"))
 def press_forecastoday(client,message):
-    global k
-    if k < len(pages)-1:
-        k = k + 1
+    global k1
+    if k1 < len(pages_t)-1:
+        k1 = k1 + 1
         kb = InlineKeyboardMarkup([[
             InlineKeyboardButton("Prossima fascia oraria",callback_data="forecastoday")]])
-        message.edit_message_text(pages[k],reply_markup=kb)
+        message.edit_message_text(pages_t[k1],reply_markup=kb)
     else:
         message.edit_message_text("__Fine__")
 
@@ -162,13 +162,16 @@ def press_forecastoday(client,message):
 """
     Json ottenuto in modo analogo a "get_weather" e vengono rilasciati i dati meteo principali della settimana che verrà.
 """
+global pages_f
+global k2
+@Client.on_message()
 def get_future_forecasts(query,client,message):
-    global pages
-    global k
+    global pages_f
+    global k2
     data = call_api_weather(query)
     array_daily = data["daily"]
     result = "**" + query.title() + "**\n\n"
-    pages = []
+    pages_f = []
     for item in array_daily:
         giorno = str(dt.fromtimestamp(item["dt"],pytz.timezone('Europe/Rome')))[0:10]
         sunset = str(dt.fromtimestamp(item["sunset"], pytz.timezone('Europe/Rome')))[10:]
@@ -189,16 +192,16 @@ def get_future_forecasts(query,client,message):
         clouds = str(item["clouds"]) + "%"
         weather = item["weather"][0]["description"]
         result += "**__" + giorno + "**__\n**Meteo:** __" + weather + "__\n**Temperatura reale/percepita\n\nMattina:** __" + morning + " / " + feels_morning + "__\n**Giorno:** __" + day + " / " + feels_day + "__\n**Sera:** __" +  evening + " / " + feels_evening + "\n**Notte:** __" + night + " / " + feels_night + "\n**Minima:** __" + temp_min + "__\n**Massima:** __" + temp_max + "__\n**Umidità:** __" + umidita + "__\n**Velocità del vento:** __" + wind_speed + " km/h__\n**Nuvole:** __" + clouds + "__\n--**#################**--\n\n"
-        pages.append(result)
+        pages_f.append(result)
         result = "**" + query.title() + "**\n\n"
     
 
     #Tiro su la tastiera e aggiungo l'handler
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Prossimo giorno",callback_data="forecastFuture")]])
-    client.add_handler(CallbackQueryHandler(callback=press_forecastfuture))
-    k = 0
-    client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
+    client.add_handler(CallbackQueryHandler(callback=press_forecastfuture,filters=filters.regex("forecastFuture")))
+    k2 = 0
+    client.send_message(get_chat(message),pages_f[k2],reply_markup=kb,reply_to_message_id=get_id_msg(message))
 
 
 """
@@ -207,12 +210,12 @@ def get_future_forecasts(query,client,message):
 """
 @Client.on_callback_query(filters = filters.regex("forecastFuture"))
 def press_forecastfuture(client,message):
-    global k
-    if k < len(pages)-1:
-        k = k + 1
+    global k2
+    if k2 < len(pages_f)-1:
+        k2 = k2 + 1
         kb = InlineKeyboardMarkup([[
             InlineKeyboardButton("Prossimo giorno",callback_data="forecastFuture")]])
-        message.edit_message_text(pages[k],reply_markup=kb)
+        message.edit_message_text(pages_f[k2],reply_markup=kb)
     else:
         message.edit_message_text("__Fine__")
 
