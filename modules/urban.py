@@ -1,7 +1,7 @@
 import urbandictionary as ud
 from utils.get_config import * 
 from pyrogram import Client,filters
-from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup,CallbackQuery
+from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 from pyrogram.handlers import CallbackQueryHandler
 
 #variabili globali indispensabili per usare i dati della prima funzione sulla seconda
