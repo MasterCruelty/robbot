@@ -14,8 +14,6 @@ from pyrogram.handlers import CallbackQueryHandler
 config_file = get_config_file("../config.json")
 api_weather = config_file["api_weather"]
 
-global pages #usata per popolare la lista che si andrà a scorrere tramite i bottoni inline
-global k #indice globale per gestire gli elementi di pages da restituire premendo il bottone inline
 
 #dizionario per i codici di visualizzazione delle mappe satellitari
 sat24_codes = {"pioggia"    : "rainTMC",
@@ -101,6 +99,9 @@ def get_weather(query,client,message):
 """
     Json ottenuto in modo analogo a "get_weather" e vengono rilasciati i dati meteo principali del giorno corrente distanziati di ora in ora.
 """
+global pages #usata per popolare la lista che si andrà a scorrere tramite i bottoni inline
+global k #indice globale per gestire gli elementi di pages da restituire premendo il bottone inline
+
 @Client.on_message()
 def get_today_forecasts(query,client,message):
     global pages
@@ -140,13 +141,13 @@ def get_today_forecasts(query,client,message):
         InlineKeyboardButton("Prossima fascia oraria",callback_data="forecastoday")]])
     client.add_handler(CallbackQueryHandler(callback=press_forecastoday))
     k = 0
-    client.send_message(get_chat(message),pages[k],reply_markup=kb)
+    client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
 
 """
     Funzione che viene chiamata quando è premuto il bottone associato alla funzione get_today_forecasts.
     A ogni pressione si scorrono le pagine ovvero gli elementi contenuti nella variabile globale pages.
 """
-@Client.on_callback_query(filters.regex("forecastoday"))
+@Client.on_callback_query(filters = filters.regex("forecastoday"))
 def press_forecastoday(client,message):
     global k
     if k < len(pages)-1:
@@ -197,14 +198,14 @@ def get_future_forecasts(query,client,message):
         InlineKeyboardButton("Prossimo giorno",callback_data="forecastFuture")]])
     client.add_handler(CallbackQueryHandler(callback=press_forecastfuture))
     k = 0
-    client.send_message(get_chat(message),pages[k],reply_markup=kb)
+    client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
 
 
 """
     Funzione che viene chiamata quando è premuto il bottone associato alla funzione get_future_forecasts.
     A ogni pressione si scorrono le pagine ovvero gli elementi contenuti nella variabile globale pages.
 """
-@Client.on_callback_query(filters.regex("forecastFuture"))
+@Client.on_callback_query(filters = filters.regex("forecastFuture"))
 def press_forecastfuture(client,message):
     global k
     if k < len(pages)-1:
