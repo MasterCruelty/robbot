@@ -1,4 +1,5 @@
 from pyrogram import Client
+from pyrogram import errors
 import utils.controller as uct
 import utils.get_config as ugc
 import random
@@ -14,11 +15,10 @@ def poll_function(query,client,message):
     domanda = poll[0]
     try:
         opzioni = poll[1]
-    except IndexError:
+        opzioni = opzioni.split(",")
+        client.send_poll(chat,domanda,opzioni,is_anonymous=False,reply_to_message_id=id_messaggio)
+    except (IndexError,errors.exceptions.bad_request_400.PollAnswersInvalid):
         return ugc.sendMessage(client,message,"__Errore formato.\n/helprob poll__")
-    opzioni = opzioni.split(",")
-    client.send_poll(chat,domanda,opzioni,is_anonymous=False,reply_to_message_id=id_messaggio)
-    return
 
 """
 Restituisce il json intero di un messaggio. Se il json supera la capacità di un messaggio Telegram, viene inviato sotto forma di file.
