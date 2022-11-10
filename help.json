@@ -15,6 +15,10 @@
 		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito\n",
 		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__\n"
 	},
+	"tper":{
+		"tper_default":"**/tper 'stop_code'** => restituisce i dati relativi alla fermata inserita.\n",
+		"tpershop": "**/tpershop 'stop_code'** => restituisce la rivendita più vicina alla fermata inserita.\n"
+	},
 	"mappe":{
 		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.\n",
 		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km.\n"
@@ -28,5 +32,5 @@
 	},
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI",
 	"urban": "**/urban 'word' ** => restituisce la definizione di urban dictionary per la parola richiesta",
-        "default": "Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, urban, poll, reminder, atm e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, ai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
+        "default": "Cerca un comando in particolare come ad esempio:\n /helprob 'comando'\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, urban, poll, reminder, tper, atm e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, ai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }

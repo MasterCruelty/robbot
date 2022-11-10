@@ -41,7 +41,7 @@ def ping(query,client,message):
 documentazione dei comandi utente direttamente su Telegram
 """
 #array per filtrare il comando help richiesto in help.json
-help_array = ["wiki","lyrics","covid","vaccine","poll","atm","mappe","meteo","reminder","openai","urban"]
+help_array = ["wiki","lyrics","covid","vaccine","poll","atm","tper","mappe","meteo","reminder","openai","urban"]
 def help(query,client,message):
     help_file = ugc.get_config_file("help.json")
     if query in help_array:

@@ -9,6 +9,7 @@ import modules.weather
 import modules.reminder
 import modules.openai
 import modules.urban
+import modules.tper
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -18,7 +19,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/km'             : modules.gmaps.execute_km,
                     '/lyrics'         : modules.lyrics.execute_lyrics,
                     '/searchsongs'    : modules.lyrics.execute_lyrics,
-                    '/atm'            : modules.atm_feature.get_stop_info,
+                    '/atm'            : modules.atm_feature.send_stop_info,
                     '/geoatm'         : modules.atm_feature.geodata_stop,
                     '/searchatm'      : modules.atm_feature.search_line,
                     '/covid'          : modules.covid.covid_cases,
@@ -30,6 +31,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/reminder'       : modules.reminder.set_reminder,
                     '/urban'          : modules.urban.urban_search,
                     '/mystat'         : udb.show_stats,
+                    '/tper'           : modules.tper.send_tper_stop,
+                    '/tpershop'       : modules.tper.get_tper_edicola,
                     '/helprob'        : usys.help}
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
