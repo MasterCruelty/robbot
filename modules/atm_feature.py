@@ -79,7 +79,6 @@ def send_stop_info(query,client,message):
     client.add_handler(CallbackQueryHandler(callback=press_button,filters=filters.regex("REFRESH;"+str(query))))
     #send message with button
     client.send_message(get_chat(message),result,reply_markup=kb,disable_web_page_preview=True,reply_to_message_id=get_id_msg(message))
-    #return sendMessage(client,message,result)
 
 """
     Aggiorna lo stato sulla fermata

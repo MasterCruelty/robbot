@@ -1,4 +1,4 @@
-from utils.get_config import * 
+from utils.get_config import sendMessage,get_chat,get_id_msg 
 from pyrogram import Client,filters
 from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 from pyrogram.handlers import CallbackQueryHandler
@@ -22,7 +22,7 @@ def get_tper_edicola(query,client,message):
 """
     Restituisce i dati della fermata tper richiesta
 """
-def get_tper_stop(query,client=None,message=None):
+def get_tper_stop(query):
     url = "https://hellobuswsweb.tper.it/web-services/hello-bus.asmx/QueryHellobus?fermata=" + str(query) + "&linea=&oraHHMM="
     data = requests.get(url)
     regex = re.findall('.asmx">([^<]*)',data.text)
@@ -40,7 +40,7 @@ def get_tper_stop(query,client=None,message=None):
 """
 @Client.on_message()
 def send_tper_stop(query,client,message):
-    result = get_tper_stop(query,client,message)
+    result = get_tper_stop(query)
     if(result.startswith("__404")):
         return sendMessage(client,message,result)
     #build keyboard
