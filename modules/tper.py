@@ -1,5 +1,5 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg 
-from pyrogram import Client,filters
+from pyrogram import Client,filters,errors
 from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 from pyrogram.handlers import CallbackQueryHandler
 import re
@@ -62,4 +62,8 @@ def press_button(client,message):
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])
     #refresh
-    message.edit_message_text(get_tper_stop(query),reply_markup=kb)
+    try:
+        message.edit_message_text(get_tper_stop(query),reply_markup=kb)
+    except errors.exceptions.bad_request_400.MessageNotModified:
+        message.edit_message_text(get_tper_stop(query)+"\n__Nessun aggiornamento per ora__",reply_markup=kb)
+
