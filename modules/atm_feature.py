@@ -1,9 +1,12 @@
 import requests
 import json
 import sys
+import time
 sys.path.append(sys.path[0] + "/..")
 from utils.get_config import *
-from pyrogram import Client
+from pyrogram import Client,filters,errors
+from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
+from pyrogram.handlers import CallbackQueryHandler
 
 config = get_config_file("config.json")
 api_url = config["api_url"]
@@ -36,7 +39,7 @@ def search_line(line_number,client,message):
     Dato un codice fermata, vengono fornite le informazioni relative a quella fermata contattando direttamente il server atm
     Dedicato ai dati delle fermate di mezzi di superficie/metro. Riporta dati parziali su altri tipi di richieste.
 """
-def get_stop_info(stop_code,client,message):
+def get_stop_info(stop_code,client=None,message=None):
     resp = get_json_atm(stop_code)
     data_json = handle_except(resp)
     if str(data_json).startswith("404"):
@@ -59,7 +62,43 @@ def get_stop_info(stop_code,client,message):
     for i in range(len(line_code)):
         time_table[i] = check_none(time_table[i])
         result += "Orari linea " + line_code[i] + ": " + time_table[i] + "\n"
-    return sendMessage(client,message,result)
+    
+    return result
+
+"""
+    Invia il messaggio con i dati della fermata atm con bottone inline refresh
+"""
+@Client.on_message()
+def send_stop_info(query,client,message):
+    #get data
+    result = get_stop_info(query,client,message)
+    #build keyboard
+    kb = InlineKeyboardMarkup([[
+        InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])
+    #add handler
+    client.add_handler(CallbackQueryHandler(callback=press_button,filters=filters.regex("REFRESH;"+str(query))))
+    #send message with button
+    client.send_message(get_chat(message),result,reply_markup=kb,disable_web_page_preview=True,reply_to_message_id=get_id_msg(message))
+    #return sendMessage(client,message,result)
+
+"""
+    Aggiorna lo stato sulla fermata
+"""
+@Client.on_callback_query()
+def press_button(client,message):
+    cb = message.data.split(";")
+    query = cb[1]
+    #build keyboard
+    kb = InlineKeyboardMarkup([[
+        InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])
+    #edit message
+    try:
+        message.edit_message_text(get_stop_info(query,client,message),reply_markup=kb,disable_web_page_preview=True)
+    except errors.exceptions.bad_request_400.MessageNotModified:
+        message.edit_message_text(get_stop_info(query,client,message)+"\n__Nessun aggiornamento per ora__",reply_markup=kb,disable_web_page_preview=True)
+        time.sleep(5)
+        
+
 
 """
 dato un codice fermata, fornisce le coordinate geografiche di quella fermata.
