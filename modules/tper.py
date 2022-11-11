@@ -23,14 +23,18 @@ def get_tper_edicola(query,client,message):
     Restituisce i dati della fermata tper richiesta
 """
 def get_tper_stop(query):
-    url = "https://hellobuswsweb.tper.it/web-services/hello-bus.asmx/QueryHellobus?fermata=" + str(query) + "&linea=&oraHHMM="
+    fermata = query.split(" ")
+    if(len(fermata) >1):
+        url = "https://hellobuswsweb.tper.it/web-services/hello-bus.asmx/QueryHellobus?fermata=" + str(fermata[0]) + "&linea=" + str(fermata[1]) + "&oraHHMM="
+    else: 
+        url = "https://hellobuswsweb.tper.it/web-services/hello-bus.asmx/QueryHellobus?fermata=" + str(fermata[0]) + "&linea=&oraHHMM="
     data = requests.get(url)
     regex = re.findall('.asmx">([^<]*)',data.text)
     if("NON GESTITA" in regex[0]):
         return "__404: page not found.__"
     data = regex[0].replace("TperHellobus:","").replace("DaSatellite","da satellite") 
     info_stop = data.split(",")
-    result = "**Fermata " + str(query) + "**\n"
+    result = "**Fermata " + str(fermata[0]) + "**\n"
     for line in info_stop:
         result += "__Linea " + line + "__" + "\n"
     return result
