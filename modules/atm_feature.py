@@ -120,7 +120,7 @@ Fa la richiesta al server atm e restituisce il json corrispondente.
 """
 def get_json_atm(stop_code):
     data = {"url": "tpPortal/geodata/pois/stops/" + stop_code + "?lang=it".format()}
-    resp = requests.post(api_url,data = data,headers = headers,verify=False)
+    resp = requests.post(api_url,data = data,headers = headers)
     return resp
 
 """
@@ -130,7 +130,7 @@ def search_stop(query):
     data = {"url": "tpPortal/tpl/stops/search/" + query + "".format()}
     stops = []
     try:
-        for stop in (requests.post(api_url,data = data,headers = headers,verify=False)).json():
+        for stop in (requests.post(api_url,data = data,headers = headers)).json():
             stops.append(stop)
     except:
         result = "__Nessuna fermata trovata.__"
