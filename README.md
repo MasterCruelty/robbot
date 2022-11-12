@@ -16,7 +16,8 @@
 #### <i>This Telegram bot has the same structure of this [project](https://github.com/MasterCruelty/my-tg-app) which is an userbot I made for several features I needed.<br>So this bot has some commands in common with that userbot but also other new commands and obviously there aren't those commands that a bot can't execute but a userbot can. <br> So if you're interested you can also visit that repository.</i>
 
 ** **
-<b>Feel free to contribute/improve the project. After the Italian section you will find an english version of the README. In <code>doc</code> folder you will find a bit of documentation of RobBot.</b>
+# <b>Feel free to contribute and improve the project. <br> See more details on How to contribute [here](https://github.com/MasterCruelty/robbot/blob/master/CONTRIBUTING.md).<br>
+After the Italian section you will find an english version of the README. In <code>doc</code> folder you will find a bit of documentation of RobBot.</b>
 
 # **[IT]**
 
