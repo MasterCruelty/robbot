@@ -13,7 +13,7 @@ comandi = config["commands"][0]
 comandi_admin = config["commands"][1]
 comandi_super = config["commands"][2]
 app = Client(session, api_id, api_hash,bot_token)
-print("RobBot 1.0.6 is running...")
+print("MIT license\nContribute @ https://www.github.com/MasterCruelty/robbot\n\nRobBot is running...")
 @app.on_message()
 def print_updates(client,message):
     #recupero parametri principali del messaggio dal json
