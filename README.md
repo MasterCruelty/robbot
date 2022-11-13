@@ -75,6 +75,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [wttr.in](https://github.com/chubin/wttr.in)
 * [OpenAI](https://www.openai.com)
 * [Urban Dictionary](https://www.github.com/bocong/urbandictionary-py)
+* [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
 
 # **[ENG]**
 
@@ -134,3 +135,4 @@ This json file is only in Italian, but you can translate it in every languages b
 * [wttr.in](https://github.com/chubin/wttr.in)
 * [OpenAI](https://www.openai.com)
 * [Urban Dictionary](https://www.github.com/bocong/urbandictionary-py)
+* [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
