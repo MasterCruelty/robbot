@@ -32,11 +32,16 @@ def execute_km(query,client,message):
 """
 @Client.on_message()
 def showmaps(address,client,message):
+    if "-i" in address:
+        check = True
+        address = address.replace("-i","")
     geolocate = Nominatim(user_agent="Robbot")
     location  = geolocate.geocode(address,timeout=10000)
     coordinates = []
     caption = "__**" + location.address + "\n\nTipologia luogo: " + location.raw["type"] + "\n\nImportanza: " + str(round(location.raw["importance"],2)) + "**__"
     caption += "\n\n__Importanza è un valore compreso tra 0 e 1 circa, calcolato in base al rank del luogo negli articoli di Wikipedia.__"
+    if check == True:
+        return sendMessage(client,message,caption)
     try:
         coordinates.append(location.latitude)
         coordinates.append(location.longitude)
