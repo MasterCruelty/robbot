@@ -59,6 +59,7 @@ Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
 def fetch_admin_command(match,query,client,message):
     #system functions
+    udb.update_stats(ugc.get_id_user(message),match)
     dictionary_admin[match](query,client,message)
 
 """
