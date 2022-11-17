@@ -32,6 +32,7 @@ def execute_km(query,client,message):
 """
 @Client.on_message()
 def showmaps(address,client,message):
+    check = False
     if "-i" in address:
         check = True
         address = address.replace("-i","")
