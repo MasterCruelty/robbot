@@ -33,6 +33,8 @@ def departStation_train(client,message,train_number):
     data = json.loads(resp.text)
     return "Stazione di partenza del treno "+ train_number + ": " + data["codLocOrig"] + " " + data["descLocOrig"]
 
+
+
 """
     Restituisce i dati delle partenze di treni che vanno da una stazione A a una stazione B con gli orari e altre info
 """
@@ -65,27 +67,50 @@ def timetable2stations(query,client,message):
     resp = requests.get(url)
     if resp.text == 'Error':
         return sendMessage(client,message,"__Errore formato.\nProva /helprob treni__")
-    data = json.loads(resp.text)
-    data = data["soluzioni"]
+    data_complete = json.loads(resp.text) #questo json contiene anche origine e destinazione predefinite
+    data = data_complete["soluzioni"] #questo json contiene solo le soluzioni di viaggio dirette e con cambi
     pages = []
-    result = "**__" + date_time + "__**\n\n"
+    result = "**__" + date_time.split("T")[0] + "__**\n\n"
     i = 0
+    #il json ottenuto è composto da n oggetti di tipo "vehicles" ognuno dei quali contenenti una lista di oggetti.
+    #Se il treno è diretto è uno solo, ma se ha dei cambi sono più di uno, quindi controllo che la destinazione 
+    #corrisponda con quella richiesta.
+    check_cambi = False
     for item in data:
-        from_s = item["vehicles"][0]["origine"]
-        from_time = str(item["vehicles"][0]["orarioPartenza"].split("T")[1])[0:5]
-        to_time = str(item["vehicles"][0]["orarioArrivo"].split("T")[1])[0:5]
-        to_s = item["vehicles"][0]["destinazione"]
-        durata = item["durata"]
-        tipo_treno = item["vehicles"][0]["categoriaDescrizione"]
-        numero_treno = item["vehicles"][0]["numeroTreno"]
-        result += "**" + from_s + "==>" + to_s + "(" + from_time + "-" + to_time + ")**\n"
-        result += "__Treno: " + tipo_treno + " " + numero_treno + "__\n"
-        result += "**Durata: " + str(durata) + "**\n\n"
-        i += 1
-        if i == 3:
+        if item["vehicles"][0]["destinazione"] == data_complete["destinazione"]:
+            from_s = item["vehicles"][0]["origine"]
+            from_time = str(item["vehicles"][0]["orarioPartenza"].split("T")[1])[0:5]
+            to_time = str(item["vehicles"][0]["orarioArrivo"].split("T")[1])[0:5]
+            to_s = item["vehicles"][0]["destinazione"]
+            durata = item["durata"]
+            tipo_treno = item["vehicles"][0]["categoriaDescrizione"]
+            numero_treno = item["vehicles"][0]["numeroTreno"]
+            result += "**" + from_s + "==>" + to_s + "(" + from_time + "-" + to_time + ")**\n"
+            result += "__Treno: " + tipo_treno + " " + numero_treno + "__\n"
+            result += "**Durata: " + str(durata) + "**\n\n"
+            i += 1
+            if i == 3 or check_cambi == True: #per visualizzare almeno 3 soluzioni consecutive dirette o solo una se ci sono spesso cambi necessari
+                pages.append(result)
+                result = "**__" + date_time.split("T")[0] + "__**\n\n"
+                i = 0
+        else:
+            check_cambi = True
+            result = "__Questa soluzione presenta dei cambi__\n\n"
+            durata = item["durata"]
+            for cambio in item["vehicles"]:
+                from_s = cambio["origine"]
+                from_time = str(cambio["orarioPartenza"].split("T")[1])[0:5]
+                to_time = str(cambio["orarioArrivo"].split("T")[1])[0:5]
+                to_s = cambio["destinazione"]
+                tipo_treno = cambio["categoriaDescrizione"]
+                numero_treno = cambio["numeroTreno"]
+                result += "**" + from_s + "==>" + to_s + "(" + from_time + "-" + to_time + ")**\n"
+                result += "__Treno: " + tipo_treno + " " + numero_treno + "__\n"
+            result += "**Durata: " + str(durata) + "**\n\n"
             pages.append(result)
-            result = "**__" + date_time + "__**\n\n"
             i = 0
+            result = "**__" + date_time.split("T")[0] + "__**\n\n"
+        
 
     #build keyboard
     kb = InlineKeyboardMarkup([[
@@ -96,6 +121,10 @@ def timetable2stations(query,client,message):
     k = 0
     client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
 
+
+"""
+    funzione callback per il bottone "prossimi treni" che fa visualizzare la pagina successiva
+"""
 @Client.on_callback_query(filters = filters.regex("PROSSIMI"))
 def press_button(client,message):
     global k
