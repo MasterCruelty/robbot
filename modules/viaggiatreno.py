@@ -12,15 +12,17 @@ import datetime
     Restituisce il codice stazione della stazione richiesta
 """
 def get_station_code(client,message,name):
-    url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/autocompletaStazione/" + name
+    url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/cercaStazione/" + name
     resp = requests.get(url)
-    data = resp.text.split("|")
-    station_code = data[1].replace("\n","")
     try:
-        int(station_code[1:])
-    except ValueError:
-        return sendMessage(client,message,"__Stazione " + name +" non trovata__")
-    return station_code
+        data = json.loads(resp.text)
+    except json.decoder.JSONDecodeError:
+        return None 
+    #vedo se tra i risultati trovati c'è il nome della stazione cercato e restituisco il suo codice stazione
+    for item in data:
+        if name.upper() in item["nomeLungo"] or name.title() in item["nomeBreve"]:
+            return item["id"]
+    return None 
 
 """
     Restituisce la stazione di partenza del treno indicato
@@ -46,16 +48,23 @@ def timetable2stations(query,client,message):
     global pages
     global k
     splitted = query.split(",")
-    from_station = get_station_code(client,message,splitted[0])
-    to_station = get_station_code(client,message,str(splitted[1])[1:]) #da pos 1 perché c'è uno spazio
+    try:
+        from_station = get_station_code(client,message,splitted[0])
+        to_station = get_station_code(client,message,str(splitted[1])[1:]) #da pos 1 perché c'è uno spazio
+    except IndexError:
+        return sendMessage(client,message,"__Errore formato.\nProva /helprob trenitalia__")
     if len(splitted) < 3:
         now = str(datetime.datetime.now())
         date_time = now.replace(" ","T")
     else:
         date_time = splitted[2] + "T00:00:00"
     #formatto i codici stazione per essere in regola per la chiamata dopo
-    from_station = from_station.replace("S","")
-    to_station = to_station.replace("S","")
+    try:
+        from_station = from_station.replace("S","")
+        to_station = to_station.replace("S","")
+    except AttributeError:
+        return sendMessage(client,message,"__Stazione " + name +" non trovata__")
+    #rimuovo il carattere S e i primi zeri che compaiono altrimenti non va a buon fine la richiesta
     while True:
         if from_station.startswith("0"):
             from_station = from_station[1:]
@@ -91,8 +100,12 @@ def timetable2stations(query,client,message):
             i += 1
             if i == 3 or check_cambi == True: #per visualizzare almeno 3 soluzioni consecutive dirette o solo una se ci sono spesso cambi necessari
                 pages.append(result)
-                result = "**__" + date_time.split("T")[0] + "__**\n\n"
+                if item["vehicles"][0]["orarioPartenza"].split("T")[0] == date_time:
+                    result = "**__" + date_time.split("T")[0] + "__**\n\n"
+                else:
+                    result = "**__" + item["vehicles"][0]["orarioPartenza"].split("T")[0] + "__**\n\n"
                 i = 0
+                check_cambi = False
         else:
             check_cambi = True
             result = "__Questa soluzione presenta dei cambi__\n\n"
@@ -109,7 +122,10 @@ def timetable2stations(query,client,message):
             result += "**Durata: " + str(durata) + "**\n\n"
             pages.append(result)
             i = 0
-            result = "**__" + date_time.split("T")[0] + "__**\n\n"
+            if item["vehicles"][0]["orarioPartenza"].split("T")[0] == date_time:
+                result = "**__" + date_time.split("T")[0] + "__**\n\n"
+            else:
+                result = "**__" + item["vehicles"][0]["orarioPartenza"].split("T")[0] + "__**\n\n"
         
 
     #build keyboard
@@ -119,7 +135,10 @@ def timetable2stations(query,client,message):
     #add handler
     client.add_handler(CallbackQueryHandler(callback=press_button,filters=filters.regex("PROSSIMI")))
     k = 0
-    client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
+    try:
+        client.send_message(get_chat(message),pages[k],reply_markup=kb,reply_to_message_id=get_id_msg(message))
+    except IndexError:
+        return sendMessage(client,message,"__Errore formato.\nProva /helprob treni__")
 
 
 """
