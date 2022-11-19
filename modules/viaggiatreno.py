@@ -118,7 +118,7 @@ def timetable2stations(query,client,message):
                 tipo_treno = cambio["categoriaDescrizione"]
                 numero_treno = cambio["numeroTreno"]
                 result += "**" + from_s + "==>" + to_s + "(" + from_time + "-" + to_time + ")**\n"
-                result += "__Treno: " + tipo_treno + " " + numero_treno + "__\n"
+                result += "__Treno: " + tipo_treno + " " + numero_treno + "__\n\n"
             result += "**Durata: " + str(durata) + "**\n\n"
             pages.append(result)
             i = 0
@@ -156,3 +156,16 @@ def press_button(client,message):
         message.edit_message_text("__Fine__")
 
 
+def get_delay(query,client,message):
+    url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/"
+    splitted = query.split(",")
+    station_code = get_statio_code(splitted[1])
+    train_number = splitted[0]
+    url += station_code + "/" + train_number
+    date_obj = datetime.now()
+    week_day = date_obj.strftime('%a')
+    month = date_obj.strftime('%b')
+    month_day = date_obj.strftime('%d')
+    year = date_obj.strftime('%Y')
+    date_time = datetime.datetime.now().split(".")[0]
+    date_time += " GMT+0100 (Ora standard dell'Europa centrale)"
