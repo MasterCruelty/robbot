@@ -155,12 +155,15 @@ def press_button(client,message):
     else:
         message.edit_message_text("__Fine__")
 
-
+"""
+    Restituisce informazioni riguardo l'eventuale ritardo accumulato sul treno richiesto
+"""
 def get_delay(query,client,message):
     url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/"
     splitted = query.split(",")
     station_code = get_statio_code(splitted[1])
     train_number = splitted[0]
+    #Aggiungo numero treno e codice stazione sull'url
     url += station_code + "/" + train_number
     date_obj = datetime.now()
     week_day = date_obj.strftime('%a')
@@ -169,3 +172,37 @@ def get_delay(query,client,message):
     year = date_obj.strftime('%Y')
     date_time = datetime.datetime.now().split(".")[0]
     date_time += " GMT+0100 (Ora standard dell'Europa centrale)"
+    #Aggiungo orario sull'url
+    url += "/" + date_time
+
+    resp = requests.get(url)
+    data = json.loads(resp.text)
+    for item in data:
+        if item["numeroTreno"] == int(train_number):
+            info_train = item["compiNumeroTreno"] + "|" + item["compTiplogiaTreno"]
+            depart_station = splitted[1].title()
+            arrival_station = item["destinazione"].title()
+            #controllo se sta circolando il treno
+            if item["circolante"]:
+                travelling = "Risulta in viaggio"
+            else:
+                travelling = "Non risulta in viaggio"
+            real_platform = str(item["binarioEffettivoPartenzaDescrizione"])
+            programmed_platform = str(item["binarioProgrammatoPartenzaDescrizione"])
+            #controllo se il treno è fermo in una stazione o sta viaggiando
+            if item["inStazione"]:
+                in_station = "Risulta fermo in una stazione"]
+            else:
+                in_station = ""
+            #Controllo se il treno è partito dalla stazione richiesta
+            if item["nonPartito"]:
+                departed = "Non risulta partito dalla stazione di " + depart_station
+            else:
+                departed = "risulta partito dalla stazione di " + depart_station
+            #informazioni sull'orario di partenza e il ritardo
+            real_depart_time = "Orario di partenza previsto: " + str(item["compOrarioZero"])
+            expected_depart_time = "Orario effettivo di partenza: " + str(item["compOrarioPartenzaEffettivo"])
+            delay = "Il treno viaggia " + item["compRitardoAndamento"]
+
+
+
