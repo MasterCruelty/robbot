@@ -53,11 +53,15 @@ def timetable2stations(query,client,message):
         to_station = get_station_code(client,message,str(splitted[1])[1:]) #da pos 1 perché c'è uno spazio
     except IndexError:
         return sendMessage(client,message,"__Errore formato.\nProva /helprob trenitalia__")
+    #controllo se richiesta una data specifica altrimenti metto quella odierna
     if len(splitted) < 3:
         now = str(datetime.datetime.now())
         date_time = now.replace(" ","T")
     else:
         date_time = splitted[2] + "T00:00:00"
+    #controllo opzione prezzi ed eseguo la funzione dedicata che usa le api frecce con codici stazione e data già calcolati.
+    if "-price" in query:
+        return timetable_with_price(client,message,from_station,to_station,date_time)
     #formatto i codici stazione per essere in regola per la chiamata dopo
     try:
         from_station = from_station.replace("S","")
@@ -152,6 +156,80 @@ def press_button(client,message):
         kb = InlineKeyboardMarkup([[
             InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMI")]])
         message.edit_message_text(pages[k],reply_markup=kb)
+    else:
+        message.edit_message_text("__Fine__")
+
+"""
+    Restituisce info sui prezzi della tratta richiesta nel giorno richiesto(oggi se omesso)
+"""
+def timetable_with_price(client,message,from_station,to_station,date_time):
+    #api frecce
+    url ="https://www.lefrecce.it/Channels.Website.BFF.WEB/website/ticket/solutions"
+    #headers aggiuntivi per sicurezza
+    headers = { "Origin": "https://www.lefrecce.it",
+                "Referer":"https://www.lefrecce.it",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64;x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
+              }
+    #aggiungo prefisso 83000 per api frecce ai codici stazione
+    from_station = int("83000" + str(from_station))
+    to_station = int("83000" + str(to_station))
+    date_time += "+01:00"
+    
+    #preparo il payload per la post
+    data = { "departureLocationId": from_station,
+             "arrivalLocationId":   to_station,
+             "departureTime":       date_time,
+             "adults": 1,
+             "children": 0,
+             "criteria": {
+                 "frecceOnly": False,
+                 "regionalOnly": False,
+                 "noChanges": False,
+                 "order": "DEPARTURE_DATE",
+                 "limit": 10,
+                 "offset": 0
+            },
+            "advancedSearchRequest": {
+                "bestFare": False
+            }
+        }
+    #faccio la richiesta
+    resp = requests.post(url,json=data,headers=headers)
+
+    data = json.loads(resp.text)
+    data = data["Solutions"]
+
+    #estrapolo i dati che ci interessano dal json
+    for item in data:
+        day = data["departureTime"].split("T")[0]
+        depart_time = str(data["departureTime"].split("T")[1])[0:5]
+        arrival_time = str(data["arrivalTime"].split("T")[1])[0:5]
+        journey_time = "(" + depart_time + "-" + arrival_time + ")"
+        durata = data["duration"]
+        vendibile = "Vendibile" if data["status"] == "SALEABLE" else "Non vendibile"
+        tratta = data["origin"] + "==>" + data["destination"]
+
+        result = ""
+        if data["trains"] > 1:
+            result = "__Questa soluzione presenta dei cambi.\nPer vedere quali, digita ```/treni " + data["origin"] + "," + data["destination"] + "," + date_time + "__"
+        result += "**" + day + "**\n\n" + "**" + tratta + journey_time + "**\n\n__Prezzo: " + str(round(data["price"]["amount"],2)) + data["price"]["currency"] + "__"
+
+        #build keyboard
+        kb = InlineKeyboardMarkup([[
+            InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMI")]])
+
+
+"""
+    funzione callback per il bottone "prossimi treni" che fa visualizzare la pagina successiva
+"""
+@Client.on_callback_query(filters = filters.regex("PROSSIMI"))
+def press_button_price(client,message):
+    global k2
+    if k2 < len(pages2)-1:
+        k2 = k2 + 1
+        kb = InlineKeyboardMarkup([[
+            InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMI")]])
+        message.edit_message_text(pages2[k2],reply_markup=kb)
     else:
         message.edit_message_text("__Fine__")
 
