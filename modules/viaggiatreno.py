@@ -123,7 +123,7 @@ def timetable2stations(query,client,message):
                 check_cambi = False
         else:
             check_cambi = True
-            result = "__Questa soluzione presenta dei cambi__\n\n"
+            result += "__Questa soluzione presenta dei cambi__\n\n"
             durata = item["durata"]
             for cambio in item["vehicles"]:
                 from_s = cambio["origine"]
@@ -196,7 +196,7 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
     #preparo il payload per la post
     data = { "departureLocationId": from_station,
              "arrivalLocationId":   to_station,
-             "departureTime":       date_time,
+             "departureTime":       date_time.replace(" ",""),
              "adults": 1,
              "children": 0,
              "criteria": {
@@ -204,7 +204,7 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
                  "regionalOnly": False,
                  "noChanges": False,
                  "order": "DEPARTURE_DATE",
-                 "limit": 10,
+                 "limit": 15,
                  "offset": 0
             },
             "advancedSearchRequest": {
@@ -235,7 +235,7 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
 
         result = "**" + day + "**\n\n"
         if len(item["solution"]["trains"]) > 1:
-            result += "__Questa soluzione presenta dei cambi.__\n**Per vedere quali**, digita <code>/treni " + item["solution"]["origin"] + ", " + item["solution"]["destination"] + "," + date_time.split("+")[0] + "</code>\n__È sufficiente toccare e incollare.__"
+            result += "__Questa soluzione presenta dei cambi.__\n**Per vedere quali**, digita <code>/treni " + item["solution"]["origin"] + ", " + item["solution"]["destination"] + "," + day + "T" + depart_time + ":00" +  "</code>\n__È sufficiente toccare e incollare.__"
         result += "\n**" + tratta + journey_time + "**\n\n__Prezzo: " + prezzo + "__"
         result += "\n**" + durata + "**\n__Stato: " + vendibile + "__" 
         pages2.append(result)
