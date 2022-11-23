@@ -9,7 +9,8 @@ import datetime
 
 
 """
-    Restituisce il codice stazione della stazione richiesta
+    Restituisce il codice stazione della stazione richiesta oppure null se non trovata
+    primo tentativo con api viaggiatreno, secondo tentativo con api frecce
 """
 def get_station_code(client,message,name):
     url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/cercaStazione/" + name
@@ -17,12 +18,24 @@ def get_station_code(client,message,name):
     try:
         data = json.loads(resp.text)
     except json.decoder.JSONDecodeError:
-        return None 
+        #provo con le api frecce se viaggiatreno non trova la stazione
+        url = "https://lefrecce.it/Channels.Website.BFF.WEB/website/locations/search?name=" + name + "&limit=10" 
+        resp = requests.get(url)
+        try:
+            data = json.loads(resp.text)
+        except json.decoder.JSONDecoreError:
+            return None
+        for item in data:
+            if name.title() in item["displayName"] or name.title()[5:] in item["displayName"]:
+                return str(item["id"]).replace("83000","")
+            else:
+                return None
     #vedo se tra i risultati trovati c'è il nome della stazione cercato e restituisco il suo codice stazione
     for item in data:
         if name.upper() in item["nomeLungo"] or name.title() in item["nomeBreve"]:
             return item["id"]
-    return None 
+        else:
+            return None 
 
 """
     Restituisce la stazione di partenza del treno indicato
@@ -84,7 +97,7 @@ def timetable2stations(query,client,message):
         from_station = format_station_code(from_station)
         to_station = format_station_code(to_station)
     except AttributeError:
-        return sendMessage(client,message,"__Stazione " + name +" non trovata__")
+        return sendMessage(client,message,"__Stazione non trovata__")
 
     #preparo l'url per la chiamata, i parametri sono pronti
     url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/soluzioniViaggioNew/" + from_station + "/" + to_station + "/" + date_time
@@ -242,11 +255,11 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
 
     #build keyboard
     kb = InlineKeyboardMarkup([[
-        InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMITRENI")]])
+        InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMI_prezzi")]])
 
 
     #add handler
-    client.add_handler(CallbackQueryHandler(callback=press_button_price,filters=filters.regex("PROSSIMITRENI")))
+    client.add_handler(CallbackQueryHandler(callback=press_button_price,filters=filters.regex("PROSSIMI_prezzi")))
     k2 = 0
     try:
         client.send_message(get_chat(message),pages2[k2],reply_markup=kb,reply_to_message_id=get_id_msg(message))
@@ -258,13 +271,13 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
 """
     funzione callback per il bottone "prossimi treni" che fa visualizzare la pagina successiva
 """
-@Client.on_callback_query(filters = filters.regex("PROSSIMITRENI"))
+@Client.on_callback_query(filters = filters.regex("PROSSIMI_prezzi"))
 def press_button_price(client,message):
     global k2
     if k2 < len(pages2)-1:
         k2 = k2 + 1
         kb = InlineKeyboardMarkup([[
-            InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMITRENI")]])
+            InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMI_prezzi")]])
         message.edit_message_text(pages2[k2],reply_markup=kb)
     else:
         message.edit_message_text("__Fine__")
