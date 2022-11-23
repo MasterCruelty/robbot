@@ -36,6 +36,18 @@ def departStation_train(client,message,train_number):
     return "Stazione di partenza del treno "+ train_number + ": " + data["codLocOrig"] + " " + data["descLocOrig"]
 
 
+"""
+    tolgo la S e gli zeri iniziali per adattare il codice stazione ad alcune chiamate
+"""
+def format_station_code(station):
+    station = station.replace("S","")
+    #rimuovo il carattere S e i primi zeri che compaiono altrimenti non va a buon fine la richiesta
+    while True:
+        if station.startswith("0"):
+            station = station[1:]
+        else:
+            break
+    return station
 
 """
     Restituisce i dati delle partenze di treni che vanno da una stazione A a una stazione B con gli orari e altre info
@@ -47,6 +59,11 @@ global k
 def timetable2stations(query,client,message):
     global pages
     global k
+    price = False
+    #controllo se richiesto il prezzo e preparo la funzione dedicata ai prezzi
+    if "-price" in query:
+        price = True
+        query = query.replace("-price ","")
     splitted = query.split(",")
     try:
         from_station = get_station_code(client,message,splitted[0])
@@ -60,22 +77,16 @@ def timetable2stations(query,client,message):
     else:
         date_time = splitted[2] + "T00:00:00"
     #controllo opzione prezzi ed eseguo la funzione dedicata che usa le api frecce con codici stazione e data già calcolati.
-    if "-price" in query:
+    if price:
         return timetable_with_price(client,message,from_station,to_station,date_time)
     #formatto i codici stazione per essere in regola per la chiamata dopo
     try:
-        from_station = from_station.replace("S","")
-        to_station = to_station.replace("S","")
+        from_station = format_station_code(from_station)
+        to_station = format_station_code(to_station)
     except AttributeError:
         return sendMessage(client,message,"__Stazione " + name +" non trovata__")
-    #rimuovo il carattere S e i primi zeri che compaiono altrimenti non va a buon fine la richiesta
-    while True:
-        if from_station.startswith("0"):
-            from_station = from_station[1:]
-        elif to_station.startswith("0"):
-            to_station = to_station[1:]
-        else:
-            break
+
+    #preparo l'url per la chiamata, i parametri sono pronti
     url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/soluzioniViaggioNew/" + from_station + "/" + to_station + "/" + date_time
     resp = requests.get(url)
     if resp.text == 'Error':
@@ -162,7 +173,11 @@ def press_button(client,message):
 """
     Restituisce info sui prezzi della tratta richiesta nel giorno richiesto(oggi se omesso)
 """
+global pages2
+global k2
 def timetable_with_price(client,message,from_station,to_station,date_time):
+    global pages2
+    global k2
     #api frecce
     url ="https://www.lefrecce.it/Channels.Website.BFF.WEB/website/ticket/solutions"
     #headers aggiuntivi per sicurezza
@@ -170,7 +185,10 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
                 "Referer":"https://www.lefrecce.it",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64;x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
               }
-    #aggiungo prefisso 83000 per api frecce ai codici stazione
+    #formatto i codici stazione e poi aggiungo prefisso 83000 per api frecce ai codici stazione
+    from_station = format_station_code(from_station)
+    to_station = format_station_code(to_station)
+
     from_station = int("83000" + str(from_station))
     to_station = int("83000" + str(to_station))
     date_time += "+01:00"
@@ -197,38 +215,56 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
     resp = requests.post(url,json=data,headers=headers)
 
     data = json.loads(resp.text)
-    data = data["Solutions"]
+    data = data["solutions"]
 
-    #estrapolo i dati che ci interessano dal json
+    #estrapolo i dati che ci interessano dal json e inizializzo la globale pags2
+    pages2 = []
     for item in data:
-        day = data["departureTime"].split("T")[0]
-        depart_time = str(data["departureTime"].split("T")[1])[0:5]
-        arrival_time = str(data["arrivalTime"].split("T")[1])[0:5]
+        day = item["solution"]["departureTime"].split("T")[0]
+        depart_time = str(item["solution"]["departureTime"].split("T")[1])[0:5]
+        arrival_time = str(item["solution"]["arrivalTime"].split("T")[1])[0:5]
         journey_time = "(" + depart_time + "-" + arrival_time + ")"
-        durata = data["duration"]
-        vendibile = "Vendibile" if data["status"] == "SALEABLE" else "Non vendibile"
-        tratta = data["origin"] + "==>" + data["destination"]
+        durata = "**Durata: " + item["solution"]["duration"] + "**"
+        vendibile = "Vendibile" if item["solution"]["status"] == "SALEABLE" else "Non vendibile"
+        tratta = item["solution"]["origin"] + "==>" + item["solution"]["destination"]
+        try:
+            prezzo = str( "%0.2f" % item["solution"]["price"]["amount"])
+            prezzo += item["solution"]["price"]["currency"]
+        except TypeError:
+            prezzo = "Non disponibile"
 
-        result = ""
-        if data["trains"] > 1:
-            result = "__Questa soluzione presenta dei cambi.\nPer vedere quali, digita ```/treni " + data["origin"] + "," + data["destination"] + "," + date_time + "__"
-        result += "**" + day + "**\n\n" + "**" + tratta + journey_time + "**\n\n__Prezzo: " + str(round(data["price"]["amount"],2)) + data["price"]["currency"] + "__"
+        result = "**" + day + "**\n\n"
+        if len(item["solution"]["trains"]) > 1:
+            result += "__Questa soluzione presenta dei cambi.__\n**Per vedere quali**, digita <code>/treni " + item["solution"]["origin"] + ", " + item["solution"]["destination"] + "," + date_time.split("+")[0] + "</code>\n__È sufficiente toccare e incollare.__"
+        result += "\n**" + tratta + journey_time + "**\n\n__Prezzo: " + prezzo + "__"
+        result += "\n**" + durata + "**\n__Stato: " + vendibile + "__" 
+        pages2.append(result)
 
-        #build keyboard
-        kb = InlineKeyboardMarkup([[
-            InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMI")]])
+    #build keyboard
+    kb = InlineKeyboardMarkup([[
+        InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMITRENI")]])
+
+
+    #add handler
+    client.add_handler(CallbackQueryHandler(callback=press_button_price,filters=filters.regex("PROSSIMITRENI")))
+    k2 = 0
+    try:
+        client.send_message(get_chat(message),pages2[k2],reply_markup=kb,reply_to_message_id=get_id_msg(message))
+    except IndexError:
+        return sendMessage(client,message,"__Errore formato.\nProva /helprob treni__")
+
 
 
 """
     funzione callback per il bottone "prossimi treni" che fa visualizzare la pagina successiva
 """
-@Client.on_callback_query(filters = filters.regex("PROSSIMI"))
+@Client.on_callback_query(filters = filters.regex("PROSSIMITRENI"))
 def press_button_price(client,message):
     global k2
     if k2 < len(pages2)-1:
         k2 = k2 + 1
         kb = InlineKeyboardMarkup([[
-            InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMI")]])
+            InlineKeyboardButton("Prossimi treni",callback_data="PROSSIMITRENI")]])
         message.edit_message_text(pages2[k2],reply_markup=kb)
     else:
         message.edit_message_text("__Fine__")
@@ -269,7 +305,7 @@ def get_delay(query,client,message):
             programmed_platform = str(item["binarioProgrammatoPartenzaDescrizione"])
             #controllo se il treno è fermo in una stazione o sta viaggiando
             if item["inStazione"]:
-                in_station = "Risulta fermo in una stazione"]
+                in_station = "Risulta fermo in una stazione"
             else:
                 in_station = ""
             #Controllo se il treno è partito dalla stazione richiesta
