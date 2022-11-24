@@ -5,6 +5,7 @@ from pyrogram.handlers import CallbackQueryHandler
 import requests
 import json
 import datetime
+import time
 
 
 
@@ -13,6 +14,8 @@ import datetime
     primo tentativo con api viaggiatreno, secondo tentativo con api frecce
 """
 def get_station_code(client,message,name):
+    if name.startswith(" "):
+        name = name[1:]
     url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/cercaStazione/" + name
     resp = requests.get(url)
     try:
@@ -37,16 +40,6 @@ def get_station_code(client,message,name):
         else:
             return None 
 
-"""
-    Restituisce la stazione di partenza del treno indicato
-"""
-def departStation_train(client,message,train_number):
-    url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/cercaNumeroTreno/" + train_number
-    resp = requests.get(url)
-    if resp.text == '':
-        return sendMessage(client,message,"__Treno non trovato__")
-    data = json.loads(resp.text)
-    return "Stazione di partenza del treno "+ train_number + ": " + data["codLocOrig"] + " " + data["descLocOrig"]
 
 
 """
@@ -80,7 +73,7 @@ def timetable2stations(query,client,message):
     splitted = query.split(",")
     try:
         from_station = get_station_code(client,message,splitted[0])
-        to_station = get_station_code(client,message,str(splitted[1])[1:]) #da pos 1 perché c'è uno spazio
+        to_station = get_station_code(client,message,splitted[1]) #da pos 1 perché c'è uno spazio
     except IndexError:
         return sendMessage(client,message,"__Errore formato.\nProva /helprob trenitalia__")
     #controllo se richiesta una data specifica altrimenti metto quella odierna
@@ -283,53 +276,115 @@ def press_button_price(client,message):
         message.edit_message_text("__Fine__")
 
 """
+    Restituisce la stazione di partenza del treno indicato(non utilizzata al momento)
+"""
+def departStation_train(train_number):
+    url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/cercaNumeroTreno/" + train_number
+    resp = requests.get(url)
+    if resp.text == '':
+        return sendMessage(client,message,"__Treno non trovato__")
+    data = json.loads(resp.text)
+    return data["codLocOrig"]
+
+
+"""
     Restituisce informazioni riguardo l'eventuale ritardo accumulato sul treno richiesto
 """
 def get_delay(query,client,message):
-    url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/"
-    splitted = query.split(",")
-    station_code = get_statio_code(splitted[1])
-    train_number = splitted[0]
-    #Aggiungo numero treno e codice stazione sull'url
-    url += station_code + "/" + train_number
-    date_obj = datetime.now()
-    week_day = date_obj.strftime('%a')
-    month = date_obj.strftime('%b')
-    month_day = date_obj.strftime('%d')
-    year = date_obj.strftime('%Y')
-    date_time = datetime.datetime.now().split(".")[0]
-    date_time += " GMT+0100 (Ora standard dell'Europa centrale)"
-    #Aggiungo orario sull'url
-    url += "/" + date_time
+    #calcolo il codice stazione di partenza rispetto al numero del treno
+    station_code = departStation_train(query)
+    train_number = query 
 
+    timestamp_url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/cercaNumeroTrenoTrenoAutocomplete/" + train_number
+    resp = requests.get(timestamp_url)
+    splitted = resp.text.split("\n")
+    if len(splitted) > 1 and len(splitted[1]) > 2:
+        s = splitted[1]
+    else:
+        s = splitted[0]
+    s = s.split("-")
+    timestamp = ""
+    for i in range(len(s)):
+        if len(s[i]) == 13:
+            timestamp = s[i]
+    #modifico url e faccio chiamata su un'altra rotta per ottenere l'ultimo rilevamento
+    url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/andamentoTreno/" + station_code + "/" + train_number + "/" + timestamp
     resp = requests.get(url)
-    data = json.loads(resp.text)
-    for item in data:
-        if item["numeroTreno"] == int(train_number):
-            info_train = item["compiNumeroTreno"] + "|" + item["compTiplogiaTreno"]
-            depart_station = splitted[1].title()
-            arrival_station = item["destinazione"].title()
-            #controllo se sta circolando il treno
-            if item["circolante"]:
-                travelling = "Risulta in viaggio"
-            else:
-                travelling = "Non risulta in viaggio"
-            real_platform = str(item["binarioEffettivoPartenzaDescrizione"])
-            programmed_platform = str(item["binarioProgrammatoPartenzaDescrizione"])
-            #controllo se il treno è fermo in una stazione o sta viaggiando
-            if item["inStazione"]:
-                in_station = "Risulta fermo in una stazione"
-            else:
-                in_station = ""
-            #Controllo se il treno è partito dalla stazione richiesta
-            if item["nonPartito"]:
-                departed = "Non risulta partito dalla stazione di " + depart_station
-            else:
-                departed = "risulta partito dalla stazione di " + depart_station
-            #informazioni sull'orario di partenza e il ritardo
-            real_depart_time = "Orario di partenza previsto: " + str(item["compOrarioZero"])
-            expected_depart_time = "Orario effettivo di partenza: " + str(item["compOrarioPartenzaEffettivo"])
-            delay = "Il treno viaggia " + item["compRitardoAndamento"]
+    try:
+        data = json.loads(resp.text)
+    except json.decoder.JSONDecoreError:
+        return sendMessage(client,message,"__Treno non trovato__")
+
+       
+    #estrapolo i dati dal json
+    info_train = "Treno: __" + data["categoria"] + " " + str(data["numeroTreno"]) + "(" + data["compTipologiaTreno"] + ")__"
+    route = "Tratta: __" + data["origine"].title() + "==>" + data["destinazione"].title() + "__"
+    #controllo se il treno è in viaggio o è fermo in stazione
+    if data["inStazione"] ==  False:
+        in_station = "**Risulta in viaggio**"
+    else:
+        in_station = "**Risulta fermo in stazione**"
+    #Ritardo sul treno
+    delay = "Il treno viaggia __" + data["compRitardoAndamento"][0] + "__"
+    duration = data["compDurata"]
+    expected_depart = "Partenza prevista da " + data["origine"].title() + ": __" + data["compOrarioPartenzaZero"] + "__"
+    real_depart = "Partenza effettiva da " + data["origine"].title() + ": __" + data["compOrarioPartenzaZeroEffettivo"] + "__"
+    expected_arrival = "Arrivo previsto a " + data["destinazione"].title() + ": __" + data["compOrarioArrivoZero"] + "__"
+    real_arrival = "Arrivo effettivo a " + data["destinazione"].title() + ": __" + data["compOrarioArrivoZeroEffettivo"] + "__"
+    
+    #ultimo rilevamento
+    last_detection = data["stazioneUltimoRilevamento"].title()
+    last_time_detection = data["compOraUltimoRilevamento"]
+    
+    #Inizio a cosstruire la stringa da restituire
+    result = info_train + "\n" + route + "\nStato: " + in_station + "\n" + delay + "\nDurata prevista: **" + duration + "**\n" + expected_depart + "\n" + real_depart + "\n" + expected_arrival + "\n" + real_arrival + "\n"
+
+    #aggiungo info alla stringa costruita prima
+    result += "\nOra ultimo rilevamento: __" + str(last_time_detection) + "__"
+    result += "\nStazione ultimo rilevamento: __" + last_detection + "__"
+    
+    #elenco fermate
+    fermate = data["fermate"]
+    stops = "Fermate : **"
+    for stop in fermate:
+        stops += stop["stazione"].title() + "=>"
+    stops += "**"
+    result += "\n\n" + stops
+    return result
+
+"""
+    Invia il messaggio con i dati relativi al treno richiesto(dati presi da get_delay() qua sopra
+"""
+@Client.on_message()
+def send_delay(query,client,message):
+    #recupero la stringa
+    result = get_delay(query,client,message)
+
+    #build keyboard
+    kb = InlineKeyboardMarkup([[
+        InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])
+
+    #add handler
+    client.add_handler(CallbackQueryHandler(callback=press_button_refresh,filters=filters.regex("REFRESH;"+str(query))))
+    client.send_message(get_chat(message),result,reply_markup=kb,reply_to_message_id=get_id_msg(message))
+
+"""
+    Aggiorna lo stato del treno richiesto in precedenza
+"""
+@Client.on_callback_query()
+def press_button_refresh(client,message):
+    cb = message.data.split(";")
+    query = cb[1]
+    #build keyboard
+    kb = InlineKeyboardMarkup([[
+        InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])
+    #edit message
+    try:
+        message.edit_message_text(get_delay(query,client,message),reply_markup=kb)
+    except errors.exceptions.bad_request_400.MessageNotModified:
+        message.edit_message_text(get_delay(query,client,message) + "\n__Nessun aggiornamento per ora__", reply_markup=kb)
+        time.sleep(5)
+
 
 
 
