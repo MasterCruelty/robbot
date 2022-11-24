@@ -76,6 +76,8 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [OpenAI](https://www.openai.com)
 * [Urban Dictionary](https://www.github.com/bocong/urbandictionary-py)
 * [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
+* [TrainMonitor per le API viaggiatreno](https://github.com/bluviolin/TrainMonitor)
+* [Trenitalia-API di SimoDax per le API frecce.it](https://github.com/SimoDax/Trenitalia-API)
 
 # **[ENG]**
 
@@ -136,3 +138,5 @@ This json file is only in Italian, but you can translate it in every languages b
 * [OpenAI](https://www.openai.com)
 * [Urban Dictionary](https://www.github.com/bocong/urbandictionary-py)
 * [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
+* [TrainMonitor for viaggiatreno API](https://github.com/bluviolin/TrainMonitor)
+* [SimoDax's wiki for frecce.it API](https://github.com/SimoDax/Trenitalia-API)
