@@ -10,6 +10,7 @@ import modules.reminder
 import modules.openai
 import modules.urban
 import modules.tper
+import modules.viaggiatreno
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -21,6 +22,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/atm'            : modules.atm_feature.send_stop_info,
                     '/geoatm'         : modules.atm_feature.geodata_stop,
                     '/searchatm'      : modules.atm_feature.search_line,
+                    '/treni'          : modules.viaggiatreno.timetable2stations,
+                    '/infotreno'      : modules.viaggiatreno.send_delay,
                     '/covid'          : modules.covid.covid_cases,
                     '/vaccine'        : modules.covid.check_vaccine_function,
                     '/poll'           : usys.poll_function,
