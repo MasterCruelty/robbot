@@ -38,6 +38,8 @@ def showmaps(address,client,message):
         address = address.replace("-i","")
     geolocate = Nominatim(user_agent="Robbot")
     location  = geolocate.geocode(address,timeout=10000)
+    if location == None:
+        return sendMessage(client,message,"__Error 404: not found__")
     coordinates = []
     caption = "__**" + location.address + "\n\nTipologia luogo: " + location.raw["type"] + "\n\nImportanza: " + str(round(location.raw["importance"],2)) + "**__"
     caption += "\n\n__Importanza è un valore compreso tra 0 e 1 circa, calcolato in base al rank del luogo negli articoli di Wikipedia.__"
@@ -47,7 +49,7 @@ def showmaps(address,client,message):
         coordinates.append(location.latitude)
         coordinates.append(location.longitude)
     except AttributeError:
-        return "__Error 404: not found__"
+        return sendMessage(client,message,"__Error 404: not found__")
     try:
         client.send_location(get_chat(message),coordinates[0],coordinates[1],reply_to_message_id=get_id_msg(message))
         return sendMessage(client,message,caption)
