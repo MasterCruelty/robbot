@@ -19,6 +19,10 @@
 		"tper_default":"**/tper 'stop_code'** => restituisce i dati relativi alla fermata inserita.\n<u>Se ti serve solo una linea in particolare sulla fermata, aggiungi uno spazio e mettila.</u>\n __Esempio: /tper 1234 30__\n**1234 è la fermta e 30 è la linea di cui voglio sapere gli orari.**\n\n",
 		"tpershop": "**/tpershop 'stop_code'** => restituisce la rivendita più vicina alla fermata inserita.\n"
 	},
+	"treni":{
+		"treni": "**/treni 'partenza','arrivo'** => restituisce le soluzioni di treni(è possibile inserire anche la data specifica).\n\n__Esempio: /treni milano centrale, bologna centrale\nOppure: /treni milano centrale, bologna centrale, 2022-12-06__\nInoltre se aggiungete l'opzione '-price' è possibile consultare anche i prezzi.\n__Esempio: /treni -price milano centrale, bologna centrale__\n\n",
+		"infotreno":"**/infotreno 'numero-treno'** ==> restituisce informazioni sul treno richiesto(andamento, ultimo rilevamento, ritardo etc.etc.)"
+	},
 	"mappe":{
 		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.\nAggiungi l'opzione -i se vuoi solo sapere informazioni sul luogo e il valore di importanza. __Esempio: /map __**-i**__ Piazza del duomo Milano__\n\n",
 		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km.\n"
@@ -32,5 +36,5 @@
 	},
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI",
 	"urban": "**/urban 'word' ** => restituisce la definizione di urban dictionary per la parola richiesta",
-        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  meteo, urban, poll, reminder, tper, atm e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, ai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
+        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, ai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
