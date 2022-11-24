@@ -13,7 +13,7 @@ import time
     Restituisce il codice stazione della stazione richiesta oppure null se non trovata
     primo tentativo con api viaggiatreno, secondo tentativo con api frecce
 """
-def get_station_code(client,message,name):
+def get_station_code(name):
     if name.startswith(" "):
         name = name[1:]
     url = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/cercaStazione/" + name
@@ -72,8 +72,8 @@ def timetable2stations(query,client,message):
         query = query.replace("-price ","")
     splitted = query.split(",")
     try:
-        from_station = get_station_code(client,message,splitted[0])
-        to_station = get_station_code(client,message,splitted[1]) #da pos 1 perché c'è uno spazio
+        from_station = get_station_code(splitted[0])
+        to_station = get_station_code(splitted[1]) #da pos 1 perché c'è uno spazio
     except IndexError:
         return sendMessage(client,message,"__Errore formato.\nProva /helprob trenitalia__")
     #controllo se richiesta una data specifica altrimenti metto quella odierna
