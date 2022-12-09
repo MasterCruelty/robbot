@@ -147,31 +147,31 @@ def vaccine(query,client,message):
         total_somm = sum(data_total["dosi_somministrate"])
         regione = "Italia"
     else:
-        for i in data_total['nome_area'].unique():
+        for i in data_total['reg'].unique():
             if query.title() in i:
                 regione = i
-        total_consegne = sum(data_total[data_total['nome_area'] == regione]["dosi_consegnate"])
-        total_somm = sum(data_total[data_total['nome_area'] == regione]["dosi_somministrate"])
+        total_consegne = sum(data_total[data_total['reg'] == regione]["dosi_consegnate"])
+        total_somm = sum(data_total[data_total['reg'] == regione]["dosi_somministrate"])
     if(total_consegne == 0):
         return ugc.sendMessage(client,message,"__Errore formato.\n/helprob vaccine per più dettagli sul comando.__")
     perc = str(round(((total_somm * 100) / total_consegne),2))
     giorno = str(data_total["ultimo_aggiornamento"].unique()[0])
-    fornitori = data_consegne_fornitori['fornitore'].unique()
+    fornitori = data_consegne_fornitori['forn'].unique()
     fornitori_somma = []
     forn_str = ""
     prima_dose = seconda_dose = dose_booster = 0
     if(query == "/vaccine"):
         for i in fornitori:
-            fornitori_somma.append(sum(data_consegne_fornitori[data_consegne_fornitori['fornitore'] == i]['numero_dosi']))
-        prima_dose = sum(data_somministrazioni["prima_dose"])
-        seconda_dose = sum(data_somministrazioni["seconda_dose"])
-        dose_booster = sum(data_somministrazioni["dose_addizionale_booster"])
+            fornitori_somma.append(sum(data_consegne_fornitori[data_consegne_fornitori['forn'] == i]['numero_dosi']))
+        prima_dose = sum(data_somministrazioni["d1"])
+        seconda_dose = sum(data_somministrazioni["d2"])
+        dose_booster = sum(data_somministrazioni["db1"]) + sum(data_somministrazioni["db2"])
     else:
         for i in fornitori:
-            fornitori_somma.append(sum(data_consegne_fornitori[(data_consegne_fornitori['fornitore'] == i) & (data_consegne_fornitori['nome_area'] == regione)]['numero_dosi']))
-        prima_dose = sum(data_somministrazioni[data_somministrazioni['nome_area'] == regione]["prima_dose"])
-        seconda_dose = sum(data_somministrazioni[data_somministrazioni['nome_area'] == regione]["seconda_dose"])
-        dose_booster = sum(data_somministrazioni[data_somministrazioni['nome_area'] == regione]["dose_addizionale_booster"])
+            fornitori_somma.append(sum(data_consegne_fornitori[(data_consegne_fornitori['forn'] == i) & (data_consegne_fornitori['reg'] == regione)]['numero_dosi']))
+        prima_dose = sum(data_somministrazioni[data_somministrazioni['reg'] == regione]["d1"])
+        seconda_dose = sum(data_somministrazioni[data_somministrazioni['reg'] == regione]["d2"])
+        dose_booster = sum(data_somministrazioni[data_somministrazioni['reg'] == regione]["db1"]) + sum(data_somministrazioni[data_somministrazioni['reg'] == regione]["db2"])
     for i in range(len(fornitori)):
         forn_str += "**" + fornitori[i] + ":** __" + format_values(fornitori_somma[i]) + "__\n"
     result = "Dati complessivi sui vaccini in __**" + regione + "**__ :\n**__Ultimo aggiornamento: " + giorno + "__**\n\n**Dosi consegnate:** __" + format_values(total_consegne) + "__\n**Dosi somministrate:** __" + format_values(total_somm) + "__\n\n**Percentuale dosi somministrate:** __" + str(perc) + "__\n**Totale prime dosi:** __" + format_values(prima_dose) + "__\n**Totale seconde dosi:** __" + format_values(seconda_dose) + "__\n**Totale dosi booster:** __" + format_values(dose_booster) + "__\n\nTra le dosi consegnate vi sono:\n" + forn_str
