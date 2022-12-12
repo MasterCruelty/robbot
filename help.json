@@ -27,7 +27,7 @@
 		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.\nAggiungi l'opzione -i se vuoi solo sapere informazioni sul luogo e il valore di importanza. __Esempio: /map __**-i**__ Piazza del duomo Milano__\n\n",
 		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km.\n"
 	},
-	"meteo":{
+	"weather":{
 		"weather":"**/weather 'place'** => restituisce i dati meteo principali della città richiesta.\n",
 		"weathermap": "**/weathermap 'area' ** => Restituisce un'immagine della mappa dell'area scelta\n",
 		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__**modalità esistenti: pioggia/sole/neve/infrarossi.**\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__\n",
@@ -36,5 +36,5 @@
 	},
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI",
 	"urban": "**/urban 'word' ** => restituisce la definizione di urban dictionary per la parola richiesta",
-        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, ai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
+        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
