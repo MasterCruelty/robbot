@@ -11,6 +11,7 @@ import modules.openai
 import modules.urban
 import modules.tper
 import modules.viaggiatreno
+import modules.trivial
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -35,6 +36,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/mystat'         : udb.show_stats,
                     '/tper'           : modules.tper.send_tper_stop,
                     '/tpershop'       : modules.tper.get_tper_edicola,
+                    '/trivial'        : modules.trivial.send_question,
                     '/helprob'        : usys.help}
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
@@ -55,7 +57,7 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
 def fetch_command(match,query,client,message):
-    udb.update_stats(ugc.get_id_user(message),match)
+    #udb.update_stats(ugc.get_id_user(message),match)
     dictionary[match](query,client,message)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
