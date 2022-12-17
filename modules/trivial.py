@@ -1,9 +1,10 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg 
 from pyrogram import Client,errors
+from pyrogram.enums import PollType
 import requests
 import json
+import random
 
-global token
 
 categorie = {"General Knowledge"     :9,
              "Books"                 :10,
@@ -30,6 +31,21 @@ categorie = {"General Knowledge"     :9,
              "Japanese Anime & Manga":31,
              "Cartoon & Animations"  :32}
 
+difficolta = {"Easy"       :"easy",
+              "Medium"     :"medium",
+              "Hard"       :"hard"}
+
+tipo_domanda = {"tf"       :"boolean",
+                "multi"    :"multiple"}
+
+response_code = {0:"Ok",
+                 1:"No Results",
+                 2:"Invalid Parameter",
+                 3:"Token not found",
+                 4:"Token Empty"}
+
+
+global token
 
 """
     Chiamata per la creazione di un token che garantisce l'unicità delle domande fetchate da opentb.com
@@ -44,7 +60,7 @@ def create_token():
     if data["response_code"] == 0:
         token = data["token"]
     else:
-        return "__Errore durante la creazione token.__"
+        return response_code[data["response_code"]]
     return token
 
 """
@@ -58,5 +74,52 @@ def reset_token():
     if data["response_code"] == 0:
         token = data["token"]
     else:
-        return "__Errore durante reset token.__"
+        return response_code[data["response_code"]]
     return token
+
+
+
+
+@Client.on_message()
+def send_question(query,client,message):
+    global token
+    #check token existence
+    try:
+        if token == None:
+            token = create_token()
+    except NameError:
+        token = create_token()
+    #check token is good
+    if token == "Token Empty":
+        token = reset_token()
+    elif len(token) < 17:
+        return sendMessage(client,message,token)
+    #build parameter for request
+    splitted = query.split("/")
+    try:
+        category= splitted[1]
+        splitted = splitted[0].split(" ")
+        question_type = splitted[0]
+        difficulty = splitted[1]
+    except IndexError:
+        return sendMessage(client,message,"__Errore formato trivial.__")
+
+    #build api url
+    api_url = "https://opentdb.com/api.php?amount=1&category=" + str(categorie[category.title()]) + "&difficulty=" + difficolta[difficulty.title()] + "&type=" + tipo_domanda[question_type] + "&token=" + token
+    resp = requests.get(api_url)
+    data = json.loads(resp.text)
+    for item in data["results"]:
+        category = item["category"]
+        difficulty = item["difficulty"]
+        question = item["question"]
+        correct = item["correct_answer"]
+        incorrect = item["incorrect_answers"]
+        incorrect.append(correct)
+    random.shuffle(incorrect)
+    #prepare question and send
+    try:
+        client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=40,is_anonymous=False,reply_to_message_id=get_id_msg(message))
+    except errors.exceptions.bad_request_400.PollAnswersInvalid:
+        return sendMessage(client,message,"__Errore durante invio trivial__")
+
+
