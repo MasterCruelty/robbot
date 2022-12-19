@@ -57,7 +57,7 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
 def fetch_command(match,query,client,message):
-    #udb.update_stats(ugc.get_id_user(message),match)
+    udb.update_stats(ugc.get_id_user(message),match)
     dictionary[match](query,client,message)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin

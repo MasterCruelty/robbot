@@ -31,9 +31,6 @@ categorie = {"General Knowledge"     :9,
              "Japanese Anime & Manga":31,
              "Cartoon & Animations"  :32}
 
-difficolta = {"Easy"       :"easy",
-              "Medium"     :"medium",
-              "Hard"       :"hard"}
 
 tipo_domanda = {"tf"       :"boolean",
                 "multi"    :"multiple"}
@@ -77,9 +74,17 @@ def reset_token():
         return response_code[data["response_code"]]
     return token
 
+"""
+    funzione ausiliaria per settare la difficoltà randomicamente
+"""
+def set_difficulty():
+    difficulty_list = ["easy","medium","hard"]
+    random.shuffle(difficulty_list)
+    return difficulty_list[0]
 
-
-
+"""
+    Restituisce una domanda quiz tramite le api di opentdb.com
+"""
 @Client.on_message()
 def send_question(query,client,message):
     global token
@@ -95,17 +100,30 @@ def send_question(query,client,message):
     elif len(token) < 17:
         return sendMessage(client,message,token)
     #build parameter for request
-    splitted = query.split("/")
-    try:
-        category= splitted[1]
-        splitted = splitted[0].split(" ")
-        question_type = splitted[0]
-        difficulty = splitted[1]
-    except IndexError:
-        return sendMessage(client,message,"__Errore formato trivial.__")
+    if query == "/trivial":
+        #Build random options for the request
+        category_number = random.randint(9,32)
+        category_keys = list(categorie.keys())
+        values = categorie.values()
+        
+        category = str({i for i in categorie if categorie[i] == category_number}).replace("{'","").replace("'}","")
+        
+        question_list = ["tf","multi"]
+        random.shuffle(question_list)
+
+        question_type = question_list[0]
+        difficulty = set_difficulty()
+    else:
+        splitted = query.split(" ")
+        try:
+            category= splitted[1]
+            question_type = splitted[0]
+            difficulty = set_difficulty()
+        except IndexError:
+            return sendMessage(client,message,"__Errore formato trivial.__")
 
     #build api url
-    api_url = "https://opentdb.com/api.php?amount=1&category=" + str(categorie[category.title()]) + "&difficulty=" + difficolta[difficulty.title()] + "&type=" + tipo_domanda[question_type] + "&token=" + token
+    api_url = "https://opentdb.com/api.php?amount=1&category=" + str(categorie[category.title()]) + "&difficulty=" + difficulty + "&type=" + tipo_domanda[question_type] + "&token=" + token
     resp = requests.get(api_url)
     data = json.loads(resp.text)
     for item in data["results"]:
