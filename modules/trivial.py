@@ -114,7 +114,7 @@ def send_question(query,client,message):
         question_type = question_list[0]
         difficulty = set_difficulty()
     else:
-        splitted = query.split(" ")
+        splitted = query.split("/")
         try:
             category= splitted[1]
             question_type = splitted[0]
