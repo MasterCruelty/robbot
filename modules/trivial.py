@@ -127,6 +127,7 @@ def send_question(query,client,message):
     resp = requests.get(api_url)
     data = json.loads(resp.text)
     incorrect = []
+    question = ""
     for item in data["results"]:
         category = item["category"]
         difficulty = item["difficulty"]
