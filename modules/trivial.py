@@ -75,6 +75,26 @@ def reset_token():
         return response_code[data["response_code"]]
     return token
 
+
+
+"""
+    Controlla se il token è in buono stato e quindi se non lo è lo resetta o lo crea se non esistente.
+"""
+def check_token():
+    #check token existence
+    try:
+        if token == None:
+            token = create_token()
+    except NameError:
+        token = create_token()
+    #check token is good
+    if token == "Token Empty":
+        token = reset_token()
+    elif len(token) < 17:
+        return sendMessage(client,message,token)
+    return token
+
+
 """
     funzione ausiliaria per settare la difficoltà randomicamente
 """
@@ -90,40 +110,33 @@ def set_difficulty():
 def html2text(strings):
     result = []
     for i in range(len(strings)):
-        zuppa = BeautifulSoup(strings[i])
+        zuppa = BeautifulSoup(strings[i],features="lxml")
         result.append(zuppa.get_text())
     return result
+
 
 """
     Restituisce una domanda quiz tramite le api di opentdb.com
 """
 @Client.on_message()
 def send_question(query,client,message):
+    #check token
     global token
-    #check token existence
-    try:
-        if token == None:
-            token = create_token()
-    except NameError:
-        token = create_token()
-    #check token is good
-    if token == "Token Empty":
-        token = reset_token()
-    elif len(token) < 17:
-        return sendMessage(client,message,token)
+    token = check_token()
+
     #build parameter for request
     if query == "/trivial":
         #Build random options for the request
         category_number = random.randint(9,32)
         category_keys = list(categorie.keys())
         values = categorie.values()
-        
+        #list comprehension per recuperare la chiave del dizionario categoria a partire dal valore random creato 
         category = str({i for i in categorie if categorie[i] == category_number}).replace("{'","").replace("'}","")
-        
+        #create question type in random mode 
         question_list = ["tf","multi"]
         random.shuffle(question_list)
-
         question_type = question_list[0]
+        #setting difficulty
         difficulty = set_difficulty()
     else:
         splitted = query.split("/")
@@ -149,8 +162,8 @@ def send_question(query,client,message):
         incorrect.append(correct)
     random.shuffle(incorrect)
     #prepare question and send
-    zuppa = BeautifulSoup(question)
-    question = zuppa.get_text()
+    zuppa = BeautifulSoup(question,features="lxml")
+    question  = zuppa.get_text()
     incorrect = html2text(incorrect)
     try:
         client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=40,is_anonymous=False,reply_to_message_id=get_id_msg(message))
