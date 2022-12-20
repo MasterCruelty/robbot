@@ -4,6 +4,7 @@ from pyrogram.enums import PollType
 import requests
 import json
 import random
+from bs4 import BeautifulSoup
 
 
 categorie = {"General Knowledge"     :9,
@@ -82,6 +83,17 @@ def set_difficulty():
     random.shuffle(difficulty_list)
     return difficulty_list[0]
 
+
+"""
+    Conversione codifica HTML in testo
+"""
+def html2text(strings):
+    result = []
+    for i in range(len(strings)):
+        zuppa = BeautifulSoup(strings[i])
+        result.append(zuppa.get_text())
+    return result
+
 """
     Restituisce una domanda quiz tramite le api di opentdb.com
 """
@@ -137,6 +149,9 @@ def send_question(query,client,message):
         incorrect.append(correct)
     random.shuffle(incorrect)
     #prepare question and send
+    zuppa = BeautifulSoup(question)
+    question = zuppa.get_text()
+    incorrect = html2text(incorrect)
     try:
         client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=40,is_anonymous=False,reply_to_message_id=get_id_msg(message))
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
