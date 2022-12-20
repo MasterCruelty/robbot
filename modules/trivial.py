@@ -126,6 +126,7 @@ def send_question(query,client,message):
     api_url = "https://opentdb.com/api.php?amount=1&category=" + str(categorie[category.title()]) + "&difficulty=" + difficulty + "&type=" + tipo_domanda[question_type] + "&token=" + token
     resp = requests.get(api_url)
     data = json.loads(resp.text)
+    incorrect = []
     for item in data["results"]:
         category = item["category"]
         difficulty = item["difficulty"]
