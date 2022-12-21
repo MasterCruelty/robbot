@@ -40,5 +40,5 @@
 	},
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI",
 	"urban": "**/urban 'word' ** => restituisce la definizione di urban dictionary per la parola richiesta",
-        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
+        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart e mappe.\n\ncomandi admin: **playlotto, getmessage, weathermap, weathersat, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
