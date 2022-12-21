@@ -153,6 +153,7 @@ def send_question(query,client,message):
     data = json.loads(resp.text)
     incorrect = []
     question = ""
+    correct = ""
     for item in data["results"]:
         category = item["category"]
         difficulty = item["difficulty"]
