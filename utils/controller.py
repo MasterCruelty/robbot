@@ -36,6 +36,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/mystat'         : udb.show_stats,
                     '/tper'           : modules.tper.send_tper_stop,
                     '/tpershop'       : modules.tper.get_tper_edicola,
+                    '/infopista'      : modules.pistekart.get_info_pista,
                     '/piste'          : modules.pistekart.get_piste_region,
                     '/helprob'        : usys.help}
 
