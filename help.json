@@ -23,6 +23,10 @@
 		"treni": "**/treni 'partenza','arrivo'** => restituisce le soluzioni di treni(è possibile inserire anche la data specifica).\n\n__Esempio: /treni milano centrale, bologna centrale\nOppure: /treni milano centrale, bologna centrale, 2022-12-06__\nInoltre se aggiungete l'opzione '-price' è possibile consultare anche i prezzi.\n__Esempio: /treni -price milano centrale, bologna centrale__\n\n",
 		"infotreno":"**/infotreno 'numero-treno'** ==> restituisce informazioni sul treno richiesto(andamento, ultimo rilevamento, ritardo etc.etc.)"
 	},
+	"kart":{
+		"piste":"**/piste 'regione'** => restituisce elenco delle piste nella regione.\n/piste 'regione' 'cod-provincia' per avere solo la provincia.\nEsempio /piste lombardia cr-cremona.\n\n",
+		"infopista":"**/infopista 'nome pista'** => restituisce informazioni dettagliate sulla pista(se disponibili) e la foto del tracciato."
+	},
 	"mappe":{
 		"map":"**/map ' place'** => restituisce la posizione del luogo richiesto.\nAggiungi l'opzione -i se vuoi solo sapere informazioni sul luogo e il valore di importanza. __Esempio: /map __**-i**__ Piazza del duomo Milano__\n\n",
 		"km":"**/km 'place1', 'place2'** => restituisce la distanza in linea d'aria tra i due luoghi in km.\n"

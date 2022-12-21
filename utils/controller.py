@@ -12,6 +12,7 @@ import modules.urban
 import modules.tper
 import modules.viaggiatreno
 import modules.trivial
+import modules.pistekart
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -37,6 +38,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/tper'           : modules.tper.send_tper_stop,
                     '/tpershop'       : modules.tper.get_tper_edicola,
                     '/trivial'        : modules.trivial.send_question,
+                    '/infopista'      : modules.pistekart.get_info_pista,
+                    '/piste'          : modules.pistekart.get_piste_region,
                     '/helprob'        : usys.help}
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
