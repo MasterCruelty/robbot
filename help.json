@@ -17,7 +17,7 @@
 		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__\n"
 	},
 	"tper":{
-		"intro":"__Features disponibili per il trasporto pubblico di Bologna e Ferrara__\n",
+		"intro":"__Features disponibili per il trasporto pubblico in quasi tutta la Regione Emilia-Romagna.__\n",
 		"tper_default":"**/tper 'stop_code'** => restituisce i dati relativi alla fermata inserita.\n<u>Se ti serve solo una linea in particolare sulla fermata, aggiungi uno spazio e mettila.</u>\n __Esempio: /tper 1234 30__\n**1234 è la fermta e 30 è la linea di cui voglio sapere gli orari.**\n\n",
 		"tpershop": "**/tpershop 'stop_code'** => restituisce la rivendita più vicina alla fermata inserita.\n"
 	},
