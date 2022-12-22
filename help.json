@@ -27,7 +27,7 @@
 		"infotreno":"**/infotreno 'numero-treno'** ==> restituisce informazioni sul treno richiesto(andamento, ultimo rilevamento, ritardo etc.etc.)"
 	},
 	"kart":{
-		"intro":"__Features disponibili per le piste di go kart presenti in Italia.__",
+		"intro":"__Features disponibili per le piste di go kart presenti in Italia.__\n",
 		"piste":"**/piste 'regione'** => restituisce elenco delle piste nella regione.\n/piste 'regione' 'cod-provincia' per avere solo la provincia.\nEsempio /piste lombardia cr-cremona.\n\n",
 		"infopista":"**/infopista 'nome pista'** => restituisce informazioni dettagliate sulla pista(se disponibili) e la foto del tracciato."
 	},
