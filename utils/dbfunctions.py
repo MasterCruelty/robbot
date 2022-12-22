@@ -43,6 +43,55 @@ def show_stats(utente,client,message):
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
     return sendMessage(client,message,result)
 
+"""
+    @params utente,punteggio,categoria
+
+    Aggiorna il punteggio dell'utente sulla categoria
+"""
+def update_trivial_score(utente,punteggio,categoria):
+    query = (Trivial
+            .update({Trivial.points: Trivial.points + punteggio})
+            .where((Trivial.id_user == utente) &
+                   (Trivial.category == categoria))).execute()
+    if(query == 0):
+        score = Trivial(id_user = utente,category = categoria, points = punteggio)
+        score.save()
+    return
+
+"""
+    @params utente,client,message
+
+    Restituisce le proprie statistiche sul gioco Trivial
+"""
+def personal_leaderboard(utente,client,message):
+    id_utente = get_id_user(message)
+    result = "Le tue statistiche su Trivial\n"
+    query = (Trivial
+            .select()
+            .join(User, on=(User.id_user == Trivial.id_user))
+            .where(Trivial.id_user == id_utente)
+            .order_by(Trivial.points.desc()))
+    count = 0
+    for item in query:
+        result += item.category + "__: " + str(item.points) + "punti.__\n"
+        count += item.points
+    result += "**Punteggio totale: " + str(count) + "**"
+    return sendMessage(client,message,result)
+
+"""
+    @params client,message
+    Classifica globale dei punti su Trivial
+"""
+def global_leaderboard(client,message):
+    query = (Trivial
+            .select(User.name,fn.SUM(Trivial.points))
+            .join(User, on=(User.id_user == Trivial.id_user))
+            .order_by(fn.SUM(Trivial.points)))
+
+    result = ""
+    for item in query:
+        result += item.name + ": __" + str(item.points) + " punti.__"
+    return sendMEssage(client,message,result)
 
 """
 questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
