@@ -11,19 +11,23 @@
 	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
 	"reminder":"**/reminder 'tempo';'messaggio'** => invia dopo il tempo indicato.\n__s = secondi\nm = minuti\nh = ore\ngg = giorni__\n\n**/reminder 1m50s;ciao\n/reminder 1h10m;ciao\n/reminder 1gg5h10m;ciao.**",
 	"atm":{
+		"intro":"__Features disponibili per il trasporto pubblico di Milano__\n",
 		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito\n",
 		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito\n",
 		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__\n"
 	},
 	"tper":{
+		"intro":"__Features disponibili per il trasporto pubblico di Bologna e Ferrara__\n",
 		"tper_default":"**/tper 'stop_code'** => restituisce i dati relativi alla fermata inserita.\n<u>Se ti serve solo una linea in particolare sulla fermata, aggiungi uno spazio e mettila.</u>\n __Esempio: /tper 1234 30__\n**1234 è la fermta e 30 è la linea di cui voglio sapere gli orari.**\n\n",
 		"tpershop": "**/tpershop 'stop_code'** => restituisce la rivendita più vicina alla fermata inserita.\n"
 	},
 	"treni":{
+		"intro":"__Features disponibili per i treni in Italia.__\n",
 		"treni": "**/treni 'partenza','arrivo'** => restituisce le soluzioni di treni(è possibile inserire anche la data specifica).\n\n__Esempio: /treni milano centrale, bologna centrale\nOppure: /treni milano centrale, bologna centrale, 2022-12-06__\nInoltre se aggiungete l'opzione '-price' è possibile consultare anche i prezzi.\n__Esempio: /treni -price milano centrale, bologna centrale__\n\n",
 		"infotreno":"**/infotreno 'numero-treno'** ==> restituisce informazioni sul treno richiesto(andamento, ultimo rilevamento, ritardo etc.etc.)"
 	},
 	"kart":{
+		"intro":"__Features disponibili per le piste di go kart presenti in Italia.__",
 		"piste":"**/piste 'regione'** => restituisce elenco delle piste nella regione.\n/piste 'regione' 'cod-provincia' per avere solo la provincia.\nEsempio /piste lombardia cr-cremona.\n\n",
 		"infopista":"**/infopista 'nome pista'** => restituisce informazioni dettagliate sulla pista(se disponibili) e la foto del tracciato."
 	},
