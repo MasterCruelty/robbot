@@ -63,7 +63,7 @@ def update_trivial_score(utente,punteggio,categoria):
 
     Restituisce le proprie statistiche sul gioco Trivial
 """
-def personal_leaderboard(utente,client,message):
+def personal_trivial_leaderboard(utente,client,message):
     id_utente = get_id_user(message)
     result = "Le tue statistiche su Trivial\n"
     query = (Trivial
@@ -82,7 +82,7 @@ def personal_leaderboard(utente,client,message):
     @params client,message
     Classifica globale dei punti su Trivial
 """
-def global_leaderboard(client,message):
+def global_trivial_leaderboard(client,message):
     query = (Trivial
             .select(User.name,fn.SUM(Trivial.points))
             .join(User, on=(User.id_user == Trivial.id_user))
