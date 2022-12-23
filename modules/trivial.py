@@ -1,6 +1,9 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg 
 from pyrogram import Client,errors
 from pyrogram.enums import PollType
+from pyrogram.handlers import PollHandler,RawUpdateHandler
+from pyrogram.raw.functions.messages import GetPollResults
+from pyrogram.raw.types import UpdateMessagePollVote
 import requests
 import json
 import random
@@ -166,9 +169,22 @@ def send_question(query,client,message):
     zuppa = BeautifulSoup(question,features="lxml")
     question  = zuppa.get_text()
     incorrect = html2text(incorrect)
+    
+    #aggiungo handler per ricevere aggiornamenti sul quiz in corso
+    #riga commentata per quanto in futuro sarà possibile ricevere update anche sui quiz
+    client.add_handler(PollHandler(callback=check_trivial_updates))
+    #client.add_handler(RawUpdateHandler(callback=check_trivial_updates))
+    
     try:
-        client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=40,is_anonymous=False,reply_to_message_id=get_id_msg(message))
+        msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=40,is_anonymous=False,reply_to_message_id=get_id_msg(message))
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
         return sendMessage(client,message,"__Errore durante invio trivial__")
 
+@Client.on_raw_update()
+def check_trivial_updates(client,update):#,users,chat):
+    print(update)
+    """if isinstance(update,UpdateMessagePollVote):
+        client.invoke(GetPollResults(peer = str(update.user_id),msg_id =update.poll_id))
+        #print(update)
+        player = update.user_id"""
 
