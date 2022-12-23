@@ -64,5 +64,8 @@ def get_info_pista(query,client,message):
     
     #invio messaggio con descrizione pista e foto tracciato
     sendMessage(client,message,"__" + info_track+ "__")
-    sendPhoto(client,message,img_url,"__Foto del tracciato__")
+    try:
+        sendPhoto(client,message,img_url,"__Foto del tracciato__")
+    except ValueError:
+        sendMessage(client,message,"__Foto del tracciato non disponibile__")
 
