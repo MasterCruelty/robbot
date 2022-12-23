@@ -33,6 +33,8 @@ def get_piste_region(query,client,message):
             pista = ""
         else:
             pista += results[i] + "\n"
+            if result == "" and i == len(results)-1:
+                result = pista
 
     try:
         return sendMessage(client,message,result)
