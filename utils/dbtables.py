@@ -46,7 +46,7 @@ class Group(BaseModel):
 
 
 db.connect()
-db.create_tables([User,Stats])
+db.create_tables([User,Stats,Trivial])
 
 #Inizializzo il super admin da file di configurazione
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)
