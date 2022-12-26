@@ -65,7 +65,7 @@ def update_trivial_score(utente,punteggio,categoria):
 """
 def personal_trivial_leaderboard(utente,client,message):
     id_utente = get_id_user(message)
-    result = "Le tue statistiche su Trivial\n"
+    result = "Le tue statistiche su Trivial\n\n"
     query = (Trivial
             .select()
             .join(User, on=(User.id_user == Trivial.id_user))
@@ -73,7 +73,7 @@ def personal_trivial_leaderboard(utente,client,message):
             .order_by(Trivial.points.desc()))
     count = 0
     for item in query:
-        result += item.category + "__: " + str(item.points) + "punti.__\n"
+        result += item.category + "__: " + str(item.points) + " punti.__\n"
         count += item.points
     result += "**Punteggio totale: " + str(count) + "**"
     return sendMessage(client,message,result)
@@ -83,15 +83,16 @@ def personal_trivial_leaderboard(utente,client,message):
     Classifica globale dei punti su Trivial
 """
 def global_trivial_leaderboard(client,message):
-    query = (Trivial
-            .select(User.name,fn.SUM(Trivial.points))
-            .join(User, on=(User.id_user == Trivial.id_user))
-            .order_by(fn.SUM(Trivial.points)))
+    query = (User
+            .select(User.name.alias('user'),fn.SUM(Trivial.points).alias('count'))
+            .join(Trivial, on=(User.id_user == Trivial.id_user))
+            .order_by(fn.SUM(Trivial.points))
+            .group_by(User.id_user))
 
     result = ""
     for item in query:
-        result += item.name + ": __" + str(item.points) + " punti.__"
-    return sendMEssage(client,message,result)
+        result += item.user + ": __" + str(item.count) + " punti.__"
+    return sendMessage(client,message,result)
 
 """
 questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
