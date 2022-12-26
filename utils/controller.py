@@ -38,6 +38,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/tper'           : modules.tper.send_tper_stop,
                     '/tpershop'       : modules.tper.get_tper_edicola,
                     '/trivial'        : modules.trivial.send_question,
+                    '/mytscore'       : modules.trivial.get_personal_score,
+                    '/globaltscore'   : modules.trivial.get_global_score,
                     '/infopista'      : modules.pistekart.get_info_pista,
                     '/piste'          : modules.pistekart.get_piste_region,
                     '/helprob'        : usys.help}
