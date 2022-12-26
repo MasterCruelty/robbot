@@ -86,12 +86,12 @@ def global_trivial_leaderboard(client,message):
     query = (User
             .select(User.name.alias('user'),fn.SUM(Trivial.points).alias('count'))
             .join(Trivial, on=(User.id_user == Trivial.id_user))
-            .order_by(fn.SUM(Trivial.points))
+            .order_by(fn.SUM(Trivial.points).desc())
             .group_by(User.id_user))
 
     result = ""
     for item in query:
-        result += item.user + ": __" + str(item.count) + " punti.__"
+        result += item.user + ": __" + str(item.count) + " punti.__\n"
     return sendMessage(client,message,result)
 
 """
