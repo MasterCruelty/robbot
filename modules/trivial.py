@@ -1,14 +1,13 @@
-from utils.get_config import sendMessage,get_chat,get_id_msg 
+from utils.get_config import sendMessage,get_chat,get_id_msg,get_id_user 
+from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard,update_trivial_score
 from pyrogram import Client,errors
 from pyrogram.enums import PollType
 from pyrogram.handlers import PollHandler,RawUpdateHandler
-from pyrogram.raw.functions.messages import GetPollResults,GetPollVotes
 from pyrogram.raw.types import UpdateMessagePollVote
 import requests
 import json
 import random
 from bs4 import BeautifulSoup
-import time
 
 
 categorie = {"General Knowledge"     :9,
@@ -122,8 +121,17 @@ def html2text(strings):
 """
     Restituisce una domanda quiz tramite le api di opentdb.com
 """
+global corretta
+global difficolta_domanda
+global versione_domanda
+global categoria
 @Client.on_message()
 def send_question(query,client,message):
+    #variabili globali per tenere traccia di alcune informazioni per la fine del poll
+    global corretta
+    global difficolta_domanda
+    global versione_domanda
+    global categoria
     #check token
     global token
     token = check_token()
@@ -175,19 +183,48 @@ def send_question(query,client,message):
     #riga commentata per quanto in futuro sarà possibile ricevere update anche sui quiz
     #client.add_handler(PollHandler(callback=check_trivial_updates))
     client.add_handler(RawUpdateHandler(callback=check_trivial_updates))
+    corretta = incorrect.index(correct)
+    versione_domanda = tipo_domanda[question_type] 
+    difficolta_domanda = difficulty
+    categoria = category.title()
     
     try:
         msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=10,is_anonymous=False,reply_to_message_id=get_id_msg(message))
-        #time.sleep(10)
-        print(GetPollResults(peer = get_chat(message),msg_id =msg.poll.id))
-        results = client.invoke(GetPollVotes(peer = get_chat(message),limit=99,id=msg.poll.id,option=bytes(incorrect.index(correct))))
-        print(results)
 
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
         return sendMessage(client,message,"__Errore durante invio trivial__")
 
+
+punteggi = { 'Easy'  : 1,
+             'Medium': 2,
+             'Hard'  : 3}
+
+"""
+    Funzione che prende raw updates per ogni volta che un giocatore vota sul quiz, assegnando o meno il punteggio.
+"""
 @Client.on_raw_update()
 def check_trivial_updates(client,update,users,chat):
-    print(update)
-    #if isinstance(update,UpdateMessagePollVote):
+    if isinstance(update,UpdateMessagePollVote):
+        data = update
+        player = data.user_id
+        chosen = data.options[0]
+        int_chosen = int.from_bytes(chosen,"big")
+        if corretta == int_chosen:
+            print(str(player) + " ha risposto correttamente")
+            if versione_domanda.title() == 'Boolean':
+                update_trivial_score(player,1,categoria)
+            else:
+                update_trivial_score(player,punteggi[difficolta_domanda.title()],categoria)
+
+"""
+    richiamo funzione per punteggi personali
+"""
+def get_personal_score(query,client,message):
+    return personal_trivial_leaderboard(get_id_user(message),client,message)
+
+"""
+    richiamo funzione per classifica globale
+"""
+def get_global_score(query,client,message):
+    return global_trivial_leaderboard(client,message)
 
