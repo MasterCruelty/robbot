@@ -125,6 +125,58 @@ def get_wait_trivial_value():
         return item.value
 
 """
+    Restituisce la lista dei gruppi autorizzati a certi comandi
+"""
+@Client.on_message()
+def list_group(client,message):
+    result = "Gruppi salvati:\n\n"
+    query = Group.select()
+    for group in query:
+        result += str(group.id_group) + ";" + group.title + ";" + group.command + "\n"
+    return sendMessage(client,message,result)
+
+
+"""
+    setto il gruppo come unico autorizzato a un particolare comando
+"""
+@Client.on_message()
+def set_group(client,message,query):
+    #splitto sullo spazio poichè l'input è del tipo /setgroup <id gruppo> <comando>
+    splitted = query.split(" ")
+    json_group = client.get_chat(splitted[0])
+    group_id = json_group.id
+    title = json_group.title
+    command = splitted[1]
+    
+    #inserisco in db
+    group = Group(id_group = group_id,title = title,command = command)
+    group.save()
+    #verifico sia inserito correttamente
+    query = Group.select().where(Group.id_group == group_id)
+    for item in query:
+        result = "Gruppo " + str(item.id_group) + " registrato con comando " + command
+    return sendMessage(client,message,result)
+
+
+"""
+    controllo se il gruppo è autorizzato a eseguire un determinato comando
+"""
+def check_group_command(match,message):
+    query = (Group
+            .select()
+            .where((Group.id_group == get_chat(message)) &
+                   (Group.command == match))).execute()
+
+    #controllo se vi è almeno un record
+    i = 0
+    for item in query:
+        i = i + 1
+    if i == 0:
+        return True
+    else:
+        return False
+    
+"""
 questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
 """
 
