@@ -56,7 +56,8 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/listrobuser'    : udb.list_user,
                     '/allrobuser'     : udb.all_user,
                     '/setrobadmin'    : udb.set_admin,
-                    '/delrobadmin'    : udb.del_admin}
+                    '/delrobadmin'    : udb.del_admin,
+                    '/setgroup'       : udb.set_group}
 
 """
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
