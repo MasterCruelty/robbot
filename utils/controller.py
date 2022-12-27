@@ -59,12 +59,18 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/delrobadmin'    : udb.del_admin,
                     '/setgroup'       : udb.set_group}
 
+auth_command = ["/trivial"]
+
 """
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
 def fetch_command(match,query,client,message):
-    udb.update_stats(ugc.get_id_user(message),match)
-    dictionary[match](query,client,message)
+    #controllo sui comandi autorizzati solo in determinate chat
+    if udb.check_group_command(match,message) and match in auth_command:
+        return ugc.sendMessage(client,message,"__Comando non autorizzato in questa chat.\nContatta @MasterCruelty per informazioni.__")
+    else:
+        udb.update_stats(ugc.get_id_user(message),match)
+        dictionary[match](query,client,message)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """
