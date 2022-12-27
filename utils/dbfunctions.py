@@ -157,6 +157,14 @@ def set_group(client,message,query):
         result = "Gruppo " + str(item.id_group) + " registrato con comando " + command
     return sendMessage(client,message,result)
 
+"""
+    Cancella il gruppo selezionato dai gruppi autorizzati a determinati comandi
+"""
+@Client.on_message()
+def del_group(client,message,query):
+    delete = Group.delete().where(Group.id_group == query).execute()
+    result = "Gruppo " + str(query) + " eliminato dai gruppi salvati."
+    return sendMessage(client,message,result)
 
 """
     controllo se il gruppo è autorizzato a eseguire un determinato comando
