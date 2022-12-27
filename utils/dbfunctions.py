@@ -27,6 +27,36 @@ def update_stats(utente,comando):
     return
 
 """
+    Modifica forzata del numero di volte associato a un comando per un utente
+"""
+def force_update_stats(client,message,query):
+    splitted = query.split(" ")
+    userid = int(splitted[0])
+    command = splitted[1]
+    value = int(splitted[2])
+    query = (Stats
+             .update({Stats.times : value})
+             .where((Stats.id_user == userid) &
+                    (Stats.command == command))).execute()
+    return sendMessage(client,message,"__Valore aggiornato su " + command + " per " + str(userid) + "__")
+
+
+"""
+    Cancella una riga dalla tabella per l'utente scelto e il comando selezionato
+"""
+def force_delete_stats(client,message,query):
+    splitted = query.split(" ")
+    userid = int(splitted[0])
+    command = splitted[1]
+    query = (Stats
+             .delete()
+             .where((Stats.id_user == userid) &
+                    (Stats.command == command))).execute()
+    result = "Comando " + command + " eliminato dalle statistiche di " + str(userid)
+    return sendMessage(client,message,result)
+             
+
+"""
     @params client,message,id_utente
 
     La funzione restituisce tutti i dati sulle statistiche dei comandi usati dall'utente.
@@ -42,6 +72,7 @@ def show_stats(utente,client,message):
     for item in query:
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
     return sendMessage(client,message,result)
+
 
 """
     @params utente,punteggio,categoria
