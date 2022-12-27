@@ -121,8 +121,10 @@ def global_trivial_leaderboard(client,message):
             .group_by(User.id_user))
 
     result = ""
+    k = 1
     for item in query:
-        result += item.user + ": __" + str(item.count) + " punti.__\n"
+        result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        k = k + 1
     return sendMessage(client,message,result)
 
 """
