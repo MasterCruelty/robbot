@@ -1,5 +1,5 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg,get_id_user 
-from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard,update_trivial_score
+from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard,update_trivial_score,get_wait_trivial_value,set_wait_trivial,unset_wait_trivial
 from pyrogram import Client,errors
 from pyrogram.enums import PollType
 from pyrogram.handlers import PollHandler,RawUpdateHandler
@@ -7,6 +7,7 @@ from pyrogram.raw.types import UpdateMessagePollVote
 import requests
 import json
 import random
+import time
 from bs4 import BeautifulSoup
 
 
@@ -127,6 +128,10 @@ global versione_domanda
 global categoria
 @Client.on_message()
 def send_question(query,client,message):
+    #check wait_quiz
+    wait_trivial = get_wait_trivial_value()
+    if wait_trivial:
+        return sendMessage(client,message,"__Un altro quiz è attualmente in corso.\nRiprova tra poco.__")
     #variabili globali per tenere traccia di alcune informazioni per la fine del poll
     global corretta
     global difficolta_domanda
@@ -180,8 +185,9 @@ def send_question(query,client,message):
     incorrect = html2text(incorrect)
     
     #aggiungo handler per ricevere aggiornamenti sul quiz in corso
-    #riga commentata per quanto in futuro sarà possibile ricevere update anche sui quiz
+    #riga commentata per quando in futuro sarà possibile ricevere update anche sui quiz
     #client.add_handler(PollHandler(callback=check_trivial_updates))
+
     client.add_handler(RawUpdateHandler(callback=check_trivial_updates))
     corretta = incorrect.index(correct)
     versione_domanda = tipo_domanda[question_type] 
@@ -189,7 +195,12 @@ def send_question(query,client,message):
     categoria = category.title()
     
     try:
-        msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=10,is_anonymous=False,reply_to_message_id=get_id_msg(message))
+        msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=20,is_anonymous=False,reply_to_message_id=get_id_msg(message))
+        #Setto il wait così che non ci siano due quiz in contemporanea
+        set_wait_trivial()
+        time.sleep(20)
+        #setto a false dopo la fine del quiz
+        unset_wait_trivial()
 
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
         return sendMessage(client,message,"__Errore durante invio trivial__")
