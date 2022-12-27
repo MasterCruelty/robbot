@@ -40,6 +40,13 @@ class Trivial(BaseModel):
     category = CharField()
     points = IntegerField(default = 0)
 
+"""
+    Tabella gruppi per autorizzare un comando solo all'interno di alcuni gruppi
+    Campi:
+    id gruppo
+    nome gruppo
+    nome comando
+"""
 class Group(BaseModel):
     id_group = IntegerField(unique = True)
     title = CharField()
@@ -53,7 +60,7 @@ class waitTrivial(BaseModel):
 
 
 db.connect()
-db.create_tables([User,Stats,Trivial,waitTrivial])
+db.create_tables([User,Stats,Trivial,waitTrivial,Group])
 
 #Inizializzo il wait trivial a False
 wait_trivial = waitTrivial(value = False)
