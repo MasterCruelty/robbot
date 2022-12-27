@@ -95,6 +95,36 @@ def global_trivial_leaderboard(client,message):
     return sendMessage(client,message,result)
 
 """
+    setto il wait time a true per via di un quiz in corso
+"""
+def set_wait_trivial():
+    query = (waitTrivial
+             .update({waitTrivial.value: True})).execute()
+    if(query == 0):
+        wait_trivial = waitTrivial(value = True)
+        wait_trivial.save()
+    return
+
+"""
+    setto il wait time a false, è possibile lanciare un nuovo quiz
+"""
+def unset_wait_trivial():
+    query = (waitTrivial
+             .update({waitTrivial.value: False})).execute()
+    if(query == 0):
+        wait_trivial = waitTrivial(value = False)
+        wait_trivial.save()
+    return
+
+"""
+    prelevo il valore del wait time
+"""
+def get_wait_trivial_value():
+    query = waitTrivial.select()
+    for item in query:
+        return item.value
+
+"""
 questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
 """
 
