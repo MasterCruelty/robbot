@@ -59,7 +59,9 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/delrobadmin'    : udb.del_admin,
                     '/setgroup'       : udb.set_group,
                     '/listgroup'      : udb.list_group,
-                    '/delgroup'       : udb.del_group}
+                    '/delgroup'       : udb.del_group,
+                    '/updatestat'     : udb.force_update_stats,
+                    '/delstat'        : udb.force_delete_stats}
 
 auth_command = ["/trivial"]
 
