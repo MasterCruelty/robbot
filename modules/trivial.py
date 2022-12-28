@@ -1,5 +1,5 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg,get_id_user 
-from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard,update_trivial_score,get_wait_trivial_value,set_wait_trivial,unset_wait_trivial
+from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard,update_trivial_score
 from pyrogram import Client,errors
 from pyrogram.enums import PollType
 from pyrogram.handlers import PollHandler,RawUpdateHandler
@@ -119,6 +119,14 @@ def html2text(strings):
     return result
 
 """
+    Come sopra ma per le stringhe singole e non liste
+"""
+def html2text_str(string):
+    zuppa = BeautifulSoup(string,features="lxml")
+    result = zuppa.get_text()
+    return result
+
+"""
     randomizza se scegliere vero/falso o risposta multipla
 """
 def get_question_type():
@@ -170,7 +178,7 @@ def send_question(query,client,message):
             category = splitted[0].title()
             for item in categorie:
                 if category in item:
-                    category = categorie[item]
+                    category_number = categorie[item]
                     break
             question_type = get_question_type()
             difficulty = set_difficulty()
@@ -193,8 +201,8 @@ def send_question(query,client,message):
         incorrect.append(correct)
     random.shuffle(incorrect)
     #prepare question and send
-    zuppa = BeautifulSoup(question,features="lxml")
-    question  = zuppa.get_text()
+    question  = html2text_str(question)
+    correct = html2text_str(correct)
     incorrect = html2text(incorrect)
     
     #aggiungo handler per ricevere aggiornamenti sul quiz in corso
