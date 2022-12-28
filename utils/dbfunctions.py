@@ -138,16 +138,19 @@ def global_trivial_leaderboard(client,message):
     classifica globale ma solo in una specifica categoria di domande
 """
 def global_trivial_leaderboard_category(query,client,message):
-    query = (User
-             .select(User.name.alias('user'),fn.SUM(Trivial.points).alias('count'))
-             .join(Trivial, on(User.id_user == Trivial.id_user))
-             .where(Trivial.category == query)
-             .order_by(fn.SUM(Trivial.points).desc())
-             .group_by(User.id_user))
-    result = "__" + query + "__"
+    if query == '/globaltscore':
+        return global_trivial_leaderboard(client,message)
+    query_sql = (User
+            .select(User.name.alias('user'),fn.SUM(Trivial.points).alias('count'))
+            .join(Trivial, on=(User.id_user == Trivial.id_user))
+            .where(Trivial.category == query)
+            .order_by(fn.SUM(Trivial.points).desc())
+            .group_by(User.id_user))
+    result = "__" + query + "__\n"
     k = 1
-    for item in query:
+    for item in query_sql:
         result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        k = k + 1
     return sendMessage(client,message,result)
 
 
