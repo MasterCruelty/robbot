@@ -150,39 +150,6 @@ def global_trivial_leaderboard_category(query,client,message):
         result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
     return sendMessage(client,message,result)
 
-"""
-    setto il wait time a true per via di un quiz in corso
-"""
-#to delete
-def set_wait_trivial():
-    query = (waitTrivial
-             .update({waitTrivial.value: True})).execute()
-    if(query == 0):
-        wait_trivial = waitTrivial(value = True)
-        wait_trivial.save()
-    return
-
-"""
-    setto il wait time a false, è possibile lanciare un nuovo quiz
-"""
-#to delete
-def unset_wait_trivial():
-    query = (waitTrivial
-             .update({waitTrivial.value: False})).execute()
-    if(query == 0):
-        wait_trivial = waitTrivial(value = False)
-        wait_trivial.save()
-    return
-
-"""
-    prelevo il valore del wait time
-"""
-#to delete
-def get_wait_trivial_value():
-    query = waitTrivial.select()
-    for item in query:
-        return item.value
-
 
 
 #############################################################################    

@@ -52,19 +52,11 @@ class Group(BaseModel):
     title = CharField()
     command = CharField()
 
-"""
-    valore booleano necessario per non avere due quiz attivi in contemporanea
-"""
-class waitTrivial(BaseModel):
-    value = BooleanField()
 
 
 db.connect()
-db.create_tables([User,Stats,Trivial,waitTrivial,Group])
+db.create_tables([User,Stats,Trivial,Group])
 
-#Inizializzo il wait trivial a False
-wait_trivial = waitTrivial(value = False)
-wait_trivial.save()
 
 #Inizializzo il super admin da file di configurazione
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)
