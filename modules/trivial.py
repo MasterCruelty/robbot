@@ -161,10 +161,6 @@ def send_question(query,client,message):
     if query == "/trivial":
         #Build random options for the request
         category_number = random.randint(9,32)
-        category_keys = list(categorie.keys())
-        values = categorie.values()
-        #list comprehension per recuperare la chiave del dizionario categoria a partire dal valore random creato 
-        category = str({i for i in categorie if categorie[i] == category_number}).replace("{'","").replace("'}","")
         question_type = get_question_type() 
         #setting difficulty
         difficulty = set_difficulty()
@@ -182,7 +178,7 @@ def send_question(query,client,message):
             return sendMessage(client,message,"__Errore formato trivial.__")
 
     #build api url
-    api_url = "https://opentdb.com/api.php?amount=1&category=" + str(category) + "&difficulty=" + difficulty + "&type=" + tipo_domanda[question_type] + "&token=" + token
+    api_url = "https://opentdb.com/api.php?amount=1&category=" + str(category_number) + "&difficulty=" + difficulty + "&type=" + tipo_domanda[question_type] + "&token=" + token
     resp = requests.get(api_url)
     data = json.loads(resp.text)
     incorrect = []
@@ -214,12 +210,10 @@ def send_question(query,client,message):
     try:
         msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=20,is_anonymous=False,reply_to_message_id=get_id_msg(message))
         #Setto il wait così che non ci siano due quiz in contemporanea
-        #set_wait_trivial()
         wait_trivial = True
         time.sleep(20)
         #setto a false dopo la fine del quiz
         wait_trivial = False
-        #unset_wait_trivial()
 
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
         return sendMessage(client,message,"__Errore durante invio trivial__")
