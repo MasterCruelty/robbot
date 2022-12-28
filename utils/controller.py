@@ -53,6 +53,7 @@ dictionary_admin = {'/getmessage'     : usys.get_message,
 
 dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/delrobuser'     : udb.del_user,
+                    '/updaterobuser'  : udb.update_user,
                     '/listrobuser'    : udb.list_user,
                     '/allrobuser'     : udb.all_user,
                     '/setrobadmin'    : udb.set_admin,
