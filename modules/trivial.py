@@ -118,9 +118,22 @@ def html2text(strings):
         result.append(zuppa.get_text())
     return result
 
+"""
+    randomizza se scegliere vero/falso o risposta multipla
+"""
+def get_question_type():
+    #create question type in random mode 
+    n = random.randint(0,100)
+    question_list = ["tf","multi"]
+    if n >= 65:
+        question_type = question_list[0]
+    else:
+        question_type = question_list[1]
+    return question_type
 
 """
     Restituisce una domanda quiz tramite le api di opentdb.com
+    Definizione di alcune variabili globali per tenere dei valori in memoria tra una funzione e la callback
 """
 global corretta
 global difficolta_domanda
@@ -131,6 +144,7 @@ wait_trivial = False
 @Client.on_message()
 def send_question(query,client,message):
     #check wait_quiz
+    global wait_trivial
     #wait_trivial = get_wait_trivial_value()
     if wait_trivial:
         return sendMessage(client,message,"__Un altro quiz è attualmente in corso.\nRiprova tra poco.__")
@@ -151,23 +165,24 @@ def send_question(query,client,message):
         values = categorie.values()
         #list comprehension per recuperare la chiave del dizionario categoria a partire dal valore random creato 
         category = str({i for i in categorie if categorie[i] == category_number}).replace("{'","").replace("'}","")
-        #create question type in random mode 
-        question_list = ["tf","multi"]
-        random.shuffle(question_list)
-        question_type = question_list[0]
+        question_type = get_question_type() 
         #setting difficulty
         difficulty = set_difficulty()
     else:
-        splitted = query.split("/")
+        splitted = query.split(" ")
         try:
-            category= splitted[1]
-            question_type = splitted[0]
+            category = splitted[0].title()
+            for item in categorie:
+                if category in item:
+                    category = categorie[item]
+                    break
+            question_type = get_question_type()
             difficulty = set_difficulty()
         except IndexError:
             return sendMessage(client,message,"__Errore formato trivial.__")
 
     #build api url
-    api_url = "https://opentdb.com/api.php?amount=1&category=" + str(categorie[category.title()]) + "&difficulty=" + difficulty + "&type=" + tipo_domanda[question_type] + "&token=" + token
+    api_url = "https://opentdb.com/api.php?amount=1&category=" + str(category) + "&difficulty=" + difficulty + "&type=" + tipo_domanda[question_type] + "&token=" + token
     resp = requests.get(api_url)
     data = json.loads(resp.text)
     incorrect = []
