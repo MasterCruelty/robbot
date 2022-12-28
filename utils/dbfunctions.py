@@ -8,6 +8,9 @@ from utils.get_config import *
 db.connect()
 
 
+####################################################################    
+#### FUNZIONI LEGATE ALLE STATISTICHE SUI COMANDI USATI DAGLI UTENTI
+####################################################################    
 """
     @params utente, comando
 
@@ -74,6 +77,10 @@ def show_stats(utente,client,message):
     return sendMessage(client,message,result)
 
 
+######################################    
+#### FUNZIONI LEGATE AL GIOCO /TRIVIAL
+######################################    
+
 """
     @params utente,punteggio,categoria
 
@@ -130,6 +137,7 @@ def global_trivial_leaderboard(client,message):
 """
     setto il wait time a true per via di un quiz in corso
 """
+#to delete
 def set_wait_trivial():
     query = (waitTrivial
              .update({waitTrivial.value: True})).execute()
@@ -141,6 +149,7 @@ def set_wait_trivial():
 """
     setto il wait time a false, è possibile lanciare un nuovo quiz
 """
+#to delete
 def unset_wait_trivial():
     query = (waitTrivial
              .update({waitTrivial.value: False})).execute()
@@ -152,10 +161,17 @@ def unset_wait_trivial():
 """
     prelevo il valore del wait time
 """
+#to delete
 def get_wait_trivial_value():
     query = waitTrivial.select()
     for item in query:
         return item.value
+
+
+
+#############################################################################    
+#### FUNZIONI LEGATE ALLA GESTIONE DEI GRUPPI SALVATI CON COMANDI AUTORIZZATI
+#############################################################################    
 
 """
     Restituisce la lista dei gruppi autorizzati a certi comandi
@@ -216,7 +232,11 @@ def check_group_command(match,message):
         return True
     else:
         return False
-    
+
+
+##############################################################    
+#### FUNZIONI LEGATE ALLA GESTIONE DEGLI UTENTI SALVATI SUL DB
+##############################################################    
 """
 questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
 """
@@ -281,6 +301,21 @@ def set_user(client,message,query):
     for user in query:
         result = "Utente " + str(user.id_user) + " salvato!"
     return sendMessage(client,message,result) 
+
+"""
+    update dei dati sul db di un utente specifico
+"""
+@Client.on_message()
+def update_user(client,message,query):
+    json_user = client.get_users(query)
+    userid = json_user.id
+    nome_utente = json_user.first_name
+    username_utente = "@" + str(json_user.username)
+    query = (User
+             .update((name = nome_utente,username = username_utente))
+             .where(User.id_user == userid)).execute()
+    result = "Dati aggiornati per utente " + str(userid)
+    return sendMessage(client,message,result)
 
 """
 Questa funzione elimina un utente dalla tabella User
