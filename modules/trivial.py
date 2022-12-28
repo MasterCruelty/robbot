@@ -126,10 +126,12 @@ global corretta
 global difficolta_domanda
 global versione_domanda
 global categoria
+global wait_trivial
+wait_trivial = False
 @Client.on_message()
 def send_question(query,client,message):
     #check wait_quiz
-    wait_trivial = get_wait_trivial_value()
+    #wait_trivial = get_wait_trivial_value()
     if wait_trivial:
         return sendMessage(client,message,"__Un altro quiz è attualmente in corso.\nRiprova tra poco.__")
     #variabili globali per tenere traccia di alcune informazioni per la fine del poll
@@ -197,10 +199,12 @@ def send_question(query,client,message):
     try:
         msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=20,is_anonymous=False,reply_to_message_id=get_id_msg(message))
         #Setto il wait così che non ci siano due quiz in contemporanea
-        set_wait_trivial()
+        #set_wait_trivial()
+        wait_trivial = True
         time.sleep(20)
         #setto a false dopo la fine del quiz
-        unset_wait_trivial()
+        wait_trivial = False
+        #unset_wait_trivial()
 
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
         return sendMessage(client,message,"__Errore durante invio trivial__")
