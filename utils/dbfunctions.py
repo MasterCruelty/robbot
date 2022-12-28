@@ -328,7 +328,7 @@ def update_user(client,message,query):
     nome_utente = json_user.first_name
     username_utente = "@" + str(json_user.username)
     query = (User
-             .update((name = nome_utente,username = username_utente))
+             .update(name = nome_utente,username = username_utente)
              .where(User.id_user == userid)).execute()
     result = "Dati aggiornati per utente " + str(userid)
     return sendMessage(client,message,result)
