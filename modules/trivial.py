@@ -1,5 +1,5 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg,get_id_user 
-from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard,update_trivial_score
+from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard_category,update_trivial_score
 from pyrogram import Client,errors
 from pyrogram.enums import PollType
 from pyrogram.handlers import PollHandler,RawUpdateHandler
@@ -251,12 +251,16 @@ def check_trivial_updates(client,update,users,chat):
 """
     richiamo funzione per punteggi personali
 """
-def get_personal_score(query,client,message):
+def get_personal_score(client,message):
     return personal_trivial_leaderboard(get_id_user(message),client,message)
 
 """
     richiamo funzione per classifica globale
 """
 def get_global_score(query,client,message):
-    return global_trivial_leaderboard(client,message)
+    print(query)
+    for item in categorie:
+        if query.title() in item:
+            query = item
+    return global_trivial_leaderboard_category(query,client,message)
 
