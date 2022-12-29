@@ -83,6 +83,8 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
 * [TrainMonitor per le API viaggiatreno](https://github.com/bluviolin/TrainMonitor) (Queste API non sono pubbliche, non abusate del servizio)
 * [Trenitalia-API di SimoDax per le API frecce.it](https://github.com/SimoDax/Trenitalia-API) (Queste API non sono pubbliche, non abusate del servizio)
+* [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
+* [Open Trivia Database](https://opentdb.com/)
 
 # **[ENG]**
 
@@ -150,3 +152,5 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
 * [TrainMonitor for viaggiatreno API](https://github.com/bluviolin/TrainMonitor) (These API aren't public, don't abuse the service)
 * [SimoDax's wiki for frecce.it API](https://github.com/SimoDax/Trenitalia-API)  (These API aren't public, don't abuse the service)
+* [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
+* [Open Trivia Database](https://opentdb.com/)
