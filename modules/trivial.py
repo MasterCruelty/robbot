@@ -244,9 +244,9 @@ def check_trivial_updates(client,update,users,chat):
         if corretta == int_chosen:
             print(str(player) + " ha risposto correttamente")
             if versione_domanda.title() == 'Boolean':
-                update_trivial_score(player,1,categoria)
+                update_trivial_score(player,1,categoria,client,update)
             else:
-                update_trivial_score(player,punteggi[difficolta_domanda.title()],categoria)
+                update_trivial_score(player,punteggi[difficolta_domanda.title()],categoria,client,update)
 
 """
     richiamo funzione per punteggi personali

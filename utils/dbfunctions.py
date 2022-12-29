@@ -3,6 +3,7 @@ sys.path.append(sys.path[0] + "/..")
 from utils.dbtables import *
 from pyrogram import Client
 from utils.get_config import *
+import peewee
 
 #Inizio della connessione con il db
 db.connect()
@@ -86,14 +87,20 @@ def show_stats(utente,client,message):
 
     Aggiorna il punteggio dell'utente sulla categoria
 """
-def update_trivial_score(utente,punteggio,categoria):
+def update_trivial_score(utente,punteggio,categoria,client,message):
     query = (Trivial
             .update({Trivial.points: Trivial.points + punteggio})
             .where((Trivial.id_user == utente) &
                    (Trivial.category == categoria))).execute()
     if(query == 0):
         score = Trivial(id_user = utente,category = categoria, points = punteggio)
-        score.save()
+        try:
+            score.save()
+        except peewee.PeeweeException:
+            #Se un utente non registrato vota su un quiz, viene registrato in automatico
+            set_user(client,message,utente)
+            score = Trivial(id_user = utente,category = categoria, points = punteggio)
+            score.save()
     return
 
 """
