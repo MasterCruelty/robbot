@@ -161,6 +161,33 @@ def global_trivial_leaderboard_category(query,client,message):
     return sendMessage(client,message,result)
 
 
+"""
+    Salva in db i dati del trivial in corso
+"""
+def save_trivial_data(group,msg,difficulty,categ,question_type):
+    trdata = TrivialSavedData(id_chat = group, id_msg = msg, diff = difficulty, category = categ,qtype = question_type)
+    trdata.save()
+    print("Dati trivial salvati")
+    return
+
+"""
+    prelevo i dati dei trivial salvati su db
+"""
+def get_trivial_data():
+    query = TrivialSavedData.select()
+    print("Dati trivial prelevati")
+    return query
+
+"""
+    cancella un record dalla tabella dei trivial salvati
+"""
+def delete_trivial_data(msg):
+    query = (TrivialSavedData
+             .delete()
+             .where(TrivialSavedData.id_msg == msg)).execute()
+    print("Dati trivial concluso eliminati")
+    return
+
 
 #############################################################################    
 #### FUNZIONI LEGATE ALLA GESTIONE DEI GRUPPI SALVATI CON COMANDI AUTORIZZATI
