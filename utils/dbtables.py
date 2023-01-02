@@ -52,11 +52,20 @@ class Group(BaseModel):
     title = CharField()
     command = CharField()
 
+"""
+    Tabella ausiliaria per salvare i dati del trivial mentre è in corso
+    Così da poter avere più trivial contemporaneamente in gioco.
+"""
+class TrivialSavedData(BaseModel):
+    id_chat = IntegerField(default = 0)
+    id_msg = IntegerField(unique = True)
+    diff = CharField()
+    category = CharField()
+    qtype = CharField()
 
 
 db.connect()
-db.create_tables([User,Stats,Trivial,Group])
-
+db.create_tables([User,Stats,Trivial,Group,TrivialSavedData])
 
 #Inizializzo il super admin da file di configurazione
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)
