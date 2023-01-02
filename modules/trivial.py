@@ -1,5 +1,5 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg,get_id_user 
-from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard_category,update_trivial_score
+from utils.dbfunctions import personal_trivial_leaderboard,global_trivial_leaderboard_category,update_trivial_score,get_trivial_data,save_trivial_data,delete_trivial_data
 from pyrogram import Client,errors
 from pyrogram.enums import PollType
 from pyrogram.handlers import PollHandler,RawUpdateHandler
@@ -143,24 +143,8 @@ def get_question_type():
     Restituisce una domanda quiz tramite le api di opentdb.com
     Definizione di alcune variabili globali per tenere dei valori in memoria tra una funzione e la callback
 """
-global corretta
-global difficolta_domanda
-global versione_domanda
-global categoria
-global wait_trivial
-wait_trivial = False
 @Client.on_message()
 def send_question(query,client,message):
-    #check wait_quiz
-    global wait_trivial
-    #wait_trivial = get_wait_trivial_value()
-    if wait_trivial:
-        return sendMessage(client,message,"__Un altro quiz è attualmente in corso.\nRiprova tra poco.__")
-    #variabili globali per tenere traccia di alcune informazioni per la fine del poll
-    global corretta
-    global difficolta_domanda
-    global versione_domanda
-    global categoria
     #check token
     global token
     token = check_token()
@@ -210,18 +194,12 @@ def send_question(query,client,message):
     #client.add_handler(PollHandler(callback=check_trivial_updates))
 
     client.add_handler(RawUpdateHandler(callback=check_trivial_updates))
-    corretta = incorrect.index(correct)
-    versione_domanda = tipo_domanda[question_type] 
-    difficolta_domanda = difficulty
-    categoria = category.title()
     
     try:
         msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=20,is_anonymous=False,reply_to_message_id=get_id_msg(message))
-        #Setto il wait così che non ci siano due quiz in contemporanea
-        wait_trivial = True
-        time.sleep(20)
-        #setto a false dopo la fine del quiz
-        wait_trivial = False
+        
+        #aggiungo su db dati sul trivial in corso
+        save_trivial_data(get_chat(message),msg.id,difficulty.title(),category.title(),tipo_domanda[question_type].title())
 
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
         return sendMessage(client,message,"__Errore durante invio trivial__")
@@ -241,12 +219,19 @@ def check_trivial_updates(client,update,users,chat):
         player = data.user_id
         chosen = data.options[0]
         int_chosen = int.from_bytes(chosen,"big")
-        if corretta == int_chosen:
-            print(str(player) + " ha risposto correttamente")
-            if versione_domanda.title() == 'Boolean':
-                update_trivial_score(player,1,categoria,client,update)
+        query = get_trivial_data()
+        for item in query:
+            polldata = client.get_messages(item.id_chat,item.id_msg)
+            if int(polldata.poll.id) == int(data.poll_id):
+                if int(int_chosen) == int(polldata.poll.correct_option_id):
+                        print(str(player) + " ha risposto correttamente")
+                        if item.qtype == 'Boolean':
+                            update_trivial_score(player,1,item.category,client,update)
+                        else:
+                            update_trivial_score(player,punteggi[item.diff],item.category,client,update)
             else:
-                update_trivial_score(player,punteggi[difficolta_domanda.title()],categoria,client,update)
+                if polldata.poll.is_closed:
+                    delete_trivial_data(item.id_msg)
 
 """
     richiamo funzione per punteggi personali
