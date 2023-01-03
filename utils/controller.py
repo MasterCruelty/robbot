@@ -61,6 +61,7 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/setgroup'       : udb.set_group,
                     '/listgroup'      : udb.list_group,
                     '/delgroup'       : udb.del_group,
+                    '/updategroup'    : udb.update_group,
                     '/updatestat'     : udb.force_update_stats,
                     '/delstat'        : udb.force_delete_stats}
 
