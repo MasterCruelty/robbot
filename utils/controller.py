@@ -11,6 +11,7 @@ import modules.openai
 import modules.urban
 import modules.tper
 import modules.viaggiatreno
+import modules.trivial
 import modules.pistekart
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
@@ -36,6 +37,9 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/mystat'         : udb.show_stats,
                     '/tper'           : modules.tper.send_tper_stop,
                     '/tpershop'       : modules.tper.get_tper_edicola,
+                    '/trivial'        : modules.trivial.send_question,
+                    '/mytscore'       : modules.trivial.get_personal_score,
+                    '/globaltscore'   : modules.trivial.get_global_score,
                     '/infopista'      : modules.pistekart.get_info_pista,
                     '/piste'          : modules.pistekart.get_piste_region,
                     '/helprob'        : usys.help}
@@ -49,17 +53,30 @@ dictionary_admin = {'/getmessage'     : usys.get_message,
 
 dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/delrobuser'     : udb.del_user,
+                    '/updaterobuser'  : udb.update_user,
                     '/listrobuser'    : udb.list_user,
                     '/allrobuser'     : udb.all_user,
                     '/setrobadmin'    : udb.set_admin,
-                    '/delrobadmin'    : udb.del_admin}
+                    '/delrobadmin'    : udb.del_admin,
+                    '/setgroup'       : udb.set_group,
+                    '/listgroup'      : udb.list_group,
+                    '/delgroup'       : udb.del_group,
+                    '/updategroup'    : udb.update_group,
+                    '/updatestat'     : udb.force_update_stats,
+                    '/delstat'        : udb.force_delete_stats}
+
+auth_command = ["/trivial"]
 
 """
 Questa funzione prende come argomento il match e la richiesta dal main e dirotta la richiesta sul file dedicato a quel comando
 """
 def fetch_command(match,query,client,message):
-    udb.update_stats(ugc.get_id_user(message),match)
-    dictionary[match](query,client,message)
+    #controllo sui comandi autorizzati solo in determinate chat
+    if udb.check_group_command(match,message) and match in auth_command:
+        return ugc.sendMessage(client,message,"__Comando non autorizzato in questa chat.\nContatta @MasterCruelty per informazioni.__")
+    else:
+        udb.update_stats(ugc.get_id_user(message),match)
+        dictionary[match](query,client,message)
 """
 Analogamente a fetch_command ma per i comandi esclusivi degli utenti admin
 """

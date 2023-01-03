@@ -21,18 +21,51 @@ class User(BaseModel):
     admin = BooleanField(default=False)
     superadmin = BooleanField(default=False)
 
+
+"""
+    command: comando lanciato
+    times: numero di volte che è stato lanciato
+"""
 class Stats(BaseModel):
     id_user = ForeignKeyField(User)
     command = CharField()
     times = IntegerField(default = 0)
 
+"""
+    category: categoria di domanda
+    points: numero di punti acquisiti
+"""
+class Trivial(BaseModel):
+    id_user = ForeignKeyField(User)
+    category = CharField()
+    points = IntegerField(default = 0)
+
+"""
+    Tabella gruppi per autorizzare un comando solo all'interno di alcuni gruppi
+    Campi:
+    id gruppo
+    nome gruppo
+    nome comando
+"""
 class Group(BaseModel):
     id_group = IntegerField(unique = True)
     title = CharField()
+    command = CharField()
+
+"""
+    Tabella ausiliaria per salvare i dati del trivial mentre è in corso
+    Così da poter avere più trivial contemporaneamente in gioco.
+"""
+class TrivialSavedData(BaseModel):
+    id_chat = IntegerField(default = 0)
+    id_msg = IntegerField(unique = True)
+    diff = CharField()
+    category = CharField()
+    qtype = CharField()
 
 
 db.connect()
-db.create_tables([User,Stats])
+db.create_tables([User,Stats,Trivial,Group,TrivialSavedData])
 
 #Inizializzo il super admin da file di configurazione
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)

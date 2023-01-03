@@ -41,7 +41,19 @@ def get_id_user(message):
 Restituisce l'id della chat
 """
 def get_chat(message):
-    return message.chat.id
+    try:
+        return message.chat.id
+    except AttributeError:
+        print("Error durante il prelievo dell'id chat")
+
+"""
+Restituisce il titolo della chat
+"""
+def get_chat_name(message):
+    try:
+        return message.chat.title
+    except AttributeError:
+        print("Error durante il prelievo del nome della chat")
 
 """
 Restituisce il nome utente

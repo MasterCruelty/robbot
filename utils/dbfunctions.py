@@ -3,11 +3,19 @@ sys.path.append(sys.path[0] + "/..")
 from utils.dbtables import *
 from pyrogram import Client
 from utils.get_config import *
+import peewee
+import matplotlib.pyplot as plt
+
+#setto stile matplotlib
+plt.style.use('fivethirtyeight')
 
 #Inizio della connessione con il db
 db.connect()
 
 
+####################################################################    
+#### FUNZIONI LEGATE ALLE STATISTICHE SUI COMANDI USATI DAGLI UTENTI
+####################################################################    
 """
     @params utente, comando
 
@@ -27,23 +35,264 @@ def update_stats(utente,comando):
     return
 
 """
+    Modifica forzata del numero di volte associato a un comando per un utente
+"""
+def force_update_stats(client,message,query):
+    splitted = query.split(" ")
+    userid = int(splitted[0])
+    command = splitted[1]
+    value = int(splitted[2])
+    (Stats
+     .update({Stats.times : value})
+     .where((Stats.id_user == userid) &
+            (Stats.command == command))).execute()
+    return sendMessage(client,message,"__Valore aggiornato su " + command + " per " + str(userid) + "__")
+
+
+"""
+    Cancella una riga dalla tabella per l'utente scelto e il comando selezionato
+"""
+def force_delete_stats(client,message,query):
+    splitted = query.split(" ")
+    userid = int(splitted[0])
+    command = splitted[1]
+    (Stats
+     .delete()
+     .where((Stats.id_user == userid) &
+            (Stats.command == command))).execute()
+    result = "Comando " + command + " eliminato dalle statistiche di " + str(userid)
+    return sendMessage(client,message,result)
+             
+
+"""
     @params client,message,id_utente
 
     La funzione restituisce tutti i dati sulle statistiche dei comandi usati dall'utente.
 """
-def show_stats(utente,client,message):
+def show_stats(query,client,message):
     id_utente = get_id_user(message)
     result = "Le tue statistiche\n"
-    query = (Stats
-             .select()
-             .join(User, on=(User.id_user == Stats.id_user))
-             .where(Stats.id_user == id_utente)
-             .order_by(Stats.times.desc()))
-    for item in query:
+    query_sql = (Stats
+                 .select()
+                 .join(User, on=(User.id_user == Stats.id_user))
+                 .where(Stats.id_user == id_utente)
+                 .order_by(Stats.times.desc()))
+    values = []
+    labels = []
+    k = 0
+    other_value = 0
+    for item in query_sql:
+        if k < 8:
+            labels.append(item.command)
+            values.append(item.times)
+        else:
+            other_value += item.times
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
+        k = k + 1
+    labels.append('Altro')
+    values.append(other_value)
+    #controllo opzione piechart
+    if "-pie" in query:
+        #preparo il piechart
+        plt.pie(values,labels=labels)
+        plt.savefig('graph.png')
+        with open('graph.png',"rb") as image_file:
+            sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
+    else:
+        sendMessage(client,message,result)
+
+
+######################################    
+#### FUNZIONI LEGATE AL GIOCO /TRIVIAL
+######################################    
+
+"""
+    @params utente,punteggio,categoria
+
+    Aggiorna il punteggio dell'utente sulla categoria
+"""
+def update_trivial_score(utente,punteggio,categoria,client,message):
+    query = (Trivial
+            .update({Trivial.points: Trivial.points + punteggio})
+            .where((Trivial.id_user == utente) &
+                   (Trivial.category == categoria))).execute()
+    if(query == 0):
+        score = Trivial(id_user = utente,category = categoria, points = punteggio)
+        try:
+            score.save()
+        except peewee.PeeweeException:
+            #Se un utente non registrato vota su un quiz, viene registrato in automatico
+            set_user(client,message,utente)
+            score = Trivial(id_user = utente,category = categoria, points = punteggio)
+            score.save()
+
+"""
+    @params utente,client,message
+
+    Restituisce le proprie statistiche sul gioco Trivial
+"""
+def personal_trivial_leaderboard(_,client,message):
+    id_utente = get_id_user(message)
+    result = "Le tue statistiche su Trivial\n\n"
+    query = (Trivial
+            .select()
+            .join(User, on=(User.id_user == Trivial.id_user))
+            .where(Trivial.id_user == id_utente)
+            .order_by(Trivial.points.desc()))
+    count = 0
+    for item in query:
+        result += item.category + "__: " + str(item.points) + " punti.__\n"
+        count += item.points
+    result += "**Punteggio totale: " + str(count) + "**"
+    return sendMessage(client,message,result)
+
+"""
+    @params client,message
+    Classifica globale dei punti su Trivial
+"""
+def global_trivial_leaderboard(client,message):
+    query = (User
+            .select(User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
+            .join(Trivial, on=(User.id_user == Trivial.id_user))
+            .order_by(fn.SUM(Trivial.points).desc())
+            .group_by(User.id_user))
+
+    result = ""
+    k = 1
+    for item in query:
+        if len(item.nick) > 15 or item.nick == "@None":
+            result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        else:
+            result += str(k) + ". " + item.nick.replace("@","") + ": __" + str(item.count) + " punti.__\n"
+        k = k + 1
+    return sendMessage(client,message,result)
+
+"""
+    classifica globale ma solo in una specifica categoria di domande
+"""
+def global_trivial_leaderboard_category(query,client,message):
+    if query == '/globaltscore':
+        return global_trivial_leaderboard(client,message)
+    query_sql = (User
+            .select(User.name.alias('user'),fn.SUM(Trivial.points).alias('count'))
+            .join(Trivial, on=(User.id_user == Trivial.id_user))
+            .where(Trivial.category == query)
+            .order_by(fn.SUM(Trivial.points).desc())
+            .group_by(User.id_user))
+    result = "__" + query + "__\n"
+    k = 1
+    for item in query_sql:
+        result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        k = k + 1
     return sendMessage(client,message,result)
 
 
+"""
+    Salva in db i dati del trivial in corso
+"""
+def save_trivial_data(group,msg,difficulty,categ,question_type):
+    trdata = TrivialSavedData(id_chat = group, id_msg = msg, diff = difficulty, category = categ,qtype = question_type)
+    trdata.save()
+    print("Dati trivial salvati")
+
+"""
+    prelevo i dati dei trivial salvati su db
+"""
+def get_trivial_data():
+    query = TrivialSavedData.select()
+    print("Dati trivial prelevati")
+    return query
+
+"""
+    cancella un record dalla tabella dei trivial salvati
+"""
+def delete_trivial_data(msg):
+    (TrivialSavedData
+     .delete()
+     .where(TrivialSavedData.id_msg == msg)).execute()
+    print("Dati trivial concluso eliminati")
+
+
+#############################################################################    
+#### FUNZIONI LEGATE ALLA GESTIONE DEI GRUPPI SALVATI CON COMANDI AUTORIZZATI
+#############################################################################    
+
+"""
+    Restituisce la lista dei gruppi autorizzati a certi comandi
+"""
+@Client.on_message()
+def list_group(client,message):
+    result = "Gruppi salvati:\n\n"
+    query = Group.select()
+    for group in query:
+        result += str(group.id_group) + ";" + group.title + ";" + group.command + "\n"
+    return sendMessage(client,message,result)
+
+
+"""
+    setto il gruppo come unico autorizzato a un particolare comando
+"""
+@Client.on_message()
+def set_group(client,message,query):
+    #splitto sullo spazio poichè l'input è del tipo /setgroup <id gruppo> <comando>
+    splitted = query.split(" ")
+    json_group = client.get_chat(splitted[0])
+    group_id = json_group.id
+    title = json_group.title
+    command = splitted[1]
+    
+    #inserisco in db
+    group = Group(id_group = group_id,title = title,command = command)
+    group.save()
+    #verifico sia inserito correttamente
+    query = Group.select().where(Group.id_group == group_id)
+    for item in query:
+        result = "Gruppo " + str(item.id_group) + " registrato con comando " + command
+    return sendMessage(client,message,result)
+
+"""
+    Cancella il gruppo selezionato dai gruppi autorizzati a determinati comandi
+"""
+@Client.on_message()
+def del_group(client,message,query):
+    Group.delete().where(Group.id_group == query).execute()
+    result = "Gruppo " + str(query) + " eliminato dai gruppi salvati."
+    return sendMessage(client,message,result)
+
+"""
+    Aggiorna il nome di un gruppo sul db
+"""
+@Client.on_message()
+def update_group(client,message,query):
+    json_group = client.get_chat(query)
+    (Group
+     .update({Group.title: json_group.title})
+     .where(Group.id_group == json_group.id)).execute()
+    result = "Gruppo " + str(json_group.id ) + " aggiornato con successo!"
+    return sendMessage(client,message,result)
+
+"""
+    controllo se il gruppo è autorizzato a eseguire un determinato comando
+"""
+def check_group_command(match,message):
+    query = (Group
+            .select()
+            .where((Group.id_group == get_chat(message)) &
+                   (Group.command == match))).execute()
+
+    #controllo se vi è almeno un record
+    i = 0
+    for _ in query:
+        i = i + 1
+    if i == 0:
+        return True
+    else:
+        return False
+
+
+##############################################################    
+#### FUNZIONI LEGATE ALLA GESTIONE DEGLI UTENTI SALVATI SUL DB
+##############################################################    
 """
 questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
 """
@@ -108,6 +357,21 @@ def set_user(client,message,query):
     for user in query:
         result = "Utente " + str(user.id_user) + " salvato!"
     return sendMessage(client,message,result) 
+
+"""
+    update dei dati sul db di un utente specifico
+"""
+@Client.on_message()
+def update_user(client,message,query):
+    json_user = client.get_users(query)
+    userid = json_user.id
+    nome_utente = json_user.first_name
+    username_utente = "@" + str(json_user.username)
+    (User
+     .update(name = nome_utente,username = username_utente)
+     .where(User.id_user == userid)).execute()
+    result = "Dati aggiornati per utente " + str(userid)
+    return sendMessage(client,message,result)
 
 """
 Questa funzione elimina un utente dalla tabella User

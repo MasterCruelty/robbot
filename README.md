@@ -52,6 +52,11 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * mostrare tutti gli utenti registrati: ```/listrobuser```
 * mostrare il numero di utenti registrati: ```/allrobuser```
 * verificare se il bot è online: ```/pingrob```
+* registrare un nuovo gruppo come unico autorizzato a ricevere un certo comando: `/setgroup` <id_gruppo> <comando>
+* cancellare un gruppo salvato: `/delgroup` <id_gruppo>
+* mostrare tutti i gruppi salvati: `/listgroup`
+* modificare un valore nelle statistiche di un utente per un certo comando: `/updatestat` <id_utente> <comando> <nuovo_valore>
+* cancellare un comando dalle statistiche di un utente: `/delstat` <id_utente> <comando>
 
 ### Dipendenze
 
@@ -78,6 +83,8 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
 * [TrainMonitor per le API viaggiatreno](https://github.com/bluviolin/TrainMonitor) (Queste API non sono pubbliche, non abusate del servizio)
 * [Trenitalia-API di SimoDax per le API frecce.it](https://github.com/SimoDax/Trenitalia-API) (Queste API non sono pubbliche, non abusate del servizio)
+* [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
+* [Open Trivia Database](https://opentdb.com/)
 
 # **[ENG]**
 
@@ -112,6 +119,11 @@ This json file is only in Italian, but you can translate it in every languages b
 * How to list all user registered: ```/listrobuser``` 
 * How to show ho many users are registered: ```/allrobuser```
 * check if the bot is online: ```/pingrob```
+* Save a new group to make it the only one authorized to receive a specific command: `/setgroup` <id_group> <command>
+* Delete a saved group: `/delgroup` <id_group>
+* Show all saved groups: `/listgroup`
+* Update a value in a user's stat for a specific command: `/updatestat` <id_user> <command> <new_value>
+* Delete a command from a user's stat: `/delstat` <id_user> <command>
 
 
 ### Dependencies
@@ -140,3 +152,5 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Tper open data](https://solweb.tper.it/web/tools/open-data/open-data.aspx)
 * [TrainMonitor for viaggiatreno API](https://github.com/bluviolin/TrainMonitor) (These API aren't public, don't abuse the service)
 * [SimoDax's wiki for frecce.it API](https://github.com/SimoDax/Trenitalia-API)  (These API aren't public, don't abuse the service)
+* [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
+* [Open Trivia Database](https://opentdb.com/)
