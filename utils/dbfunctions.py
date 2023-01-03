@@ -38,10 +38,10 @@ def force_update_stats(client,message,query):
     userid = int(splitted[0])
     command = splitted[1]
     value = int(splitted[2])
-    query = (Stats
-             .update({Stats.times : value})
-             .where((Stats.id_user == userid) &
-                    (Stats.command == command))).execute()
+    (Stats
+     .update({Stats.times : value})
+     .where((Stats.id_user == userid) &
+            (Stats.command == command))).execute()
     return sendMessage(client,message,"__Valore aggiornato su " + command + " per " + str(userid) + "__")
 
 
@@ -52,10 +52,10 @@ def force_delete_stats(client,message,query):
     splitted = query.split(" ")
     userid = int(splitted[0])
     command = splitted[1]
-    query = (Stats
-             .delete()
-             .where((Stats.id_user == userid) &
-                    (Stats.command == command))).execute()
+    (Stats
+     .delete()
+     .where((Stats.id_user == userid) &
+            (Stats.command == command))).execute()
     result = "Comando " + command + " eliminato dalle statistiche di " + str(userid)
     return sendMessage(client,message,result)
              
@@ -101,14 +101,13 @@ def update_trivial_score(utente,punteggio,categoria,client,message):
             set_user(client,message,utente)
             score = Trivial(id_user = utente,category = categoria, points = punteggio)
             score.save()
-    return
 
 """
     @params utente,client,message
 
     Restituisce le proprie statistiche sul gioco Trivial
 """
-def personal_trivial_leaderboard(utente,client,message):
+def personal_trivial_leaderboard(_,client,message):
     id_utente = get_id_user(message)
     result = "Le tue statistiche su Trivial\n\n"
     query = (Trivial
@@ -168,7 +167,6 @@ def save_trivial_data(group,msg,difficulty,categ,question_type):
     trdata = TrivialSavedData(id_chat = group, id_msg = msg, diff = difficulty, category = categ,qtype = question_type)
     trdata.save()
     print("Dati trivial salvati")
-    return
 
 """
     prelevo i dati dei trivial salvati su db
@@ -182,11 +180,10 @@ def get_trivial_data():
     cancella un record dalla tabella dei trivial salvati
 """
 def delete_trivial_data(msg):
-    query = (TrivialSavedData
-             .delete()
-             .where(TrivialSavedData.id_msg == msg)).execute()
+    (TrivialSavedData
+     .delete()
+     .where(TrivialSavedData.id_msg == msg)).execute()
     print("Dati trivial concluso eliminati")
-    return
 
 
 #############################################################################    
@@ -231,7 +228,7 @@ def set_group(client,message,query):
 """
 @Client.on_message()
 def del_group(client,message,query):
-    delete = Group.delete().where(Group.id_group == query).execute()
+    Group.delete().where(Group.id_group == query).execute()
     result = "Gruppo " + str(query) + " eliminato dai gruppi salvati."
     return sendMessage(client,message,result)
 
@@ -246,7 +243,7 @@ def check_group_command(match,message):
 
     #controllo se vi è almeno un record
     i = 0
-    for item in query:
+    for _ in query:
         i = i + 1
     if i == 0:
         return True
@@ -331,9 +328,9 @@ def update_user(client,message,query):
     userid = json_user.id
     nome_utente = json_user.first_name
     username_utente = "@" + str(json_user.username)
-    query = (User
-             .update(name = nome_utente,username = username_utente)
-             .where(User.id_user == userid)).execute()
+    (User
+     .update(name = nome_utente,username = username_utente)
+     .where(User.id_user == userid)).execute()
     result = "Dati aggiornati per utente " + str(userid)
     return sendMessage(client,message,result)
 

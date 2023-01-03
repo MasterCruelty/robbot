@@ -234,7 +234,7 @@ def check_trivial_updates(client,update,users,chat):
 """
     richiamo funzione per punteggi personali
 """
-def get_personal_score(query,client,message):
+def get_personal_score(_,client,message):
     return personal_trivial_leaderboard(get_id_user(message),client,message)
 
 """
