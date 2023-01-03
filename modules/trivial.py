@@ -222,16 +222,14 @@ def check_trivial_updates(client,update,users,chat):
         query = get_trivial_data()
         for item in query:
             polldata = client.get_messages(item.id_chat,item.id_msg)
-            if int(polldata.poll.id) == int(data.poll_id):
-                if int(int_chosen) == int(polldata.poll.correct_option_id):
-                        print(str(player) + " ha risposto correttamente")
-                        if item.qtype == 'Boolean':
-                            update_trivial_score(player,1,item.category,client,update)
-                        else:
-                            update_trivial_score(player,punteggi[item.diff],item.category,client,update)
-            else:
-                if polldata.poll.is_closed:
-                    delete_trivial_data(item.id_msg)
+            if (int(polldata.poll.id) == int(data.poll_id)) and (int(int_chosen) == int(polldata.poll.correct_option_id)):
+                print(str(player) + " ha risposto correttamente")
+                if item.qtype == 'Boolean':
+                    update_trivial_score(player,1,item.category,client,update)
+                else:
+                    update_trivial_score(player,punteggi[item.diff],item.category,client,update)
+            elif polldata.poll.is_closed:
+                delete_trivial_data(item.id_msg)
 
 """
     richiamo funzione per punteggi personali
