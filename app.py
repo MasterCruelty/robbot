@@ -1,7 +1,7 @@
 from pyrogram import Client 
 from utils.controller import *
 from utils.dbfunctions import *
-from utils.get_config import get_config_file,get_username,get_text_message,get_chat,get_id_msg,get_id_user,get_first_name
+from utils.get_config import get_config_file,get_username,get_text_message,get_chat,get_id_msg,get_id_user,get_first_name,get_chat_name
 from utils.sysfunctions import *
 
 config = get_config_file("config.json")
@@ -20,7 +20,7 @@ def print_updates(client,message):
     chat = get_chat(message)
     id_messaggio = get_id_msg(message)
     utente = get_id_user(message)
-    nome_chat = message.chat.title
+    nome_chat = get_chat_name(message)
     nome_utente = get_first_name(message)
     username = get_username(message) 
     messaggio = get_text_message(message)
