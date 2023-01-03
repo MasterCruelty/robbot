@@ -4,6 +4,10 @@ from utils.dbtables import *
 from pyrogram import Client
 from utils.get_config import *
 import peewee
+import matplotlib.pyplot as plt
+
+#setto stile matplotlib
+plt.style.use('fivethirtyeight')
 
 #Inizio della connessione con il db
 db.connect()
@@ -65,17 +69,37 @@ def force_delete_stats(client,message,query):
 
     La funzione restituisce tutti i dati sulle statistiche dei comandi usati dall'utente.
 """
-def show_stats(utente,client,message):
+def show_stats(query,client,message):
     id_utente = get_id_user(message)
     result = "Le tue statistiche\n"
-    query = (Stats
-             .select()
-             .join(User, on=(User.id_user == Stats.id_user))
-             .where(Stats.id_user == id_utente)
-             .order_by(Stats.times.desc()))
-    for item in query:
+    query_sql = (Stats
+                 .select()
+                 .join(User, on=(User.id_user == Stats.id_user))
+                 .where(Stats.id_user == id_utente)
+                 .order_by(Stats.times.desc()))
+    values = []
+    labels = []
+    k = 0
+    other_value = 0
+    for item in query_sql:
+        if k < 8:
+            labels.append(item.command)
+            values.append(item.times)
+        else:
+            other_value += item.times
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
-    return sendMessage(client,message,result)
+        k = k + 1
+    labels.append('Altro')
+    values.append(other_value)
+    #controllo opzione piechart
+    if "-pie" in query:
+        #preparo il piechart
+        plt.pie(values,labels=labels)
+        plt.savefig('graph.png')
+        with open('graph.png',"rb") as image_file:
+            sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
+    else:
+        sendMessage(client,message,result)
 
 
 ######################################    
