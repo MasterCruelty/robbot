@@ -152,7 +152,7 @@ def personal_trivial_leaderboard(_,client,message):
 """
 def global_trivial_leaderboard(client,message):
     query = (User
-            .select(User.name.alias('user'),fn.SUM(Trivial.points).alias('count'))
+            .select(User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
             .join(Trivial, on=(User.id_user == Trivial.id_user))
             .order_by(fn.SUM(Trivial.points).desc())
             .group_by(User.id_user))
@@ -160,7 +160,10 @@ def global_trivial_leaderboard(client,message):
     result = ""
     k = 1
     for item in query:
-        result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        if len(item.nick) > 15 or item.nick == "@None":
+            result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        else:
+            result += str(k) + ". " + item.nick.replace("@","") + ": __" + str(item.count) + " punti.__\n"
         k = k + 1
     return sendMessage(client,message,result)
 
@@ -254,6 +257,18 @@ def set_group(client,message,query):
 def del_group(client,message,query):
     Group.delete().where(Group.id_group == query).execute()
     result = "Gruppo " + str(query) + " eliminato dai gruppi salvati."
+    return sendMessage(client,message,result)
+
+"""
+    Aggiorna il nome di un gruppo sul db
+"""
+@Client.on_message()
+def update_group(client,message,query):
+    json_group = client.get_chat(query)
+    (Group
+     .update({Group.title: json_group.title})
+     .where(Group.id_group == json_group.id)).execute()
+    result = "Gruppo " + str(json_group.id ) + " aggiornato con successo!"
     return sendMessage(client,message,result)
 
 """
