@@ -5,6 +5,8 @@ from pyrogram import Client
 from utils.get_config import *
 import peewee
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 
 #setto stile matplotlib
 plt.style.use('fivethirtyeight')
@@ -79,22 +81,25 @@ def show_stats(query,client,message):
                  .order_by(Stats.times.desc()))
     values = []
     labels = []
-    k = 0
     other_value = 0
+    total = 0
+    for val in query_sql:
+        total += val.times
     for item in query_sql:
-        if k < 8:
+        if (item.times / total) >= 0.035:
             labels.append(item.command)
             values.append(item.times)
         else:
             other_value += item.times
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
-        k = k + 1
     labels.append('Altro')
     values.append(other_value)
+    colours = dict(zip(labels,plt.cm.tab10.colors[:len(labels)]))
     #controllo opzione piechart
     if "-pie" in query:
         #preparo il piechart
-        plt.pie(values,labels=labels)
+        plt.clf()
+        plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
         plt.savefig('graph.png')
         with open('graph.png',"rb") as image_file:
             sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
