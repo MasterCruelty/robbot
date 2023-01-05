@@ -48,6 +48,7 @@ response_code = {0:"Ok",
 
 
 global token
+token = None
 
 """
     Chiamata per la creazione di un token che garantisce l'unicità delle domande fetchate da opentb.com
