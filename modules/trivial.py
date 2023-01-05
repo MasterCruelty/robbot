@@ -15,7 +15,7 @@ categorie = {"General Knowledge"                    :9,
              "Entertainment: Books"                 :10,
              "Entertainment: Film"                  :11,
              "Entertainment: Music"                 :12,
-             "Entertainment: Musical & Theatres"    :13,
+             "Entertainment: Musicals & Theatres"   :13,
              "Entertainment: Television"            :14,
              "Entertainment: Video Games"           :15,
              "Entertainment: Board Games"           :16,
@@ -245,5 +245,6 @@ def get_global_score(query,client,message):
     for item in categorie:
         if query.title() in item:
             query = item
+            break
     return global_trivial_leaderboard_category(query,client,message)
 
