@@ -167,6 +167,7 @@ def timetable2stations(query,client,message):
 """
 @Client.on_callback_query(filters = filters.regex("PROSSIMI"))
 def press_button(client,message):
+    print("Giro pagina in /treni")
     global k
     if k < len(pages)-1:
         k = k + 1
@@ -266,6 +267,7 @@ def timetable_with_price(client,message,from_station,to_station,date_time):
 """
 @Client.on_callback_query(filters = filters.regex("PROSSIMI_prezzi"))
 def press_button_price(client,message):
+    print("Giro pagina in /treni -price")
     global k2
     if k2 < len(pages2)-1:
         k2 = k2 + 1
@@ -375,6 +377,7 @@ def send_delay(query,client,message):
 def press_button_refresh(client,message):
     cb = message.data.split(";")
     query = cb[1]
+    print("Premuto bottone /infotreno con richiesta: " + str(query))
     #build keyboard
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])

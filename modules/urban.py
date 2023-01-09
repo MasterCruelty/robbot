@@ -43,6 +43,7 @@ def urban_search(query,client,message):
 """
 @Client.on_callback_query(filters = filters.regex("NEXT"))
 def press_button(client,message):
+    print("Giro pagina in urban")
     global k
     if k < len(pages)-1:
         k = k + 1

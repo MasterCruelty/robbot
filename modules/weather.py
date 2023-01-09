@@ -149,6 +149,7 @@ def get_today_forecasts(query,client,message):
 """
 @Client.on_callback_query(filters = filters.regex("forecastoday"))
 def press_forecastoday(client,message):
+    print("Giro pagina in /forecastoday")
     global k1
     if k1 < len(pages_t)-1:
         k1 = k1 + 1
@@ -210,6 +211,7 @@ def get_future_forecasts(query,client,message):
 """
 @Client.on_callback_query(filters = filters.regex("forecastFuture"))
 def press_forecastfuture(client,message):
+    print("Giro pagine in /forecastfuture")
     global k2
     if k2 < len(pages_f)-1:
         k2 = k2 + 1

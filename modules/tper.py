@@ -62,6 +62,7 @@ def send_tper_stop(query,client,message):
 def press_button(client,message):
     cb = message.data.split(";")
     query = cb[1]
+    print("Premuto bottone /tper con richiesta: " + str(query))
     #build keyboard
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])

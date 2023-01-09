@@ -84,6 +84,7 @@ def search_songs(client,message,artista):
 """
 @Client.on_callback_query(filters.regex("next_album"))
 def press_next_album(client,message):
+    print("Giro pagina in /lyrics")
     global k
     if k < len(pages)-1:
         k = k + 1

@@ -87,6 +87,7 @@ def send_stop_info(query,client,message):
 def press_button(client,message):
     cb = message.data.split(";")
     query = cb[1]
+    print("bottone atm premuto con richiesta: " + str(query))
     #build keyboard
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])
