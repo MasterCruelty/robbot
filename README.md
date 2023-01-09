@@ -57,6 +57,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * mostrare tutti i gruppi salvati: `/listgroup`
 * modificare un valore nelle statistiche di un utente per un certo comando: `/updatestat` <id_utente> <comando> <nuovo_valore>
 * cancellare un comando dalle statistiche di un utente: `/delstat` <id_utente> <comando>
+* Aggiornare i dati Telegram di un utente(nome e username): `/updaterobuser` <id_utente> (oppure dando lo username)
 
 ### Dipendenze
 
@@ -124,6 +125,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * Show all saved groups: `/listgroup`
 * Update a value in a user's stat for a specific command: `/updatestat` <id_user> <command> <new_value>
 * Delete a command from a user's stat: `/delstat` <id_user> <command>
+* Update user's Telergam data(name and username): `/updaterobuser` <id_user> (or giving username)
 
 
 ### Dependencies
