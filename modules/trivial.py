@@ -194,13 +194,14 @@ def send_question(query,client,message):
     #riga commentata per quando in futuro sarà possibile ricevere update anche sui quiz
     #client.add_handler(PollHandler(callback=check_trivial_updates))
 
-    client.add_handler(RawUpdateHandler(callback=check_trivial_updates))
+    client.add_handler(RawUpdateHandler(callback=check_trivial_updates),group=1)
     
     try:
         msg = client.send_poll(get_chat(message),question="Category: " + category.title() + "\nDifficulty: " + difficulty.title() + "\n" + question,options=incorrect,type=PollType.QUIZ,correct_option_id=incorrect.index(correct),open_period=20,is_anonymous=False,reply_to_message_id=get_id_msg(message))
         
         #aggiungo su db dati sul trivial in corso
         save_trivial_data(get_chat(message),msg.id,difficulty.title(),category.title(),tipo_domanda[question_type].title())
+        return
 
     except errors.exceptions.bad_request_400.PollAnswersInvalid:
         return sendMessage(client,message,"__Errore durante invio trivial__")
@@ -213,7 +214,7 @@ punteggi = { 'Easy'  : 1,
 """
     Funzione che prende raw updates per ogni volta che un giocatore vota sul quiz, assegnando o meno il punteggio.
 """
-@Client.on_raw_update()
+@Client.on_raw_update(group=1)
 def check_trivial_updates(client,update,users,chat):
     if isinstance(update,UpdateMessagePollVote):
         data = update
