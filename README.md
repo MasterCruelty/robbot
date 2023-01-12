@@ -8,6 +8,7 @@
 [![image](https://img.shields.io/github/issues/MasterCruelty/robbot)](https://github.com/MasterCruelty/robbot/issues)
 ![image](https://img.shields.io/github/languages/top/MasterCruelty/robbot)
 ![image](https://img.shields.io/github/commit-activity/w/MasterCruelty/robbot)
+![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/MasterCruelty/robbot/latest?color=44CC11&style=flat-square)
 ![image](https://img.shields.io/github/contributors/MasterCruelty/robbot)
 
 # Robbot
