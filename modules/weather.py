@@ -2,7 +2,6 @@ import sys
 sys.path.append(sys.path[0] + "/..")
 from modules.gmaps import showmaps
 import requests
-import shutil
 import json
 from datetime import date,datetime as dt
 import pytz
@@ -227,13 +226,9 @@ def press_forecastfuture(client,message):
 Data una richiesta, restituisce l'immagine della mappa corrispondente con il meteo attuale offerto da wttr.in
 """
 def wttrin_map(query,client,message):
-    data = "https://v3.wttr.in/" + query + ".png"
-    resp = requests.get(data,stream=True)
-    with open('img.png','wb') as output:
-        shutil.copyfileobj(resp.raw,output)
-    del resp
+    img = "https://v3.wttr.in/" + query + ".png"
     try:
-        return sendPhoto(client,message,'img.png',caption="__Area **"+query+"** come richiesto.__")
+        return sendPhoto(client,message,img,caption="__Area **"+query+"** come richiesto.__")
     except:
         return sendMessage(client,message,"__404: page not found__")
 
@@ -245,11 +240,7 @@ def sat24_map(query,client,message):
     try:
         area = query[0]
         code = query[1].replace(" ","")
-        data = "https://api.sat24.com/animated/"+ area + "/"+ sat24_codes[code] + "/2/Central%20European%20Standard%20Time/6030397'%20width=400%20height=291"
-        resp = requests.get(data,stream=True)
-        with open('sat24.gif','wb') as output:
-            shutil.copyfileobj(resp.raw,output)
-        del resp
-        return sendGIF(client,message,'sat24.gif',caption="__Ecco la mappa satellitare richiesta.__")
+        img = "https://api.sat24.com/animated/"+ area + "/"+ sat24_codes[code] + "/2/Central%20European%20Standard%20Time/6030397'%20width=400%20height=291"
+        return sendGIF(client,message,img,caption="__Ecco la mappa satellitare richiesta.__")
     except:
         return sendMessage(client,message,"__Mappa non trovata o richiesta errata.\nConsulta **/helprob meteo** per più informazioni.__")
