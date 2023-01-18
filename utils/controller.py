@@ -32,6 +32,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/weather'        : modules.weather.get_weather,
                     '/forecastoday'   : modules.weather.get_today_forecasts,
                     '/forecastfuture' : modules.weather.get_future_forecasts,
+                    '/weathermap'     : modules.weather.wttrin_map,
+                    '/weathersat'     : modules.weather.sat24_map,
                     '/reminder'       : modules.reminder.set_reminder,
                     '/urban'          : modules.urban.urban_search,
                     '/mystat'         : udb.show_stats,
@@ -46,8 +48,6 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/playlotto'      : usys.play_lotto,
-                    '/weathermap'     : modules.weather.wttrin_map,
-                    '/weathersat'     : modules.weather.sat24_map,
                     '/ai'             : modules.openai.openai_completion,
                     '/pingrob'        : usys.ping}
 
