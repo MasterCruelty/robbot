@@ -179,7 +179,7 @@ def global_trivial_leaderboard_category(query,client,message):
     if query == '/globaltscore':
         return global_trivial_leaderboard(client,message)
     query_sql = (User
-            .select(User.name.alias('user'),fn.SUM(Trivial.points).alias('count'))
+            .select(User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
             .join(Trivial, on=(User.id_user == Trivial.id_user))
             .where(Trivial.category == query)
             .order_by(fn.SUM(Trivial.points).desc())
@@ -187,9 +187,16 @@ def global_trivial_leaderboard_category(query,client,message):
     result = "__" + query + "__\n"
     k = 1
     for item in query_sql:
-        result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        if len(item.nick) > 15 or item.nick == "@None":
+            result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+        else:
+            result += str(k) + ". " + item.nick.replace("@","") + ": __" + str(item.count) + " punti.__\n"
         k = k + 1
     return sendMessage(client,message,result)
+    #for item in query_sql:
+     #   result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
+      #  k = k + 1
+    #return sendMessage(client,message,result)
 
 
 """
