@@ -157,7 +157,7 @@ def personal_trivial_leaderboard(_,client,message):
 """
 def global_trivial_leaderboard(client,message):
     query = (User
-            .select(User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
+            .select(User.id_user.alias('id'),User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
             .join(Trivial, on=(User.id_user == Trivial.id_user))
             .order_by(fn.SUM(Trivial.points).desc())
             .group_by(User.id_user))
@@ -165,6 +165,12 @@ def global_trivial_leaderboard(client,message):
     result = ""
     k = 1
     for item in query:
+        if item.id == message.from_user.id and (len(item.nick) > 15 or item.nick == "@None"):
+            result += "<code>" + str(k) + ". " + item.user + ": " + str(item.count) + " punti.</code>\n"
+            continue
+        elif item.id == message.from_user.id:
+            result += "<code>" + str(k) + ". " + item.nick.replace("@","") + ": " + str(item.count) + " punti.</code>\n"
+            continue
         if len(item.nick) > 15 or item.nick == "@None":
             result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
         else:
@@ -179,7 +185,7 @@ def global_trivial_leaderboard_category(query,client,message):
     if query == '/globaltscore':
         return global_trivial_leaderboard(client,message)
     query_sql = (User
-            .select(User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
+            .select(User.id_user.alias('id'),User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
             .join(Trivial, on=(User.id_user == Trivial.id_user))
             .where(Trivial.category == query)
             .order_by(fn.SUM(Trivial.points).desc())
@@ -187,6 +193,12 @@ def global_trivial_leaderboard_category(query,client,message):
     result = "__" + query + "__\n"
     k = 1
     for item in query_sql:
+        if item.id == message.from_user.id and (len(item.nick) > 15 or item.nick == "@None"):
+            result += "<code>" + str(k) + ". " + item.user + ": " + str(item.count) + " punti.</code>\n"
+            continue
+        elif item.id == message.from_user.id:
+            result += "<code>" + str(k) + ". " + item.nick.replace("@","") + ": " + str(item.count) + " punti.</code>\n"
+            continue
         if len(item.nick) > 15 or item.nick == "@None":
             result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
         else:
