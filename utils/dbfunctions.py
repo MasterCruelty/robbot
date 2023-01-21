@@ -81,25 +81,38 @@ def show_stats(query,client,message):
                  .order_by(Stats.times.desc()))
     values = []
     labels = []
+    no_show_commands = []
     other_value = 0
     total = 0
+    #Controllo opzione per ignorare alcuni comandi dalla visualizzazione del piechart
+    if "!" in query:
+        no_show_commands = str(query.split("!")[1:]).replace("['","").replace("']","").split(",")
+    #calcolo il numero totale
     for val in query_sql:
-        total += val.times
+        if val.command not in no_show_commands:
+            total += val.times 
+    #prelevo i dati dalla query già eseguita pesando per visualizzare un grafico leggibile
     for item in query_sql:
-        if (item.times / total) >= 0.035:
+        if (item.times / total) >= 0.035 and (item.command not in no_show_commands):
             labels.append(item.command)
             values.append(item.times)
-        else:
+        elif item.command not in no_show_commands:
             other_value += item.times
         result += item.command + "__: Usato "  + str(item.times) + " volte.__\n"
-    labels.append('Altro')
-    values.append(other_value)
-    colours = dict(zip(labels,plt.cm.tab10.colors[:len(labels)]))
+    #controllo se il valore "altro" è stato modificato e nel caso aggiungo una label dedicata
+    if other_value != 0:
+        labels.append('Altro')
+        values.append(other_value)
     #controllo opzione piechart
     if "-pie" in query:
         #preparo il piechart
         plt.clf()
-        plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
+        try:
+            colours = dict(zip(labels,plt.cm.tab10.colors[:len(labels)]))
+            plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
+        except KeyError:
+            colours = dict(zip(labels,plt.cm.tab20.colors[:len(labels)]))
+            plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
         plt.savefig('graph.png')
         with open('graph.png',"rb") as image_file:
             sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
@@ -165,11 +178,9 @@ def global_trivial_leaderboard(client,message):
     result = ""
     k = 1
     for item in query:
-        if item.id == message.from_user.id and (len(item.nick) > 15 or item.nick == "@None"):
-            result += "<code>" + str(k) + ". " + item.user + ": " + str(item.count) + " punti.</code>\n"
-            continue
-        elif item.id == message.from_user.id:
-            result += "<code>" + str(k) + ". " + item.nick.replace("@","") + ": " + str(item.count) + " punti.</code>\n"
+        if item.id == message.from_user.id:
+            result += "<code> >>" + str(k) + ". " + item.user + ": " + str(item.count) + " punti.<< </code>\n"
+            k = k + 1
             continue
         if len(item.nick) > 15 or item.nick == "@None":
             result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
@@ -193,11 +204,9 @@ def global_trivial_leaderboard_category(query,client,message):
     result = "__" + query + "__\n"
     k = 1
     for item in query_sql:
-        if item.id == message.from_user.id and (len(item.nick) > 15 or item.nick == "@None"):
-            result += "<code>" + str(k) + ". " + item.user + ": " + str(item.count) + " punti.</code>\n"
-            continue
-        elif item.id == message.from_user.id:
-            result += "<code>" + str(k) + ". " + item.nick.replace("@","") + ": " + str(item.count) + " punti.</code>\n"
+        if item.id == message.from_user.id:
+            result += "<code> >>" + str(k) + ". " + item.user + ": " + str(item.count) + " punti.<< </code>\n"
+            k = k + 1
             continue
         if len(item.nick) > 15 or item.nick == "@None":
             result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
