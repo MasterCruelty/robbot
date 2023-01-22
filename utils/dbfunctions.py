@@ -6,6 +6,8 @@ from utils.get_config import *
 import peewee
 import matplotlib.pyplot as plt
 import matplotlib
+import io
+import tempfile
 matplotlib.use('Agg')
 
 #setto stile matplotlib
@@ -105,17 +107,19 @@ def show_stats(query,client,message):
         values.append(other_value)
     #controllo opzione piechart
     if "-pie" in query:
-        #preparo il piechart
+        #preparo il piechart e salvo l'immagine in RAM
         plt.clf()
+        temp = io.BytesIO()
         try:
             colours = dict(zip(labels,plt.cm.tab10.colors[:len(labels)]))
             plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
         except KeyError:
             colours = dict(zip(labels,plt.cm.tab20.colors[:len(labels)]))
             plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
-        plt.savefig('graph.png')
-        with open('graph.png',"rb") as image_file:
-            sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
+        plt.savefig(temp,format='png')
+        temp.seek(0)
+        image_file = temp
+        return sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
     else:
         sendMessage(client,message,result)
 
@@ -168,14 +172,22 @@ def personal_trivial_leaderboard(_,client,message):
     @params client,message
     Classifica globale dei punti su Trivial
 """
-def global_trivial_leaderboard(client,message):
-    query = (User
-            .select(User.id_user.alias('id'),User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
-            .join(Trivial, on=(User.id_user == Trivial.id_user))
-            .order_by(fn.SUM(Trivial.points).desc())
-            .group_by(User.id_user))
-
-    result = ""
+def global_trivial_leaderboard(client,message,category=None):
+    if category == '/globaltscore':
+        result = ""
+        query = (User
+                .select(User.id_user.alias('id'),User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
+                .join(Trivial, on=(User.id_user == Trivial.id_user))
+                .order_by(fn.SUM(Trivial.points).desc())
+                .group_by(User.id_user))
+    else:
+        result = "__" + category + "__\n"
+        query = (User
+                .select(User.id_user.alias('id'),User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
+                .join(Trivial, on=(User.id_user == Trivial.id_user))
+                .where(Trivial.category == category)
+                .order_by(fn.SUM(Trivial.points).desc())
+                .group_by(User.id_user))
     k = 1
     for item in query:
         if item.id == message.from_user.id:
@@ -193,27 +205,7 @@ def global_trivial_leaderboard(client,message):
     classifica globale ma solo in una specifica categoria di domande
 """
 def global_trivial_leaderboard_category(query,client,message):
-    if query == '/globaltscore':
-        return global_trivial_leaderboard(client,message)
-    query_sql = (User
-            .select(User.id_user.alias('id'),User.name.alias('user'),User.username.alias('nick'),fn.SUM(Trivial.points).alias('count'))
-            .join(Trivial, on=(User.id_user == Trivial.id_user))
-            .where(Trivial.category == query)
-            .order_by(fn.SUM(Trivial.points).desc())
-            .group_by(User.id_user))
-    result = "__" + query + "__\n"
-    k = 1
-    for item in query_sql:
-        if item.id == message.from_user.id:
-            result += "<code> >>" + str(k) + ". " + item.user + ": " + str(item.count) + " punti.<< </code>\n"
-            k = k + 1
-            continue
-        if len(item.nick) > 15 or item.nick == "@None":
-            result += str(k) + ". " + item.user + ": __" + str(item.count) + " punti.__\n"
-        else:
-            result += str(k) + ". " + item.nick.replace("@","") + ": __" + str(item.count) + " punti.__\n"
-        k = k + 1
-    return sendMessage(client,message,result)
+    return global_trivial_leaderboard(client,message,query)
 
 
 """
