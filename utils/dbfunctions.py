@@ -119,7 +119,9 @@ def show_stats(query,client,message):
         plt.savefig(temp,format='png')
         temp.seek(0)
         image_file = temp
-        return sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
+        sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
+        temp.close()
+        image_file.close()
     else:
         sendMessage(client,message,result)
 
