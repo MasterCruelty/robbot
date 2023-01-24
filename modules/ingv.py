@@ -37,7 +37,11 @@ def get_eq_data(query,client,message):
             result = ""
         else:
             check = True
-            sendPhoto(client,message,url_image,result)
+            try:
+                sendPhoto(client,message,url_image,result)
+            except errors.exceptions.bad_request_400.MediaEmpty:
+                i = i + 1
+                continue
             result = ""
         i = i + 1
     if check == False:
