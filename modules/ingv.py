@@ -8,7 +8,7 @@ import warnings
 """
     Restituisce dati sugli ultimi 5 terremoti avvenuti con scala maggiore di 2 da INGV
 """
-def get_eq_data(query,client,message):
+def get_eq_data(_,client,message):
     resp = requests.get("https://webservices.ingv.it/fdsnws/event/1/query?&minmag=2")
     content = resp.content
     zuppa = BeautifulSoup(content,'xml')
