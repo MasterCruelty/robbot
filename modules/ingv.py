@@ -3,49 +3,44 @@ from pyrogram import Client,filters,errors
 import re
 import requests
 from bs4 import BeautifulSoup
-from georss_ingv_centro_nazionale_terremoti_client import IngvCentroNazionaleTerremotiFeed as ingv
-import modules.gmaps as gm
-
+import warnings
 
 """
-    Restituisce dati sui terremoti nei dintorni del luogo desiderato da INGV
+    Restituisce dati sugli ultimi 5 terremoti avvenuti con scala maggiore di 2 da INGV
 """
 def get_eq_data(query,client,message):
-    splitted = query.split(",")
-    query_place = splitted[0]
-    coordinates = gm.showmaps(query_place,"client","message")
-    lat = coordinates[0]
-    lon = coordinates[1]
-    try:
-        radius = int(splitted[1])
-    except IndexError:
-        radius = 0
-    feed = ingv((lat,lon),filter_radius=radius,filter_minimum_magnitude=1.0)
-    status,entries = feed.update()
-    print(status)
-    print("trovate " + str(len(entries)) + " entries")
+    resp = requests.get("https://webservices.ingv.it/fdsnws/event/1/query?&minmag=2")
+    content = resp.content
+    zuppa = BeautifulSoup(content,'xml')
+    events = zuppa.find_all("event")
     result = ""
     text_message = ""
-    if len(entries) > 0:
-        for i in range(len(entries)):
-            print(entries[i].region)
-            if i > 5:
-                break
-            event_id = entries[i].event_id
-            #WIP
-            resp = requests.get("webservices.ingv.it/fdsnws/event/1/query?eventId=" + event_id)
-            place = entries[i].region
-            magnitude = entries[i].magnitude
-            map_image = entries[i].image_url
-            splitted = place.split(" ")
-            km = gm.distanza(query_place,splitted[3])
-            result += "**" + place + "**\nmagnitudo: __" + str(magnitude) + "__\nA " +str(km)+" km da " + query_place.title() + "__\n\n"
-            if map_image != None:
-                sendPhoto(client,message,map_image,result)
-            else:
-                text_message += result
-                result = ""
-        if text_message != "":
-            return sendMessage(client,message,text_message)
-    else:
+    check = False
+    i = 0
+    for item in events:
+        if i > 5:
+            break
+        place = "**" + item.description.get_text() +"**"
+        magnitude = "Magnitudo: __" + item.magnitude.mag.get_text().split("\n")[1] + "__\n"
+        split_time = item.origin.time.value.text.split("T")
+        origin_time = "__Avvenuto in questo orario: " + split_time[0] + " alle " + split_time[1]  + "__\n"
+        lat = float(item.origin.latitude.value.text)
+        lon = float(item.origin.longitude.value.text)
+        event_id = item["publicID"].split("eventId=")[1]
+        url_image = "https://shakemap.rm.ingv.it/shake4/data/" + event_id + "/current/products/intensity.jpg"
+        warnings.filterwarnings("ignore",category=requests.packages.urllib3.exceptions.InsecureRequestWarning)
+        image_resp = requests.get(url_image,timeout=5,verify=False)
+        result += place + magnitude + origin_time
+        if "404" in image_resp.text:
+            check = True
+            text_message += place + magnitude + origin_time + "\n\n"
+            result = ""
+        else:
+            check = True
+            sendPhoto(client,message,url_image,result)
+            result = ""
+        i = i + 1
+    if check == False:
         return sendMessage(client,message,"__Nessun dato trovato__")
+    else:
+        return sendMessage(client,message,"__Ecco gli ultimi terremoti avvenuti.__\n" + text_message)
