@@ -22,7 +22,10 @@ def execute_km(query,client,message):
         result = not_found
     else:
         result = "La distanza tra i due luoghi è di " + str(km) + " km."
-    return sendMessage(client,message,result)
+    try:
+        return sendMessage(client,message,result)
+    except AttributeError:
+        return km
 
 
 """
