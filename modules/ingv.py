@@ -10,7 +10,7 @@ import io
     Restituisce dati sugli ultimi 5 terremoti avvenuti con scala maggiore di 2 da INGV
 """
 @Client.on_message()
-def get_eq_data(query,client,message):
+def get_eq_data(_,client,message):
     resp = requests.get("https://webservices.ingv.it/fdsnws/event/1/query?&minmag=2")
     content = resp.content
     zuppa = BeautifulSoup(content,'xml')
@@ -44,4 +44,4 @@ def get_eq_data(query,client,message):
         client.send_media_group(get_chat(message),media=media)
     except errors.exceptions.bad_request_400.WebpageMediaEmpty:
         print("errore nell'invio delle immagini")
-    sendMessage(client,message,"__Ecco i dati sugli terremoti avvenuti di cui non è presente un'immagine.\nSe clicchi sulle immagini disponibi potrai leggere i dettagli sulla magnitudo rispettiva.__\n" + text_message)
+    sendMessage(client,message,"__Ecco i dati sugli terremoti avvenuti di cui non è presente un'immagine.\nSe clicchi sulle immagini disponibili potrai leggere i dettagli sulla magnitudo rispettiva.__\n" + text_message)
