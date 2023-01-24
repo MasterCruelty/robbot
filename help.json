@@ -45,6 +45,7 @@
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI",
 	"stats":"**/mystat ** => Restituisce le statistiche personali sui comandi del bot usati finora.\n**/mystat -pie !'command1','command2' ** ==> Restituisce il grafico a torta personale dei propri comandi usati finora. Con l'opzione ! si può omettere uno o più comandi dalla generazione del grafico.",
 	"urban": "**/urban 'word' ** => restituisce la definizione di urban dictionary per la parola richiesta",
+	"terremoti": "**/eq => restituisce i dati sugli ultimi terremoti avvenuti in Italia o nel mondo.",
 	"trivial": "__**Questo comando è disponibile solo in alcune chat decise dall'admin.\nI nomi delle categorie sono listati nel gruppo ufficiale del gioco.**__\n\n**/trivial** ==> quiz vero/falso oppure a scelta multipla in una categoria randomica.\n**/trivial categoria** ==> quiz della categoria scelta.\n__Esempio: /trivial history  per un quiz in storia.__\n/globaltscore per classifica globale.\n/globaltscore 'categoria' per filtrare.\n/mytscore per quella personale.\n\n",
-        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
+        "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial,stats,terremoti e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
