@@ -44,4 +44,4 @@ def get_eq_data(_,client,message):
         client.send_media_group(get_chat(message),media=media)
     except errors.exceptions.bad_request_400.WebpageMediaEmpty:
         print("errore nell'invio delle immagini")
-    sendMessage(client,message,"__Ecco i dati sugli terremoti avvenuti di cui non è presente un'immagine.\nSe clicchi sulle immagini disponibili potrai leggere i dettagli sulla magnitudo rispettiva.__\n" + text_message)
+    sendMessage(client,message,"__Ecco i dati sui terremoti avvenuti di cui non è presente un'immagine.\nSe clicchi sulle immagini disponibili potrai leggere i dettagli sulla magnitudo rispettiva.__\n" + text_message)
