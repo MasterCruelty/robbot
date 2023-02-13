@@ -17,7 +17,7 @@ def openai_completion(query,client,message):
         stop_seq = temp[0].replace("stop","")
         query = temp[1]
     resp = openai.Completion.create(
-            engine="text-davinci-001",
+            engine="text-davinci-003",
             prompt=query,
             temperature=0.8,
             max_tokens=1024,
@@ -27,3 +27,20 @@ def openai_completion(query,client,message):
             presence_penalty=0.8)
     result = "**" + query + "** " + resp["choices"][0]["text"]
     return sendMessage(client,message,result)
+
+"""
+Dato l'input viene generata un'immagina 512x512 tramite l'algoritmo DALLE offerto da OpenAI
+"""
+def openai_dalle(query,client,message):
+    openai.api_key = api_openai
+    resp = openai.Image.create(
+            prompt=query,
+            n=1,
+            size="512x512"
+        )
+    image_url = resp['data'][0]['url']
+    return sendPhoto(client,message,image_url,"__Ecco l'immagine generata__")
+
+
+
+
