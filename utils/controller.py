@@ -51,6 +51,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
 dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/playlotto'      : usys.play_lotto,
                     '/ai'             : modules.openai.openai_completion,
+                    '/aimg'           : modules.openai.openai_dalle,
                     '/pingrob'        : usys.ping}
 
 dictionary_super = {'/setrobuser'     : udb.set_user,
