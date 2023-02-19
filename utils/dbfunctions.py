@@ -125,6 +125,60 @@ def show_stats(query,client,message):
     else:
         sendMessage(client,message,result)
 
+######################################    
+#### FUNZIONI LEGATE ALL'USO DI OPENAI
+######################################
+
+"""
+   @params client, message
+
+   Controllo sul numero di utilizzi rimasti del servizio
+   Aggiornamento del numero di utilizzi decrementando di 1
+"""
+def check_amount(client,message):
+    id_user = get_id_user(message)
+    query = (OpenAICredit 
+            .select()
+            .where(OpenAICredit.id_user == id_user))
+    new_amount = 0
+    for item in query:
+        if item.amount > 0:
+            new_amount = item.amount - 1
+            print("Credito ok!")
+        else:
+            print("Credito non sufficiente")
+            return False
+    query = (OpenAICredit
+            .update({OpenAICredit.amount: new_amount})
+            .where(OpenAICredit.id_user == id_user)).execute()
+    return True
+
+"""
+    Restituisce il numero di utilizzi rimasti sul proprio profilo
+"""
+def show_personal_amount(client,message,query):
+    id_user = get_id_user(message)
+    query = (OpenAICredit
+            .select()
+            .where(OpenAICredit.id_user == id_user))
+    for item in query:
+        amount = item.amount
+    return sendMessage(client,message,"__Utilizzi rimasti: " + amount)
+
+"""
+    Restituisce il numero di utilizzi rimasti di ogni utente
+"""
+def show_all_amounts(client,message,query):
+    query = (OpenAICredit
+            .select()
+            .join(User, on(User.id_user == OpenAICredit.id_user)
+            .order_by(OpenAICredit.amount.desc())))
+    result = ""
+    for item in query:
+        user = item.username
+        amount = item.amount
+        result += user + ": " + amount + "\n"
+    return sendMessage(client,message,result)
 
 ######################################    
 #### FUNZIONI LEGATE AL GIOCO /TRIVIAL
