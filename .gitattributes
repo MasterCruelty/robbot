@@ -1,2 +1,2 @@
-*.tex linguist-detectable=true
+#*.tex linguist-detectable=true
 *.tex linguist-language=TeX
