@@ -63,6 +63,14 @@ class TrivialSavedData(BaseModel):
     category = CharField()
     qtype = CharField()
 
+"""
+    Tabella che definisce lo stato di credito di un utente per i comandi di OpenAI.
+    L'attributo amount definisce quanto utilizzo ha ancora del servizio.
+"""
+class OpenAICredit(BaseModel):
+    id_user = ForeignKeyField(User)
+    amount = IntegerField(default = 0)
+
 
 db.connect()
 db.create_tables([User,Stats,Trivial,Group,TrivialSavedData])
