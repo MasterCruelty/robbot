@@ -63,9 +63,17 @@ class TrivialSavedData(BaseModel):
     category = CharField()
     qtype = CharField()
 
+"""
+    Tabella che definisce lo stato di credito di un utente per i comandi di OpenAI.
+    L'attributo amount definisce quanto utilizzo ha ancora del servizio.
+"""
+class OpenAICredit(BaseModel):
+    id_user = ForeignKeyField(User)
+    amount  = IntegerField(default = 0)
+
 
 db.connect()
-db.create_tables([User,Stats,Trivial,Group,TrivialSavedData])
+db.create_tables([User,Stats,Trivial,Group,TrivialSavedData,OpenAICredit])
 
 #Inizializzo il super admin da file di configurazione
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)

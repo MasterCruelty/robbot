@@ -51,6 +51,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
 dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/playlotto'      : usys.play_lotto,
                     '/ai'             : modules.openai.openai_completion,
+                    '/amount'         : udb.show_personal_amount,
+                    '/aimg'           : modules.openai.openai_dalle,
                     '/pingrob'        : usys.ping}
 
 dictionary_super = {'/setrobuser'     : udb.set_user,
@@ -64,6 +66,8 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/listgroup'      : udb.list_group,
                     '/delgroup'       : udb.del_group,
                     '/updategroup'    : udb.update_group,
+                    '/allamounts'     : udb.show_all_amounts,
+                    '/setamount'      : udb.set_amount,
                     '/updatestat'     : udb.force_update_stats,
                     '/delstat'        : udb.force_delete_stats}
 
