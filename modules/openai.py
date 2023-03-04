@@ -2,7 +2,7 @@ import sys
 sys.path.append(sys.path[0] + "/..")
 from utils.get_config import *
 import openai
-from utils.dbfunctions import isSuper
+from utils.dbfunctions import isSuper,check_amount
 
 config_file = get_config_file("../config.json")
 api_openai = config_file["api_openai"]
