@@ -42,7 +42,7 @@
 		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.\n",
 		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo.\n"
 	},
-	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI.\n**/aimg 'input' ** => Genera un'immagine con l'algoritmo DALL-E",
+	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI.\n**/aimg 'input' ** => Genera un'immagine con l'algoritmo DALL-E\n__Per utilizzare questi comandi è necessario acquisire credito, contatta @MasterCruelty__",
 	"stats":"**/mystat ** => Restituisce le statistiche personali sui comandi del bot usati finora.\n**/mystat -pie !'command1','command2' ** ==> Restituisce il grafico a torta personale dei propri comandi usati finora. Con l'opzione ! si può omettere uno o più comandi dalla generazione del grafico.",
 	"urban": "**/urban 'word' ** => restituisce la definizione di urban dictionary per la parola richiesta",
 	"terremoti": "**/eq => restituisce i dati sugli ultimi terremoti avvenuti in Italia o nel mondo.",
