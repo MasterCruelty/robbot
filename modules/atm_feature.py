@@ -18,6 +18,10 @@ headers = { "Origin": "https://giromilano.atm.it/",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
           }
 
+#strighe costanti da usare in certe situazioni
+not_available = "Non disponibile"
+pdfimage = "pdf2image"
+
 """
 Restituisce l'elenco delle fermate dato l'indirizzo richiesto con i codici fermata corrispondenti
 """
@@ -36,12 +40,27 @@ def search_line(line_number,client,message):
     return sendMessage(client,message,result)
 
 
+"""
+    Restituisce la tabella degli orari come immagine dato l'url pdf
+"""
+def get_time_table(client,message,pdf_url):
+    pdf_data = requests.get(pdf_url)
+    img_data = pdf2image.convert_from_bytes(pdf_data.content,fmt="png")
+    with io.BytesIO() as img_buffer:
+        img_data[0].save(img_buffer,format="PNG")
+        img_buffer.name = "time_table.png"
+        sendPhoto(client,message,img_buffer,"__Il tempo d'attesa non è disponibile, ecco la tabella degli orari__")
 
 """
     Dato un codice fermata, vengono fornite le informazioni relative a quella fermata contattando direttamente il server atm
     Dedicato ai dati delle fermate di mezzi di superficie/metro. Riporta dati parziali su altri tipi di richieste.
 """
 def get_stop_info(stop_code,client=None,message=None):
+    #bool per fissare se l'utente vuole il tempo d'attesa oppure la tabella degli orari come immagine
+    checkT = False
+    if "-t" in stop_code:
+        stop_code = stop_code.split("-t")[1].replace(" ","")
+        checkT = True
     resp = get_json_atm(stop_code)
     data_json = handle_except(resp)
     if str(data_json).startswith("404"):
@@ -55,7 +74,11 @@ def get_stop_info(stop_code,client=None,message=None):
         line_description.append(Line["LineDescription"])
         wait_time.append(item["WaitMessage"])
         time_table.append(item["BookletUrl"])
-
+    #controllo se l'utente vuole solo la tabella degli orari
+    if checkT == True:
+        for i in range(len(time_table)):
+            get_time_table(client,message,time_table[i])
+        return pdfimage
     result = "**" + descrizione + "**" + "\n"
     for i in range(len(line_code)):
         wait_time[i] = check_none(wait_time[i])
@@ -65,17 +88,12 @@ def get_stop_info(stop_code,client=None,message=None):
         time_table[i] = check_none(time_table[i]
                 )
         #Se non c'è il tempo d'attesa, mando gli orari del pdf come immagine
-        if wait_time[i] == "Non disponibile" and time_table[i] != "Non disponibile":
-            #scarico gli orari con una get, poi converto in immagine in memory senza scrivere su disco
+        if wait_time[i] == not_available and time_table[i] != not_available:
+            #scarico gli orari con una get, poi converto in immagine in memory senza scrivere su disco con get_time_table definita qui sopra
             pdf_url = time_table[i]
-            pdf_data = requests.get(pdf_url)
-            img_data = pdf2image.convert_from_bytes(pdf_data.content,fmt="png")
-            with io.BytesIO() as img_buffer:
-                img_data[0].save(img_buffer,format="PNG")
-                img_buffer.name = "time_table.png"
-                sendPhoto(client,message,img_buffer,"__Il tempo d'attesa non è disponibile, ecco la tabella degli orari__")
-                #stringa da restituire così che la funzione send_stop_info sappia che è già stata mandata la tabella degli orari come immagine
-                return "pdf2image"
+            get_time_table(client,message,pdf_url)
+            #stringa da restituire così che la funzione send_stop_info sappia che è già stata mandata la tabella degli orari come immagine
+            return pdfimage
         
         result += "Orari linea " + line_code[i] + ": " + time_table[i] + "\n"
     
@@ -89,7 +107,7 @@ def send_stop_info(query,client,message):
     #get data
     result = get_stop_info(query,client,message)
     #se la condizione è vera, allora è stata inviata la tabella degli orari come immagine da get_stop_info()
-    if str(result) == "pdf2image":
+    if str(result) == pdfimage:
         return
     #build keyboard
     kb = InlineKeyboardMarkup([[
