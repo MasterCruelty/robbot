@@ -72,6 +72,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * pandas
 * openai
 * urbandictionary
+* pdf2image
 
 ### Progetti esterni usati
 
@@ -143,6 +144,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * pandas
 * openai
 * urbandictionary
+* pdf2image
 
 
 ### External projects used
