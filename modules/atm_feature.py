@@ -7,6 +7,8 @@ from utils.get_config import *
 from pyrogram import Client,filters,errors
 from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 from pyrogram.handlers import CallbackQueryHandler
+import pdf2image
+import io
 
 config = get_config_file("config.json")
 api_url = config["api_url"]
@@ -61,6 +63,16 @@ def get_stop_info(stop_code,client=None,message=None):
     result += "\n"
     for i in range(len(line_code)):
         time_table[i] = check_none(time_table[i])
+        #Se non c'è il tempo d'attesa, mando gli orari del pdf come immagine
+        if wait_time[i] == "Non disponibile" and time_table[i] != "Non disponibile":
+            pdf_url = time_table[i]
+            pdf_data = requests.get(pdf_url)
+            img_data = pdf2image.convert_from_bytes(pdf_data.content,fmt="png")
+            with io.BytesIO() as img_buffer:
+                img_data[0].save(img_buffer,format="PNG")
+                img_buffer.name = "time_table.png"
+                sendPhoto(client,message,img_buffer,"__Il tempo d'attesa non è disponibile, ecco la tabella degli orari__")
+                return "pdf2image"
         result += "Orari linea " + line_code[i] + ": " + time_table[i] + "\n"
     
     return result
@@ -72,6 +84,9 @@ def get_stop_info(stop_code,client=None,message=None):
 def send_stop_info(query,client,message):
     #get data
     result = get_stop_info(query,client,message)
+    #se la condizione è vera, allora è stata inviata la tabella degli orari come immagine da get_stop_info()
+    if str(result) == "pdf2image":
+        return
     #build keyboard
     kb = InlineKeyboardMarkup([[
         InlineKeyboardButton("Refresh",callback_data="REFRESH;"+str(query))]])
