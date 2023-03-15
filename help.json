@@ -12,8 +12,8 @@
 	"reminder":"**/reminder 'tempo';'messaggio'** => invia dopo il tempo indicato.\n__s = secondi\nm = minuti\nh = ore\ngg = giorni__\n\n**/reminder 1m50s;ciao\n/reminder 1h10m;ciao\n/reminder 1gg5h10m;ciao.**",
 	"atm":{
 		"intro":"__Features disponibili per il trasporto pubblico di Milano__\n",
-		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito\n",
-		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito\n",
+		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito.\n**Per le stazioni metropolitane non vi è un valore per il tempo d'attesa, verrà inviata la tabella degli orari come immagine.**\nSe si desidera la tabella degli orari anche per una fermata in particolare, aggiungere l'opzione -t al comando.\nEsempio: <code>/atm -t 13200</code>\n\n",
+		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito\n\n",
 		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__\n"
 	},
 	"tper":{
