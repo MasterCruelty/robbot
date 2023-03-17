@@ -3,6 +3,8 @@ from pyrogram import errors
 import utils.controller as uct
 import utils.get_config as ugc
 import random
+import os
+import sys
 
 """
 Lancia un sondaggio in automatico non anonimo
@@ -35,7 +37,12 @@ Veloce controllo se l'app è online
 def ping(query,client,message):
     return ugc.sendMessage(client,message,"pong " + query.replace("/pingrob",""))
 
-
+"""
+Riavvia il bot
+"""
+def restart(client,message):
+    ugc.sendMessage(client,message,"__Riavviando...\n\nTra circa 10 secondi dovrei essere di nuovo attivo.__")
+    os.execl(sys.executable,sys.executable,*sys.argv)
 
 """
 documentazione dei comandi utente direttamente su Telegram
