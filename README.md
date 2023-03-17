@@ -62,6 +62,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * Aggiornare i dati Telegram di un utente(nome e username): `/updaterobuser` <id_utente> (oppure dando lo username)
 * Aggiornare il credito di un utente per l'utilizzo di openai: `/amount` <id_utente> <valore>
 * Visualizzare l'elenco degli utenti che hanno del credito di utilizzo per openai: `/allamounts`
+* Riavviare il bot direttamente da Telegram senza passare dalla shell: `/restart`
 
 ### Dipendenze
 
@@ -133,6 +134,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * Update user's Telergam data(name and username): `/updaterobuser` <id_user> (or giving username)
 * Update the user's credit for openai usage: `/amount` <id_user> <value>
 * Show all user and their openai credit: `/allamounts`
+* Restarting the bot directly in Telegram without manually doing in shell: `/restart`
 
 
 ### Dependencies
