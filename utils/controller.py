@@ -15,6 +15,7 @@ import modules.trivial
 import modules.pistekart
 import modules.ingv
 import modules.ral
+import modules.math
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -48,6 +49,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/piste'          : modules.pistekart.get_piste_region,
                     '/eq'             : modules.ingv.get_eq_data,
                     '/ral'            : modules.ral.ral_calc,
+                    '/math'           : modules.math.calculate,
                     '/helprob'        : usys.help}
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
