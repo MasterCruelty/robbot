@@ -1,4 +1,4 @@
-from utils.get_config import sendMessage,get_chat,get_id_msg,sendPhoto
+from utils.get_config import sendMessage
 from pyrogram import Client,errors
 import requests
 from bs4 import BeautifulSoup
