@@ -7,7 +7,7 @@ import requests
     Restituisce il risultato dell'espressione matematica richiesta
 """
 def calculate(query,client,message):
-    url = "http://api.mathjs.org/v4/?expr=" + query
+    url = "https://api.mathjs.org/v4/?expr=" + query
     if "/" in query:
         url += "&precision=3"
     resp = requests.get(url)
