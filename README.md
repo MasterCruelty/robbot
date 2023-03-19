@@ -94,6 +94,9 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Open Trivia Database](https://opentdb.com/)
 * [Sito pmi.it per calcolo stipendio netto in Italia](https://www.pmi.it/servizi/292472/calcolo-stipendio-netto.html)
 * [Api Mathjs](http://api.mathjs.org)
+* [The cat api](https://api.thecatapi.com/v1/images/search)
+* [Dog ceo api](https://dog.ceo/api/breeds/image/random)
+* [Random fox api](https://randomfox.ca/floof/)
 
 # **[ENG]**
 
@@ -170,3 +173,6 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Open Trivia Database](https://opentdb.com/)
 * [pmi.it website to calculate Italian net salary](https://www.pmi.it/servizi/292472/calcolo-stipendio-netto.html)
 * [Api Mathjs](http://api.mathjs.org)
+* [The cat api](https://api.thecatapi.com/v1/images/search)
+* [Dog ceo api](https://dog.ceo/api/breeds/image/random)
+* [Random fox api](https://randomfox.ca/floof/)
