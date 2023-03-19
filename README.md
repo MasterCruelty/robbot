@@ -92,6 +92,11 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Trenitalia-API di SimoDax per le API frecce.it](https://github.com/SimoDax/Trenitalia-API) (Queste API non sono pubbliche, non abusate del servizio)
 * [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
 * [Open Trivia Database](https://opentdb.com/)
+* [Sito pmi.it per calcolo stipendio netto in Italia](https://www.pmi.it/servizi/292472/calcolo-stipendio-netto.html)
+* [Api Mathjs](http://api.mathjs.org)
+* [The cat api](https://api.thecatapi.com/v1/images/search)
+* [Dog ceo api](https://dog.ceo/api/breeds/image/random)
+* [Random fox api](https://randomfox.ca/floof/)
 
 # **[ENG]**
 
@@ -166,3 +171,8 @@ This json file is only in Italian, but you can translate it in every languages b
 * [SimoDax's wiki for frecce.it API](https://github.com/SimoDax/Trenitalia-API)  (These API aren't public, don't abuse the service)
 * [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
 * [Open Trivia Database](https://opentdb.com/)
+* [pmi.it website to calculate Italian net salary](https://www.pmi.it/servizi/292472/calcolo-stipendio-netto.html)
+* [Api Mathjs](http://api.mathjs.org)
+* [The cat api](https://api.thecatapi.com/v1/images/search)
+* [Dog ceo api](https://dog.ceo/api/breeds/image/random)
+* [Random fox api](https://randomfox.ca/floof/)

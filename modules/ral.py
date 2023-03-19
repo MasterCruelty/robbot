@@ -1,4 +1,4 @@
-from utils.get_config import sendMessage,get_chat,get_id_msg,sendPhoto
+from utils.get_config import sendMessage
 from pyrogram import Client,errors
 import requests
 from bs4 import BeautifulSoup
@@ -17,7 +17,7 @@ def ral_calc(query,client,message):
     if not ral.isdigit():
         return sendMessage(client,message,"Errore formato.\nScopri di più con __/helprob ral__")
     if len(splitted) > 1:
-        region = splitted[1]
+        region = splitted[1].lower()
     else:
         region = "lombardia"
     url = "https://www.pmi.it/servizi/292472/calcolo-stipendio-netto.html?step=2&ral=" + ral + "&reg=" + region + "&com=0.8&car=no&child_noau=0&child_au=0&childh=0&childcharge=100&family=0&monthlypay=13&days=365"
@@ -25,7 +25,7 @@ def ral_calc(query,client,message):
     zuppa = BeautifulSoup(resp.text,"html.parser")
     tags = zuppa.find_all("div",attrs={"class": "income-results tbm-pdf-download"})
     results = [tag.getText() for tag in tags if tag.getText() != ""]
-    pattern = r"Stipendio netto complessivo([\d.]+) €Stipendio netto mensile([\d.]+) €"
+    pattern = r"Stipendio netto annuo([\d.]+) €Stipendio netto mensile([\d.]+) €"
     match = re.search(pattern,results[0])
     result = "Ecco la stima che desideravi:\n\n"
     if match:
