@@ -50,5 +50,5 @@
 	"ral": "**/ral 'number' 'region' ** => restituisce una stima dello stipendio netto annuale e mensile a partire dalla ral annua e regione in cui si percepisce[di default la regione è lombardia se omessa].\n**Stima basata usando addizionale comunale 0.8% di default [comune di Milano] e contratto a tempo indeterminato.**\nEsempio: <code>/ral 35000 bolzano</code>",
 	"math": "**/math 'expr' ** => restituisce il risultato dell'espressione matematica.\nEsempio: <code> /math 2*[7-3] </code>",
 	"animali": "**/cat ** => foto di un gatto.\n**/dog ** => foto di un cane.\n**/fox ** => foto di una volpe.",
-    "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial,stats,terremoti e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
+    "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial, stats, terremoti, ral, animali e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
