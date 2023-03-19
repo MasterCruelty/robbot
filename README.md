@@ -93,6 +93,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
 * [Open Trivia Database](https://opentdb.com/)
 * [Sito pmi.it per calcolo stipendio netto in Italia](https://www.pmi.it/servizi/292472/calcolo-stipendio-netto.html)
+* [Api Mathjs](http://api.mathjs.org)
 
 # **[ENG]**
 
@@ -168,3 +169,4 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Piste Kart Italia(scraping)](https://www.pistekartitalia.it)
 * [Open Trivia Database](https://opentdb.com/)
 * [pmi.it website to calculate Italian net salary](https://www.pmi.it/servizi/292472/calcolo-stipendio-netto.html)
+* [Api Mathjs](http://api.mathjs.org)
