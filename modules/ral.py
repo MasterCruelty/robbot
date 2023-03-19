@@ -13,7 +13,7 @@ import re
 """
 def ral_calc(query,client,message):
     splitted = query.split(" ")
-    ral = splitted[0]
+    ral = int(splitted[0])
     if not ral.isdigit():
         return sendMessage(client,message,"Errore formato.\nScopri di più con __/helprob ral__")
     if len(splitted) > 1:
