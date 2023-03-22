@@ -23,6 +23,13 @@ def sendPhoto(client,message,result,caption):
     client.send_photo(get_chat(message),result,caption=caption,reply_to_message_id=get_id_msg(message))
 
 """
+funzione d'appoggio per inviare video
+"""
+@Client.on_message()
+def sendVideo(client,message,result,caption):
+    client.send_video(get_chat(message),result,caption=caption,file_name='video.mp4',reply_to_message_id=get_id_msg(message))
+
+"""
 funzione d'appoggio per inviare gif
 """
 @Client.on_message()
