@@ -17,6 +17,7 @@ import modules.ingv
 import modules.ral
 import modules.math
 import modules.animals
+import modules.videodl
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -54,6 +55,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/cat'            : modules.animals.get_cat, 
                     '/dog'            : modules.animals.get_dog, 
                     '/fox'            : modules.animals.get_fox, 
+                    '/yt'             : modules.videodl.youtube_dl,
                     '/helprob'        : usys.help}
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
