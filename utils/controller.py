@@ -55,6 +55,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/cat'            : modules.animals.get_cat, 
                     '/dog'            : modules.animals.get_dog, 
                     '/fox'            : modules.animals.get_fox, 
+                    '/rabbit'         : modules.animals.get_rabbit, 
+                    '/bird'           : modules.animals.get_bird, 
                     '/yt'             : modules.videodl.youtube_dl,
                     '/helprob'        : usys.help}
 
