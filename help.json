@@ -51,5 +51,6 @@
 	"math": "**/math 'expr' ** => restituisce il risultato dell'espressione matematica.\nEsempio: <code> /math 2*[7-3] </code>",
 	"animali": "**/cat ** => foto di un gatto.\n**/dog ** => foto di un cane.\n**/fox ** => foto di una volpe.\n**/rabbit ** => foto di un coniglio.\n**/bird ** => foto di un volatile.\n",
 	"video": "**/yt url ** => restituisce il video scaricato da youtube.\n",
+	"latex": "** /latex 'expression' ** => restituisce il LaTeX compilato.\n",
     "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial, stats, terremoti, ral, animali, video e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
