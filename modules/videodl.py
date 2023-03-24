@@ -18,5 +18,9 @@ def youtube_dl(query,client,message):
     video_bytes = io.BytesIO()
     stream.stream_to_buffer(video_bytes)
     video_bytes.seek(0)
-    return sendVideo(client,message,video_bytes,"__Ecco il video richiesto__")
+    sendVideo(client,message,video_bytes,"__Ecco il video richiesto__")
+    #clean the BytesIO file object
+    video_bytes.truncate(0)
+    video_bytes.seek(0)
+    video_bytes.close()
 
