@@ -2,7 +2,7 @@ from utils.get_config import sendMessage,sendPhoto
 from pyrogram import Client,errors
 import requests
 import json
-
+import random
 
 """
     Restituisce una foto di un gatto utilizzando un api pubblica
@@ -33,3 +33,18 @@ def get_fox(_,client,message):
     data = json.loads(resp.text)
     img = data['image']
     return sendPhoto(client,message,img,"Ecco una bella volpe")
+
+"""
+    Restituisce una foto di un coniglio utilizzando un api pubblica
+"""
+def get_rabbit(_,client,message):
+    url = f"https://source.unsplash.com/random/400x400?rabbit&{random.random()}"
+    return sendPhoto(client,message,url,"Ecco un bel coniglio")
+
+"""
+    Restituisce foto di volatili utilizzando un api pubblica
+"""
+def get_bird(_,client,message):
+    url = f"https://source.unsplash.com/random/400x400?bird&{random.random()}"
+    return sendPhoto(client,message,url,"Ecco foto di volatile")
+   
