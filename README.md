@@ -74,6 +74,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * openai
 * urbandictionary
 * pdf2image
+* pytube
 
 ### Progetti esterni usati
 
@@ -152,6 +153,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * openai
 * urbandictionary
 * pdf2image
+* pytube
 
 
 ### External projects used
