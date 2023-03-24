@@ -30,6 +30,13 @@ def sendVideo(client,message,result,caption):
     client.send_video(get_chat(message),result,caption=caption,file_name='video.mp4',reply_to_message_id=get_id_msg(message))
 
 """
+funzione d'appoggio per inviare audio
+"""
+@Client.on_message()
+def sendAudio(client,message,result,caption):
+    client.send_audio(get_chat(message),result,caption=caption,file_name='audio.mp3',reply_to_message_id=get_id_msg(message))
+
+"""
 funzione d'appoggio per inviare gif
 """
 @Client.on_message()
