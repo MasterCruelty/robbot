@@ -8,5 +8,5 @@ import requests
 def get_latex(query,client,message):
     if " " in query:
         query = query.replace(" ","%20")
-    url = "https://latex.codecogs.com/png.image?\dpi{200}" + query
+    url = "https://latex.codecogs.com/png.image?\dpi{800}" + query
     return sendPhoto(client,message,url,"__Result LaTeX__")
