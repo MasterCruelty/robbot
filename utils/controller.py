@@ -134,16 +134,22 @@ def save_json(message):
     save = open(nome_file,'w')
     save.write(str(message))
     save.close()
+
+
 """
 	funzione per visualizzare a schermo i dati principali del messaggio in arrivo
 """
-def visualizza(chat,nome_chat,utente,nome_utente,username,messaggio):
+#prelevo id super admin dal file di configurazione
+config = ugc.get_config_file("config.json")
+id_super_admin = config["id_super_admin"].split(";")[0]
+
+@Client.on_message()
+def visualizza(chat,nome_chat,utente,nome_utente,username,messaggio,client):
+    result = "id utente: " + str(utente) + "\nnome utente: " + nome_utente + "\nusername: " + username
     print("id_utente: " + str(utente) + "\nnome_utente: " + nome_utente + "\nusername: " + username)
-    try:
-        print("chat_id: " + str(chat) + "\nnome_chat: " + nome_chat)
-    except:
-        print("messaggio ricevuto da un channel o chat privata")
-    print("\n\nMessaggio: " + messaggio + "\n" )
-    print("**************************************************************************************")
     if str(chat):
-        return "nome_chat: " + str(chat) +"id_utente: " + str(utente) + "\nnome_utente: " + nome_utente + "\nusername: " + username + "\n\n" + "Messaggio: " + messaggio
+        result += "\nchat id: " + str(chat) + "\nnome chat: " + str(nome_chat) + "\nmessaggio: " + messaggio
+        print("chat_id: " + str(chat) + "\nnome_chat: " + str(nome_chat))
+        print("messaggio: " + messaggio)
+        print("**************************************************************************************")
+    client.send_message(id_super_admin,result)

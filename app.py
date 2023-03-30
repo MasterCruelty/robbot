@@ -35,7 +35,7 @@ def print_updates(client,message):
     match = messaggio.split(" ")
     if match[0] in cmd_super and isSuper(utente):
     #rappresentazione grafica del messaggio corrente sul terminale
-        visualizza(chat,nome_chat,utente,nome_utente,username,messaggio)
+        visualizza(chat,nome_chat,utente,nome_utente,username,messaggio,client)
         query = parser(messaggio)
         fetch_super_command(match[0],query,client,message)
         return
@@ -45,9 +45,13 @@ def print_updates(client,message):
     match = messaggio.split(" ")
     if match[0] in cmd_admin and isAdmin(utente):
     #rappresentazione grafica del messaggio corrente sul terminale
-        visualizza(chat,nome_chat,utente,nome_utente,username,messaggio)
+        visualizza(chat,nome_chat,utente,nome_utente,username,messaggio,client)
         query = parser(messaggio)
-        fetch_admin_command(match[0],query,client,message)
+        try:
+            fetch_admin_command(match[0],query,client,message)
+        except Exception as e:
+            messaggio = messaggio + "\n\n" + str(e)
+            visualizza(chat,nome_chat,utente,nome_utente,username,messaggio,client)
         return
 
     #funzionalità per gli utenti
@@ -55,9 +59,13 @@ def print_updates(client,message):
     match = messaggio.split(" ")
     if match[0] in lista_comandi and isUser(utente):
     #rappresentazione grafica del messaggio corrente sul terminale
-        visualizza(chat,nome_chat,utente,nome_utente,username,messaggio)
+        visualizza(chat,nome_chat,utente,nome_utente,username,messaggio,client)
         query = parser(messaggio)
-        fetch_command(match[0],query,client,message)
+        try:
+            fetch_command(match[0],query,client,message)
+        except Exception as e:
+            messaggio = messaggio + "\n\n" + str(e)
+            visualizza(chat,nome_chat,utente,nome_utente,username,messaggio,client)
         return
     elif match[0] in lista_comandi or messaggio == "/start":
         app.send_message(chat,"Se vuoi usare uno dei miei comandi, devi essere registrato.\nContatta @MasterCruelty")
