@@ -9,7 +9,7 @@ import re
 """
 def get_passport_info(query,client,message):
     query = query.replace(" ","-")
-    url = "https://passportindex.org/passport/" + query + "/"
+    url = "https://passportindex.org/passport/" + query.lower() + "/"
     resp = requests.get(url)
     zuppa = BeautifulSoup(resp.text,"html.parser")
     tags = zuppa.find_all("div",attrs={"class":"hidden-sm hidden-lg hidden-md col-xs-8 text-left psprt-dashboard-info"})
