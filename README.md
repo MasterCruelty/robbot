@@ -99,7 +99,8 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Dog ceo api](https://dog.ceo/api/breeds/image/random)
 * [Random fox api](https://randomfox.ca/floof/)
 * [Free LaTeX api](https://latex.codecogs.com)
-* [Free api for random images](https://source.unsplash.com)
+* [Free api per immagini randomiche](https://source.unsplash.com)
+* [Sito web di Passport Index(scraping)](https://www.passportindex.org/)
 
 # **[ENG]**
 
@@ -182,3 +183,4 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Random fox api](https://randomfox.ca/floof/)
 * [Free LaTeX api](https://latex.codecogs.com)
 * [Free api for random images](https://source.unsplash.com)
+* [Passport Index Web Site(scraping)](https://www.passportindex.org/)
