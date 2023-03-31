@@ -21,6 +21,9 @@ def get_passport_info(query,client,message):
     matches = re.findall(pattern, result)
     final_string = '\n'.join(['{}: {}'.format(key.strip(), value.strip()) for key, value in matches])
     final_string = final_string.replace("Visa-free","Visa-free: ")
-    imgtag = zuppa.find("div",attrs={"class": "psprt-dashboard-cover"}).find('img')
+    try:
+        imgtag = zuppa.find("div",attrs={"class": "psprt-dashboard-cover"}).find('img')
+    except:
+        return sendMessage(client,message,"__404: not found.__")
     img_url = imgtag['src']
     return sendPhoto(client,message,img_url,final_string)
