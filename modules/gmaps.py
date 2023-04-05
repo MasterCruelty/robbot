@@ -48,6 +48,7 @@ def showmaps(address,client,message):
     coordinates = []
     caption = "__**" + location.address + "\n\nTipologia luogo: " + location.raw["type"] + "\n\nImportanza: " + str(round(location.raw["importance"],2)) + "**__"
     caption += "\n\n__Importanza è un valore compreso tra 0 e 1 circa, calcolato in base al rank del luogo negli articoli di Wikipedia.__"
+    caption += "\n\nhttps://www.openstreetmap.org/#map=16/{}/{}".format(location.latitude, location.longitude)
     if check == True:
         return sendMessage(client,message,caption)
     try:
