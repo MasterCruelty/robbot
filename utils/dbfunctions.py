@@ -96,7 +96,7 @@ def show_stats(query,client,message):
             total += val.times 
     #prelevo i dati dalla query già eseguita pesando per visualizzare un grafico leggibile
     for item in query_sql:
-        if (item.times / total) >= 0.035 and (item.command not in no_show_commands):
+        if (item.times / total) >= 0.005 and (item.command not in no_show_commands):
             labels.append(item.command)
             values.append(item.times)
         elif item.command not in no_show_commands:
@@ -111,12 +111,9 @@ def show_stats(query,client,message):
         #preparo il piechart e salvo l'immagine in RAM
         plt.clf()
         temp = io.BytesIO()
-        try:
-            colours = dict(zip(labels,plt.cm.tab10.colors[:len(labels)]))
-            plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
-        except KeyError:
-            colours = dict(zip(labels,plt.cm.tab20.colors[:len(labels)]))
-            plt.pie(values,labels=labels,colors=[colours[key] for key in labels])
+        plt.figure(figsize=(20,15))
+        colours = [tuple(np.random.choice(range(256), size=3)/256) + (1,) for n in range(len(labels))]
+        plt.pie(values,labels=labels,colors=colours)
         plt.savefig(temp,format='png')
         temp.seek(0)
         image_file = temp
@@ -133,10 +130,9 @@ def show_stats(query,client,message):
         #preparo il barplot e salvo l'immagine in RAM
         plt.clf()
         temp = io.BytesIO()
-        colours = dict(zip(labels,plt.cm.tab20.colors[:len(labels)]))
         plt.figure(figsize=(20,10))
         plt.subplots_adjust(left=0.2)
-        plt.barh(labels,values,color= ['red','blue','green','purple','black'])
+        plt.barh(labels,values,color = [tuple(np.random.choice(range(256), size=3)/256) + (1,) for n in range(len(labels))])
         plt.savefig(temp,format='png')
         temp.seek(0)
         image_file = temp
