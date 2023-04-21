@@ -6,6 +6,7 @@ from utils.get_config import *
 import peewee
 import matplotlib.pyplot as plt
 import matplotlib
+import numpy as np
 import io
 import tempfile
 matplotlib.use('Agg')
@@ -120,6 +121,26 @@ def show_stats(query,client,message):
         temp.seek(0)
         image_file = temp
         sendPhoto(client,message,image_file,'__Ecco il grafico a torta prodotto__')
+        temp.close()
+        image_file.close()
+    elif "-bar" in query:
+        #non filtro per peso qui
+        labels = []
+        values = []
+        for item in query_sql:
+            labels.append(item.command)
+            values.append(item.times)
+        #preparo il barplot e salvo l'immagine in RAM
+        plt.clf()
+        temp = io.BytesIO()
+        colours = dict(zip(labels,plt.cm.tab20.colors[:len(labels)]))
+        plt.figure(figsize=(20,10))
+        plt.subplots_adjust(left=0.2)
+        plt.barh(labels,values,color= ['red','blue','green','purple','black'])
+        plt.savefig(temp,format='png')
+        temp.seek(0)
+        image_file = temp
+        sendPhoto(client,message,image_file,'__Ecco il grafico a barre prodotto__')
         temp.close()
         image_file.close()
     else:
