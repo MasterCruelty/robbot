@@ -19,7 +19,7 @@ def poll_function(query,client,message):
         opzioni = poll[1]
         opzioni = opzioni.split(",")
         client.send_poll(chat,domanda,opzioni,is_anonymous=False,reply_to_message_id=id_messaggio)
-    except (IndexError,errors.exceptions.bad_request_400.PollAnswersInvalid):
+    except (IndexError,errors.exceptions.bad_request_400.PollAnswersInvalid,Exception):
         return ugc.sendMessage(client,message,"__Errore formato.\n/helprob poll__")
 
 """
