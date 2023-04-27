@@ -360,7 +360,10 @@ def get_delay(query,client,message):
 @Client.on_message()
 def send_delay(query,client,message):
     #recupero la stringa
-    result = get_delay(query,client,message)
+    try:
+        result = get_delay(query,client,message)
+    except NameError:
+        return sendMessage(client,message,"__Errore generico.__")
 
     #build keyboard
     kb = InlineKeyboardMarkup([[
