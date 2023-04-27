@@ -44,7 +44,10 @@ def showmaps(address,client,message):
     geolocate = Nominatim(user_agent="Robbot")
     location  = geolocate.geocode(address,timeout=10000)
     if location == None:
-        return sendMessage(client,message,not_found)
+        try:
+            return sendMessage(client,message,not_found)
+        except AttributeError:
+            print("errore generico")
     coordinates = []
     caption = "__**" + location.address + "\n\nTipologia luogo: " + location.raw["type"] + "\n\nImportanza: " + str(round(location.raw["importance"],2)) + "**__"
     caption += "\n\n__Importanza è un valore compreso tra 0 e 1 circa, calcolato in base al rank del luogo negli articoli di Wikipedia.__\n"
