@@ -111,7 +111,7 @@ def comune(client,message):
             result = wikipedia.summary(random,1)
         except:
             continue 
-        if (("è un comune" in result or "città" in result or "centro abitato" in result or "è una frazione" in result)):
+        if (("è un comune" in result or "è una curazia" in result or "città" in result or "centro abitato" in result or "è una frazione" in result)):
             page = wikipedia.page(random)
             title = page.title
             page_source = page.html()
