@@ -17,7 +17,10 @@ not_found = "__Error 404: not found__"
 """
 def execute_km(query,client,message):
     addresses = query.split(',')
-    km = distanza(addresses[0],addresses[1])
+    try:
+        km = distanza(addresses[0],addresses[1])
+    except IndexError:
+        return sendMessage(client,message,"__Errore: distanza non calcolabile.__")
     if(km == "None"):
         result = not_found
     else:
