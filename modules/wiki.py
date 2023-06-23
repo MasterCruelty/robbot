@@ -42,7 +42,7 @@ def execute_wiki(query,client,message):
     word = get_keyword(query)
     if " all " in query:
         return wikiall(word,client,message,lingua)
-    if "random" in query:
+    if "-r" in query:
         return wikirandom(1,False,client,message,lingua)
     else:
         return wiki(word,client,message,lingua)
@@ -52,7 +52,7 @@ def exec_wiki_ita(query,client,message):
     if "all " in query:
         query = uct.parser(query)
         return wikiall(query,client,message)
-    if "random" in query:
+    if "-r" in query:
         return wikirandom(1,False,client,message)
     else:
         return wiki(query,client,message)
@@ -71,7 +71,7 @@ def wiki(keyword,client,message,lang="it"):
 #data la lingua e la parola chiave da cercare, restituisce il numero massimo di frasi(limite della libreria) della voce trovata
 def wikiall(keyword,client,message,lang="it"):
    wikipedia.set_lang(lang)
-   if "random" in keyword:
+   if "/wiki" in keyword:
        result = wikirandom(10,client,message,lang)
        return result
    try:
@@ -105,6 +105,8 @@ def comune(client,message):
     wikipedia.set_lang("it")
     while(True):
         count += 1
+        #Stampo solo per numeri pari dimezzando il numero di modifiche al messaggio.
+        #Meno carico sulle richieste api di Telegram.
         if count % 2 == 0:
             client.edit_message_text(chat,id_messaggio+1,"Cerco un comune...\nVoci consultate: " + str(count))
         try:
