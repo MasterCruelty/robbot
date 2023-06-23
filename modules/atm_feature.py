@@ -63,7 +63,7 @@ def get_stop_info(stop_code,client=None,message=None):
         checkT = True
     resp = get_json_atm(stop_code)
     data_json = handle_except(resp)
-    if str(data_json).startswith("404"):
+    if str(data_json).startswith("404") or "riprova tra poco" in str(data_json):
         return sendMessage(client,message,data_json)
     descrizione = data_json["Description"]
     Lines = data_json["Lines"]
@@ -158,7 +158,10 @@ Fa la richiesta al server atm e restituisce il json corrispondente.
 """
 def get_json_atm(stop_code):
     data = {"url": "tpPortal/geodata/pois/stops/" + stop_code + "?lang=it".format()}
-    resp = requests.post(api_url,data = data,headers = headers)
+    try:
+        resp = requests.post(api_url,data = data,headers = headers)
+    except requests.exceptions.ConnectionError as e:
+        return "__Troppe richieste, riprova tra poco.__"
     return resp
 
 """

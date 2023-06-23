@@ -17,7 +17,10 @@ not_found = "__Error 404: not found__"
 """
 def execute_km(query,client,message):
     addresses = query.split(',')
-    km = distanza(addresses[0],addresses[1])
+    try:
+        km = distanza(addresses[0],addresses[1])
+    except IndexError:
+        return sendMessage(client,message,"__Errore: distanza non calcolabile.__")
     if(km == "None"):
         result = not_found
     else:
@@ -44,7 +47,10 @@ def showmaps(address,client,message):
     geolocate = Nominatim(user_agent="Robbot")
     location  = geolocate.geocode(address,timeout=10000)
     if location == None:
-        return sendMessage(client,message,not_found)
+        try:
+            return sendMessage(client,message,not_found)
+        except AttributeError:
+            print("errore generico")
     coordinates = []
     caption = "__**" + location.address + "\n\nTipologia luogo: " + location.raw["type"] + "\n\nImportanza: " + str(round(location.raw["importance"],2)) + "**__"
     caption += "\n\n__Importanza è un valore compreso tra 0 e 1 circa, calcolato in base al rank del luogo negli articoli di Wikipedia.__\n"

@@ -12,11 +12,14 @@ def youtube_dl(query,client,message):
     if not url.startswith("https://www.youtube.com"):
         return sendMessage(client,message,"__url non valido per il download da Youtube__")
     #Scarico il video con pytube
-    yt = pytube.YouTube(url)
-    stream = yt.streams.get_highest_resolution()
-    #Lo metto in memoria senza salvarlo su disco e lo invio tramite Pyrogram
-    video_bytes = io.BytesIO()
-    stream.stream_to_buffer(video_bytes)
+    try:
+        yt = pytube.YouTube(url)
+        stream = yt.streams.get_highest_resolution()
+        #Lo metto in memoria senza salvarlo su disco e lo invio tramite Pyrogram
+        video_bytes = io.BytesIO()
+        stream.stream_to_buffer(video_bytes)
+    except (KeyError,pytube.exceptions.AgeRestrictedError):
+        return sendMessage(client,message,"__Errore durante il download del video richiesto.\nRiprova, se il problema persiste è legato a pytube, quindi usare un altro strumento.__")
     video_bytes.seek(0)
     sendVideo(client,message,video_bytes,"__Ecco il video richiesto__")
     #clean the BytesIO file object

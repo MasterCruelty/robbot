@@ -149,6 +149,7 @@ def send_question(query,client,message):
     #check token
     global token
     token = check_token()
+    category = ""
 
     #build parameter for request
     if query == "/trivial":
