@@ -105,7 +105,8 @@ def comune(client,message):
     wikipedia.set_lang("it")
     while(True):
         count += 1
-        client.edit_message_text(chat,id_messaggio+1,"Cerco un comune...\nVoci consultate: " + str(count))
+        if count % 2 == 0:
+            client.edit_message_text(chat,id_messaggio+1,"Cerco un comune...\nVoci consultate: " + str(count))
         try:
             random = wikipedia.random()
             result = wikipedia.summary(random,1)
