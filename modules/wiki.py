@@ -71,7 +71,7 @@ def wiki(keyword,client,message,lang="it"):
 #data la lingua e la parola chiave da cercare, restituisce il numero massimo di frasi(limite della libreria) della voce trovata
 def wikiall(keyword,client,message,lang="it"):
    wikipedia.set_lang(lang)
-   if "/wiki" in keyword:
+   if "-r" in keyword:
        result = wikirandom(10,client,message,lang)
        return result
    try:
