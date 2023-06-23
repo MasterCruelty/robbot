@@ -67,7 +67,10 @@ def check_airQualityCode(air_quality):
     OpenWeatherMap tramite la funzione "call_api_weather" rilasciando i dati meteo principali relativi al giorno corrente.
 """
 def get_weather(query,client,message):
-    data = call_api_weather(query)
+    try:
+        data = call_api_weather(query)
+    except AttributeError:
+        return sendMessage(client,message,"__404: not found__")
     if("404:" in str(data)):
         return sendMessage(client,message,data)
     data_air = call_api_airPollution(query)
