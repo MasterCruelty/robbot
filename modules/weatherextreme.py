@@ -38,9 +38,13 @@ def format_allerta(allerta):
 restituisce previsioni di oggi e domani su eventi estremi nella località richiesta
 """
 def get_extreme_forecast(query,client,message):
-    query = query.title()
     bollettino_oggi = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-oggi-comuni-latest.csv")
     bollettino_domani = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-domani-comuni-latest.csv")
+    if "-z" in query:
+        query = query.replace("-z ","").title()
+        n = len(bollettino_oggi[bollettino_oggi["zona_codice"]==query])
+        return get_extreme_byZone(n,query,client,message)
+    query = query.title()
     result = ""
     #recupero informazioni sul comune con funzione dedicata da un altro csv
     comune = get_info_comune(query)
@@ -62,3 +66,23 @@ def get_extreme_forecast(query,client,message):
     result +="**Previsioni di oggi:**\nAvviso di criticità: " + criticita_oggi + "\nAvviso idrogeologico: " + idrogeologico_oggi + "\nAvviso temporali: " + temporali_oggi + "\nAvviso idraulico: " + idraulico_oggi + "\n\n"
     result +="**Previsioni di domani:**\nAvviso di criticità: " + criticita_domani + "\nAvviso idrogeologico: " + idrogeologico_domani + "\nAvviso temporali: " + temporali_domani + "\nAvviso idraulico: " + idraulico_domani 
     return sendPhoto(client,message,url_stemma,result)
+
+"""
+Come sopra ma esteso a una zona regionale richiesta 
+"""
+def get_extreme_byZone(n,query,client,message):
+    bollettino_oggi = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-oggi-zone-latest.csv")
+    bollettino_domani = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-domani-zone-latest.csv")
+    criticita_oggi = format_allerta(bollettino_oggi[bollettino_oggi["zona_codice"] == query]["avviso_criticita"].unique()[0])
+    criticita_domani = format_allerta(bollettino_domani[bollettino_domani["zona_codice"] == query]["avviso_criticita"].unique()[0])
+    idrogeologico_oggi = format_allerta(bollettino_oggi[bollettino_oggi["zona_codice"] == query]["avviso_idrogeologico"].unique()[0])
+    idrogeologico_domani = format_allerta(bollettino_domani[bollettino_domani["zona_codice"] == query]["avviso_idrogeologico"].unique()[0])
+    temporali_oggi = format_allerta(bollettino_oggi[bollettino_oggi["zona_codice"] == query]["avviso_temporali"].unique()[0])
+    temporali_domani = format_allerta(bollettino_domani[bollettino_domani["zona_codice"] == query]["avviso_temporali"].unique()[0])
+    idraulico_oggi = format_allerta(bollettino_oggi[bollettino_oggi["zona_codice"] == query]["avviso_idraulico"].unique()[0])
+    idraulico_domani = format_allerta(bollettino_domani[bollettino_domani["zona_codice"] == query]["avviso_idraulico"].unique()[0])
+    result = "Codice zona: __" + query + "\nIn questa area geografica sono compresi __" + str(n) + "__ comuni.\n\n"
+    result +="**Previsioni di oggi:**\nAvviso di criticità: " + criticita_oggi + "\nAvviso idrogeologico: " + idrogeologico_oggi + "\nAvviso temporali: " + temporali_oggi + "\nAvviso idraulico: " + idraulico_oggi + "\n\n"
+    result +="**Previsioni di domani:**\nAvviso di criticità: " + criticita_domani + "\nAvviso idrogeologico: " + idrogeologico_domani + "\nAvviso temporali: " + temporali_domani + "\nAvviso idraulico: " + idraulico_domani 
+    sendMessage(client,message,result)
+    
