@@ -8,7 +8,7 @@
 	"lyrics":"**/lyrics 'artist' , 'song'** => restituisce le lyrics della canzone richiesta.\n**/lyrics ' artist' ** => restituisce l'elenco di tutti i brani dell'artista richiesto.",
 	"covid":"**/covid** => restituisce i dati relativi alla pandemia in italia nel giorno corrente.\n**/covid 'region'** => restituisce i dati della regione.",
 	"vaccine":"**/vaccine** => restituisce i dati relativi ai vaccini in Italia.\n**/vaccine 'region'** => restituisce i dati della regione.\n**/vaccine punti 'provincia'** => restituisce la lista dei punti di somministrazione nella provincia richiesta.",
-	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.",
+	"poll":"**/poll 'question' / 'option1','option2','option_n'** => invia un sondaggio.\n**/poll multi 'question' / 'option1','option2','option n'** => sondaggio con possibilità di risposta multipla.",
 	"reminder":"**/reminder 'tempo';'messaggio'** => invia dopo il tempo indicato.\n__s = secondi\nm = minuti\nh = ore\ngg = giorni__\n\n**/reminder 1m50s;ciao\n/reminder 1h10m;ciao\n/reminder 1gg5h10m;ciao.**",
 	"atm":{
 		"intro":"__Features disponibili per il trasporto pubblico di Milano__\n",
@@ -40,7 +40,8 @@
 		"weathermap": "**/weathermap 'area' ** => Restituisce un'immagine della mappa dell'area scelta\n",
 		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__**modalità esistenti: pioggia/sole/neve/infrarossi.**\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__\n",
 		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.\n",
-		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo.\n"
+		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo.\n",
+		"extremeforecast":"**/extremeforecast 'place' ** => restituisce previsioni di eventi estremi nella località richiesta.\nUsare opzione -z <code-zone> per avere i dati dell'intera area regionale. Ad esempio __-z lomb-13__ per avere dati su una zona regionale della Lombardia"
 	},
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI.\n**/aimg 'input' ** => Genera un'immagine con l'algoritmo DALL-E\n__Per utilizzare questi comandi è necessario acquisire credito, contatta @MasterCruelty__",
 	"stats":"**/mystat ** => Restituisce le statistiche personali sui comandi del bot usati finora.\n**/mystat -pie !'command1','command2' ** ==> Restituisce il grafico a torta personale dei propri comandi usati finora. Con l'opzione ! si può omettere uno o più comandi dalla generazione del grafico.",
