@@ -13,12 +13,19 @@ Lancia un sondaggio in automatico non anonimo
 def poll_function(query,client,message):
     chat = ugc.get_chat(message)
     id_messaggio = ugc.get_id_msg(message)
+    poll = query.split(" ")
+    multi = False
+    if "multi" in poll[0]:
+        multi = True
     poll = query.split("/")
-    domanda = poll[0]
+    domanda = poll[0].replace("multi","")
     try:
         opzioni = poll[1]
         opzioni = opzioni.split(",")
-        client.send_poll(chat,domanda,opzioni,is_anonymous=False,reply_to_message_id=id_messaggio)
+        if multi == True:
+            client.send_poll(chat,domanda,opzioni,is_anonymous=False,allows_multiple_answers=True,reply_to_message_id=id_messaggio)
+        else:
+            client.send_poll(chat,domanda,opzioni,is_anonymous=False,reply_to_message_id=id_messaggio)
     except (IndexError,errors.exceptions.bad_request_400.PollAnswersInvalid,Exception):
         return ugc.sendMessage(client,message,"__Errore formato.\n/helprob poll__")
 
