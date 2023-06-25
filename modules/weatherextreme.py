@@ -46,7 +46,7 @@ def get_extreme_forecast(query,client,message):
     comune = get_info_comune(query)
     #recupero l'immagine dello stemma del comune
     url_stemma = comune.split(";")[1]
-    result += comune.split(";")[0] + "\n\n"
+    result += comune.split(";")[0] + "\n"
     #recupero dati dai 2 csv caricati
     criticita_oggi = format_allerta(bollettino_oggi[bollettino_oggi["comune_nome"] == query]["avviso_criticita"].unique()[0])
     criticita_domani = format_allerta(bollettino_domani[bollettino_domani["comune_nome"] == query]["avviso_criticita"].unique()[0])
@@ -56,7 +56,9 @@ def get_extreme_forecast(query,client,message):
     temporali_domani = format_allerta(bollettino_domani[bollettino_domani["comune_nome"] == query]["avviso_temporali"].unique()[0])
     idraulico_oggi = format_allerta(bollettino_oggi[bollettino_oggi["comune_nome"] == query]["avviso_idraulico"].unique()[0])
     idraulico_domani = format_allerta(bollettino_domani[bollettino_domani["comune_nome"] == query]["avviso_idraulico"].unique()[0])
+    zona_codice = bollettino_oggi[bollettino_oggi["comune_nome"] == query]["zona_codice"].unique()[0]
     #preparo la stringa finale da inviare come messaggio
+    result += "Codice zona: __" + zona_codice + "\n\n"
     result +="**Previsioni di oggi:**\nAvviso di criticità: " + criticita_oggi + "\nAvviso idrogeologico: " + idrogeologico_oggi + "\nAvviso temporali: " + temporali_oggi + "\nAvviso idraulico: " + idraulico_oggi + "\n\n"
     result +="**Previsioni di domani:**\nAvviso di criticità: " + criticita_domani + "\nAvviso idrogeologico: " + idrogeologico_domani + "\nAvviso temporali: " + temporali_domani + "\nAvviso idraulico: " + idraulico_domani 
     return sendPhoto(client,message,url_stemma,result)
