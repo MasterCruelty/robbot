@@ -101,6 +101,8 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Free LaTeX api](https://latex.codecogs.com)
 * [Free api per immagini randomiche](https://source.unsplash.com)
 * [Sito web di Passport Index(scraping)](https://www.passportindex.org/)
+* [Bollettini criticita idrogeologica di open data Sicilia](https://github.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica)
+* [Dati sui comuni italiani di open data Sicilia](https://github.com/opendatasicilia/comuni-italiani)
 
 # **[ENG]**
 
@@ -184,3 +186,5 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Free LaTeX api](https://latex.codecogs.com)
 * [Free api for random images](https://source.unsplash.com)
 * [Passport Index Web Site(scraping)](https://www.passportindex.org/)
+* [Open data about extreme forecast event by open data Sicilia](https://github.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica)
+* [Open data about italian municipalities by Open data Sicilia](https://github.com/opendatasicilia/comuni-italiani)
