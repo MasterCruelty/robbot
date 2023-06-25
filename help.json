@@ -41,7 +41,7 @@
 		"weathersat": "**/weathersat 'area','modalità' ** => Restituisce una gif satellitare dell'area. \n__**modalità esistenti: pioggia/sole/neve/infrarossi.**\nPer l'area inserire il codice Alpha-2 della nazione come IT o DE. Per alcune aree esiste un codice apposito, ad esempio per la zona delle alpi si può inserire ALPS.__\n",
 		"forecastoday":"**/forecastoday 'place'** => restituisce i dati meteo delle fasce orarie del giorno corrente.\n",
 		"forecastfuture":"**/forecastfuture 'place'** => restituisce le previsioni meteo fino a 2 giorni dopo.\n",
-		"extremeforecast":"**/extremeforecast 'place' ** => restituisce previsioni di eventi estremi nella località richiesta."
+		"extremeforecast":"**/extremeforecast 'place' ** => restituisce previsioni di eventi estremi nella località richiesta.\nUsare opzione -z <code-zone> per avere i dati dell'intera area regionale. Ad esempio __-z lomb-13__ per avere dati su una zona regionale della Lombardia"
 	},
 	"openai":"**/ai 'input' ** => genera un testo in base all'input dato grazie alle api di OpenAI.\n**/aimg 'input' ** => Genera un'immagine con l'algoritmo DALL-E\n__Per utilizzare questi comandi è necessario acquisire credito, contatta @MasterCruelty__",
 	"stats":"**/mystat ** => Restituisce le statistiche personali sui comandi del bot usati finora.\n**/mystat -pie !'command1','command2' ** ==> Restituisce il grafico a torta personale dei propri comandi usati finora. Con l'opzione ! si può omettere uno o più comandi dalla generazione del grafico.",
