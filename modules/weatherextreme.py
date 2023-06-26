@@ -28,7 +28,7 @@ Formatto la stringa nel caso di nessun allerta per renderla più corta.
 """
 def format_allerta(allerta):
     if "Assenza di fenomeni significativi prevedibili / NESSUNA ALLERTA" in str(allerta):
-        return "__Nessuna allerta__"
+        return "__**Nessuna allerta**__"
     elif "nan" == str(allerta):
         return "__Informazioni non disponibili__"
     else:
@@ -61,8 +61,10 @@ def get_extreme_forecast(query,client,message):
     idraulico_oggi = format_allerta(bollettino_oggi[bollettino_oggi["comune_nome"] == query]["avviso_idraulico"].unique()[0])
     idraulico_domani = format_allerta(bollettino_domani[bollettino_domani["comune_nome"] == query]["avviso_idraulico"].unique()[0])
     zona_codice = bollettino_oggi[bollettino_oggi["comune_nome"] == query]["zona_codice"].unique()[0]
+    nome_zona = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/zone/zone.csv")
+    zona = nome_zona[nome_zona["zona_codice"] == zona_codice]["zona_nome"].unique()[0]
     #preparo la stringa finale da inviare come messaggio
-    result += "Codice zona: __" + zona_codice + "\n\n"
+    result += "Questo comune è all'interno della zona con codice: __**" + zona_codice + "**__\nDenominazione zona: __**" + zona + "**__\n\n"
     result +="**Previsioni di oggi:**\nAvviso di criticità: " + criticita_oggi + "\nAvviso idrogeologico: " + idrogeologico_oggi + "\nAvviso temporali: " + temporali_oggi + "\nAvviso idraulico: " + idraulico_oggi + "\n\n"
     result +="**Previsioni di domani:**\nAvviso di criticità: " + criticita_domani + "\nAvviso idrogeologico: " + idrogeologico_domani + "\nAvviso temporali: " + temporali_domani + "\nAvviso idraulico: " + idraulico_domani 
     return sendPhoto(client,message,url_stemma,result)
@@ -73,6 +75,7 @@ Come sopra ma esteso a una zona regionale richiesta
 def get_extreme_byZone(n,query,client,message):
     bollettino_oggi = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-oggi-zone-latest.csv")
     bollettino_domani = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-domani-zone-latest.csv")
+    nome_zona = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/zone/zone.csv")
     criticita_oggi = format_allerta(bollettino_oggi[bollettino_oggi["zona_codice"] == query]["avviso_criticita"].unique()[0])
     criticita_domani = format_allerta(bollettino_domani[bollettino_domani["zona_codice"] == query]["avviso_criticita"].unique()[0])
     idrogeologico_oggi = format_allerta(bollettino_oggi[bollettino_oggi["zona_codice"] == query]["avviso_idrogeologico"].unique()[0])
@@ -81,7 +84,8 @@ def get_extreme_byZone(n,query,client,message):
     temporali_domani = format_allerta(bollettino_domani[bollettino_domani["zona_codice"] == query]["avviso_temporali"].unique()[0])
     idraulico_oggi = format_allerta(bollettino_oggi[bollettino_oggi["zona_codice"] == query]["avviso_idraulico"].unique()[0])
     idraulico_domani = format_allerta(bollettino_domani[bollettino_domani["zona_codice"] == query]["avviso_idraulico"].unique()[0])
-    result = "Codice zona: __" + query + "\nIn questa area geografica sono compresi __" + str(n) + "__ comuni.\n\n"
+    zona = nome_zona[nome_zona["zona_codice"] == query]["zona_nome"].unique()[0]
+    result = "Codice zona: __**" + query + "**__\nDenominazione zona: __**" + zona + "**__\nIn questa area geografica sono compresi __**" + str(n) + "**__ comuni.\n\n"
     result +="**Previsioni di oggi:**\nAvviso di criticità: " + criticita_oggi + "\nAvviso idrogeologico: " + idrogeologico_oggi + "\nAvviso temporali: " + temporali_oggi + "\nAvviso idraulico: " + idraulico_oggi + "\n\n"
     result +="**Previsioni di domani:**\nAvviso di criticità: " + criticita_domani + "\nAvviso idrogeologico: " + idrogeologico_domani + "\nAvviso temporali: " + temporali_domani + "\nAvviso idraulico: " + idraulico_domani 
     sendMessage(client,message,result)
