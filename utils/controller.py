@@ -88,6 +88,7 @@ dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/setamount'      : udb.set_amount,
                     '/updatestat'     : udb.force_update_stats,
                     '/restart'        : usys.restart,
+                    '/say'            : usys.send_user,
                     '/delstat'        : udb.force_delete_stats}
 
 auth_command = ["/trivial"]

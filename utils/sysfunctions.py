@@ -52,6 +52,20 @@ def restart(client,message):
     os.execl(sys.executable,sys.executable,*sys.argv)
 
 """
+Invia un messaggio a un utente mediante Robbot.
+"""
+@Client.on_message()
+def send_user(client,message,query):
+    splitted = query.split(";")
+    username = splitted[0]
+    mex = splitted[1]
+    json_data = client.get_users(username)
+    userid = json_data.id
+    return client.send_message(userid,mex)
+    
+    
+
+"""
 documentazione dei comandi utente direttamente su Telegram
 """
 def help(query,client,message):
