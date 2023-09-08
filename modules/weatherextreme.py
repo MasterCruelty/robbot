@@ -41,7 +41,10 @@ def get_extreme_forecast(query,client,message):
     bollettino_oggi = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-oggi-comuni-latest.csv")
     bollettino_domani = pd.read_csv("https://raw.githubusercontent.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica/main/data/bollettini/bollettino-domani-comuni-latest.csv")
     if "-z" in query:
-        query = query.replace("-z ","").title()
+        try:
+            query = query.replace("-z ","").title()
+        except AttributeError:
+            return sendMessage(client,message,"__Errore generico.__")
         n = len(bollettino_oggi[bollettino_oggi["zona_codice"]==query])
         return get_extreme_byZone(n,query,client,message)
     query = query.title()
