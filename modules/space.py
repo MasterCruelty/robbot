@@ -6,7 +6,7 @@ import json
 """
     It send the daily pic from nasa APOD(Astronomy Picture of the Day)
 """
-def get_daily_pic(query,client,message):
+def get_daily_apod(query,client,message):
     url = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
     resp = requests.get(url)
     data = json.loads(resp.text)

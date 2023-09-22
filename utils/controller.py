@@ -21,6 +21,7 @@ import modules.videodl
 import modules.latex
 import modules.passport
 import modules.weatherextreme
+import modules.space
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -64,6 +65,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/latex'          : modules.latex.get_latex,
                     '/passport'       : modules.passport.get_passport_info,
                     '/extremeforecast': modules.weatherextreme.get_extreme_forecast,
+                    '/apod'           : modules.space.get_daily_apod,
                     '/helprob'        : usys.help}
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
