@@ -12,6 +12,7 @@ def get_daily_apod(query,client,message):
     data = json.loads(resp.text)
     title = data['title']
     caption = "**" + title + "**\n__" + data['explanation'] + "__"
-    pic = data['hdurl']
+    pic = data['url']
+    sendMessage(client,message,pic)
     return sendPhoto(client,message,pic,caption)
     
