@@ -55,5 +55,5 @@
 	"latex": "** /latex 'expression' ** => restituisce il LaTeX compilato.\n",
 	"passaporti": "** /passport 'nation' ** => restituisce info basilari sul passaporto selezionato.\n",
 	"nasa":"** /apod ** => restituisce l'immagine giornaliera apod(Astronomy Picture of the Day) dalle api della Nasa.",
-    "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial, stats, terremoti, ral, animali, video, latex, passaporti e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
+    "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial, stats, terremoti, ral, animali, video, latex, passaporti, nasa e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
