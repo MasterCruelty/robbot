@@ -16,6 +16,6 @@ def get_daily_apod(query,client,message):
     try:
         return sendPhoto(client,message,pic,caption)
     except:
-        caption = "**La descrizione è più lunga rispetto al limite di un messaggio Telegram.**\n__Puoi leggerla qui:__ " + pic
+        caption = "**La descrizione è più lunga rispetto al limite di un messaggio Telegram.**\n__Puoi leggerla qui:__ https://apod.nasa.gov"  
         return sendPhoto(client,message,pic,caption)
     
