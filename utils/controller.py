@@ -22,6 +22,7 @@ import modules.latex
 import modules.passport
 import modules.weatherextreme
 import modules.space
+import modules.bgg
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -66,6 +67,8 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/passport'       : modules.passport.get_passport_info,
                     '/extremeforecast': modules.weatherextreme.get_extreme_forecast,
                     '/apod'           : modules.space.get_daily_apod,
+                    '/bggsearch'      : modules.bgg.search_board_game,
+                    '/bgg'            : modules.bgg.get_board_game_data,
                     '/helprob'        : usys.help}
 
 dictionary_admin = {'/getmessage'     : usys.get_message,
