@@ -13,5 +13,9 @@ def get_daily_apod(query,client,message):
     title = data['title']
     caption = "**" + title + "**\n__" + data['explanation'] + "__"
     pic = data['url']
-    return sendPhoto(client,message,pic,caption)
+    try:
+        return sendPhoto(client,message,pic,caption)
+    except:
+        caption = "**La descrizione è più lunga rispetto al limite di un messaggio Telegram.**\n__Puoi leggerla qui:__ " + pic
+        return sendPhoto(client,message,pic,caption)
     
