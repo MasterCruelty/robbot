@@ -29,13 +29,14 @@ def get_board_game_data(query,client,message):
     Restituisce i risultati della ricerca per la keyword inserita
 """
 def search_board_game(query,client,message):
-    url_search = "https://boardgamegeek.com/xmlapi/search?search=halo fleet battles the fall of reach"
+    url_search = "https://boardgamegeek.com/xmlapi/search?search=" + query
     data = requests.get(url_search)
     pattern = re.compile(r'<boardgame objectid="(\d+)">\s*<name.*?>(.*?)</name>\s*<yearpublished>(\d+)</yearpublished>', re.DOTALL)
     matches = pattern.findall(data.text)
+    result = ""
     for match in matches:
         object_id, name, year_published = match
-        result = f"Titolo: {name}\nAnno: {year_published}\nID: {object_id}\n"
+        result += f"Titolo: {name}\nAnno: {year_published}\nID: {object_id}\n" + "\n"
     return sendMessage(client,message,result)
 
 
