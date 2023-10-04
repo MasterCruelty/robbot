@@ -17,10 +17,13 @@ def get_board_game_data(query,client,message):
 
     # Trova tutte le corrispondenze nel testo XML utilizzando pattern
     matches = pattern.findall(data.text)
+    # Utilizza la tua espressione regolare per trovare tutte le corrispondenze
+
     sendMessage(client,message,matches)
     # Itera su ogni corrispondenza e stampa i risultati
     result = ""
     for match in matches:
+        sendMessage(client,message,match)
         object_id, year_published, min_players, max_players, name, description, thumbnail, image = match
         result = f"Titolo: {name}\nAnno: {year_published}\nID: {object_id}\nMin giocatori: {min_players}\nMax giocatori: {max_players}\nDescrizione: {description}\nThumbnail: {thumbnail}\nImmagine: {image}\n"
     return sendMessage(client,message,result)
