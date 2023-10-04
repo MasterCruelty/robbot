@@ -1,7 +1,7 @@
 from utils.get_config import sendMessage,get_chat,get_id_msg 
-from pyrogram import Client,filters,errors
-from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
-from pyrogram.handlers import CallbackQueryHandler
+#from pyrogram import Client,filters,errors
+#from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
+#from pyrogram.handlers import CallbackQueryHandler
 import re
 import requests
 
@@ -36,7 +36,7 @@ def search_board_game(query,client,message):
     result = ""
     for match in matches:
         object_id, name, year_published = match
-        result += f"Titolo: {name}\nAnno: {year_published}\nID: {object_id}\n" + "\n"
+        result += f"**Titolo**: __{name}__\n**Anno**: __{year_published}__\n**ID**: <code>{object_id}</code>\n" + "\n"
     return sendMessage(client,message,result)
 
 
