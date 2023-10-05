@@ -1,9 +1,10 @@
-from utils.get_config import sendMessage,get_chat,get_id_msg 
+from utils.get_config import sendPhoto,sendMessage,get_chat,get_id_msg 
 #from pyrogram import Client,filters,errors
 #from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 #from pyrogram.handlers import CallbackQueryHandler
 import re
 import requests
+from xml.etree import cElementTree as ET
 
 
 """
@@ -12,20 +13,40 @@ import requests
 def get_board_game_data(query,client,message):
     url_info = "https://boardgamegeek.com/xmlapi2/thing?id=" + query
     data = requests.get(url_info)
-    # Definisci un modello di regex per estrarre le informazioni desiderate
-    pattern = re.compile(r'<boardgame objectid="(\d+)">\s*<yearpublished>(\d+)</yearpublished>\s*<minplayers>(\d+)</minplayers>\s*<maxplayers>(\d+)</maxplayers>\s*<name.*?>(.*?)</name>\s*<description>(.*?)</description>\s*<thumbnail>(.*?)</thumbnail>\s*<image>(.*?)</image>', re.DOTALL)
 
-    # Trova tutte le corrispondenze nel testo XML utilizzando pattern
-    matches = pattern.findall(data.text)
-    # Utilizza la tua espressione regolare per trovare tutte le corrispondenze
-
-    sendMessage(client,message,matches)
-    # Itera su ogni corrispondenza e stampa i risultati
+    root = ET.fromstring(data.text)
     result = ""
-    for match in matches:
-        sendMessage(client,message,match)
-        object_id, year_published, min_players, max_players, name, description, thumbnail, image = match
-        result = f"Titolo: {name}\nAnno: {year_published}\nID: {object_id}\nMin giocatori: {min_players}\nMax giocatori: {max_players}\nDescrizione: {description}\nThumbnail: {thumbnail}\nImmagine: {image}\n"
+    categories = ""
+    publisher = ""
+    #prelevo titolo del gioco
+    title = root.find(".//name[@type='primary']").get('value')
+    #prelevo il link dell'immagine
+    img_url = root.find(".//image").text
+    #prelevo la descrizione
+    descr = root.find(".//description").text
+    #prelevo l'anno di pubblicazione
+    year = root.find(".//yearpublished").get('value')
+    #prelevo numero minimo e massimo di giocatori
+    minplayer = root.find(".//minplayers").get('value')
+    maxplayer = root.find(".//maxplayers").get('value')
+    #prelevo durata di gioco 
+    playingtime = root.find(".//playingtime").get('value')
+    minplayingtime = root.find(".//minplaytime").get('value')
+    maxplayingtime = root.find(".//maxplaytime").get('value')
+    #cerco publisher e categorie del gioco
+    #todo: boardgamemechanic, boardgameexpansion, boardgameaccessory,boardgameintegration
+    root = ET.fromstring(data.text)
+    for link in root.iter('link'):
+        link_type = link.get('type')
+        if link_type == 'boardgamepublisher':
+            publisher = link.get('value')
+        if link_type == 'boardgamecategory':
+            categories += link.get('value') + ", "
+    caption = "**" + title + "**\n\nAnno di pubblicazione:__ " + year + "\n__Publisher:__ " + publisher + "__\nCategorie:__ " + categories + "__\n"
+    result += "__" + descr + "__\n\nNumero minimo di giocatori: __ " + minplayer + "__\n"    
+    result += "**Numero massimo di giocatori**:__ " + maxplayer + "__\n**Tempo di gioco**:__ " + playingtime + " minuti__\n**Minimo**:__ " + minplayingtime + " minuti__\n"
+    result += "**Massimo**:__ " + maxplayingtime + " minuti__"
+    sendPhoto(client,message,img_url,caption)
     return sendMessage(client,message,result)
 
 """
