@@ -57,12 +57,13 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * registrare un nuovo gruppo come unico autorizzato a ricevere un certo comando: `/setgroup` <id_gruppo> <comando>
 * cancellare un gruppo salvato: `/delgroup` <id_gruppo>
 * mostrare tutti i gruppi salvati: `/listgroup`
-* modificare un valore nelle statistiche di un utente per un certo comando: `/updatestat` <id_utente> <comando> <nuovo_valore>
-* cancellare un comando dalle statistiche di un utente: `/delstat` <id_utente> <comando>
+* modificare un valore nelle statistiche di un utente per un certo comando: `/updatestat` <id_utente> 'comando' <nuovo_valore>
+* cancellare un comando dalle statistiche di un utente: `/delstat` <id_utente> 'comando'
 * Aggiornare i dati Telegram di un utente(nome e username): `/updaterobuser` <id_utente> (oppure dando lo username)
 * Aggiornare il credito di un utente per l'utilizzo di openai: `/amount` <id_utente> <valore>
 * Visualizzare l'elenco degli utenti che hanno del credito di utilizzo per openai: `/allamounts`
 * Riavviare il bot direttamente da Telegram senza passare dalla shell: `/restart`
+* Inviare un messaggio a un utente registrato: `/say` <username> ; 'messaggio'
 
 ### Dipendenze
 
@@ -104,6 +105,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Bollettini criticita idrogeologica di open data Sicilia](https://github.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica)
 * [Dati sui comuni italiani di open data Sicilia](https://github.com/opendatasicilia/comuni-italiani)
 * [Nasa apod API](https://github.com/nasa/apod-api)
+* [BGG API](https://boardgamegeek.com/wiki/page/BGG_XML_API2)
 
 # **[ENG]**
 
@@ -141,12 +143,13 @@ This json file is only in Italian, but you can translate it in every languages b
 * Save a new group to make it the only one authorized to receive a specific command: `/setgroup` <id_group> <command>
 * Delete a saved group: `/delgroup` <id_group>
 * Show all saved groups: `/listgroup`
-* Update a value in a user's stat for a specific command: `/updatestat` <id_user> <command> <new_value>
-* Delete a command from a user's stat: `/delstat` <id_user> <command>
+* Update a value in a user's stat for a specific command: `/updatestat` <id_user> 'command' <new_value>
+* Delete a command from a user's stat: `/delstat` <id_user> 'command'
 * Update user's Telergam data(name and username): `/updaterobuser` <id_user> (or giving username)
 * Update the user's credit for openai usage: `/amount` <id_user> <value>
 * Show all user and their openai credit: `/allamounts`
 * Restarting the bot directly in Telegram without manually doing in shell: `/restart`
+* Sending a message to a registered user: `/say` <id_user> ; 'message'
 
 
 ### Dependencies
@@ -190,3 +193,4 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Open data about extreme forecast event by open data Sicilia](https://github.com/opendatasicilia/DPC-bollettini-criticita-idrogeologica-idraulica)
 * [Open data about italian municipalities by Open data Sicilia](https://github.com/opendatasicilia/comuni-italiani)
 * [Nasa apod API](https://github.com/nasa/apod-api)
+* [BGG API](https://boardgamegeek.com/wiki/page/BGG_XML_API2)
