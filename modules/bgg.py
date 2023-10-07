@@ -1,7 +1,4 @@
 from utils.get_config import sendPhoto,sendMessage,get_chat,get_id_msg 
-#from pyrogram import Client,filters,errors
-#from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
-#from pyrogram.handlers import CallbackQueryHandler
 import re
 import requests
 from xml.etree import cElementTree as ET
@@ -93,5 +90,3 @@ def search_board_game(query,client,message):
         object_id, name, year_published = match
         result += f"**Titolo**: __{name}__\n**Anno**: __{year_published}__\n**ID**: <code>{object_id}</code>\n" + "\n"
     return sendMessage(client,message,result)
-
-
