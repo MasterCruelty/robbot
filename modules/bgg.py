@@ -49,9 +49,6 @@ def get_board_game_data(query,client,message):
     categories = ""
     publisher = ""
     mecha = ""
-    access = ""
-    integr = ""
-    espan = ""
     #cerco publisher, categorie del gioco, espansioni e integrazioni
     for link in root.iter('link'):
         link_type = link.get('type')
@@ -59,14 +56,8 @@ def get_board_game_data(query,client,message):
             publisher = link.get('value')
         if link_type == 'boardgamecategory':
             categories += link.get('value') + "; "
-        if link_type == 'boardgameexpansion':
-            espan += link.get('value') + "(<code>" + link.get('id') + "</code>); "
         if link_type == 'boardgamemechanic':
             mecha += link.get('value') + "; "
-        if link_type == 'boardgameaccessory':
-            access += link.get('value') + "; "
-        if link_type == 'boardgameintegration':
-            integr += link.get('value') + "(<code>" + link.get('id') + "</code>); "
     caption = "**" + title + "**\n\n**Anno di pubblicazione**:__ " + year + "__\n**Publisher**:__ " + publisher + "__\n**Categorie**:__ " + categories + "__\n"
     caption += "**Meccaniche di gioco**:__ " + mecha + "__\n\n"  
     caption += "**Numero minimo di giocatori**: __ " + minplayer + "__\n**Numero massimo di giocatori**:__ " + maxplayer + "__\n"     
