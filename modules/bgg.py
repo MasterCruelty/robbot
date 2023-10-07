@@ -8,6 +8,17 @@ from xml.etree import cElementTree as ET
 
 
 """
+    Formatta l'url per le info aggiuntive su bgg
+""" 
+def format_url(string):
+    urltitle = string.replace(" ", "-")  
+    urltitle = ''.join(carattere if carattere.isalnum() or carattere == '-' else '' for carattere in urltitle)  
+    urltitle = '-'.join(filter(None, urltitle.split('-')))   
+    urltitle = urltitle.lower()
+    return urltitle
+
+
+"""
    Restituisce i dati del gioco da tavolo richiesto.
 """
 def get_board_game_data(query,client,message):
@@ -15,12 +26,14 @@ def get_board_game_data(query,client,message):
     data = requests.get(url_info)
 
     root = ET.fromstring(data.text)
-    #prelevo titolo del gioco
+    #prelevo titolo del gioco e creo url per info aggiuntive
     title = root.find(".//name[@type='primary']").get('value')
+    urlbggdescr = "https://boardgamegeek.com/boardgame/" + query + "/" + format_url(title) 
+    urlbggexp = urlbggdescr + "/expansions"
+    urlbggintegrate = urlbggexp.replace("expansions","linkeditems/integrateswith")
+    urlbggaccess = urlbggintegrate.replace("integrateswith","accessories")
     #prelevo il link dell'immagine
     img_url = root.find(".//image").text
-    #prelevo la descrizione
-    descr = root.find(".//description").text
     #prelevo l'anno di pubblicazione
     year = root.find(".//yearpublished").get('value')
     #prelevo numero minimo e massimo di giocatori
@@ -31,6 +44,10 @@ def get_board_game_data(query,client,message):
     minplayingtime = root.find(".//minplaytime").get('value')
     maxplayingtime = root.find(".//maxplaytime").get('value')
     #prelevo statistiche sul gioco da parte degli utenti su bgg
+    rank = root.find(".//usersrated").get('value')
+    avg = str(round(float(root.find(".//average").get('value')),2))
+    avgweight = str(round(float(root.find(".//averageweight").get('value')),2))
+
     result = ""
     categories = ""
     publisher = ""
@@ -52,15 +69,16 @@ def get_board_game_data(query,client,message):
         if link_type == 'boardgameaccessory':
             access += link.get('value') + "; "
         if link_type == 'boardgameintegration':
-            integr += link.get('value') + "; "
+            integr += link.get('value') + "(<code>" + link.get('id') + "</code>); "
     caption = "**" + title + "**\n\n**Anno di pubblicazione**:__ " + year + "__\n**Publisher**:__ " + publisher + "__\n**Categorie**:__ " + categories + "__\n"
-    caption += "**Meccaniche di gioco**:__ " + mecha + "__\n**Accessori**:__" + access + "__\n**Integrazioni**:__" + integr + "__\n\n"  
-    caption += "**Numero minimo di giocatori**: __ " + minplayer + "__\n**Numero massimo di giocatori**:__" + maxplayer + "__\n"     
+    caption += "**Meccaniche di gioco**:__ " + mecha + "__\n\n"  
+    caption += "**Numero minimo di giocatori**: __ " + minplayer + "__\n**Numero massimo di giocatori**:__ " + maxplayer + "__\n"     
     caption += "**Tempo di gioco**:__ " + playingtime + " minuti__\n**Minimo**:__ " + minplayingtime + " minuti__\n"
-    caption += "**Massimo**:__ " + maxplayingtime + " minuti__\n"
-    #result += "__" + descr + "__"    
+    caption += "**Massimo**:__ " + maxplayingtime + " minuti__\n\n"
+    caption += "**Ranking**: __" + rank + "__\n**Voto medio**: __" + avg + "__\n**Complessità**: __" + avgweight + "\nLa complessità è un valore compreso tra 1 e 5 che indica quanto è difficile imparare a giocare.__\n"  
+    result += "**Descrizione**: " + urlbggdescr + "\n**Espansioni**: " + urlbggexp + "\n**Integrazioni**: " + urlbggintegrate + "\n**Accessori**: " + urlbggaccess   
     sendPhoto(client,message,img_url,caption)
-    #return sendMessage(client,message,result)
+    return sendMessage(client,message,result)
 
 """
     Restituisce i risultati della ricerca per la keyword inserita
