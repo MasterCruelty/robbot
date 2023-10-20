@@ -46,10 +46,14 @@ def search_line(line_number,client,message):
 def get_time_table(client,message,pdf_url):
     pdf_data = requests.get(pdf_url)
     img_data = pdf2image.convert_from_bytes(pdf_data.content,fmt="png")
-    with io.BytesIO() as img_buffer:
-        img_data[0].save(img_buffer,format="PNG")
-        img_buffer.name = "time_table.png"
-        sendPhoto(client,message,img_buffer,"__Il tempo d'attesa non è disponibile, ecco la tabella degli orari__")
+    if img_data:
+        for i, img in enumerate(img_data):
+            with io.BytesIO() as img_buffer:
+                img.save(img_buffer, format="PNG")
+                img_buffer.name = f"time_table_page_{i + 1}.png"
+                sendPhoto(client, message, img_buffer, "__Pagina {} della tabella degli orari__".format(i + 1))
+    else:
+        sendMessage(client,message,"__Nessun pdf degli orari trovato per questa fermata.__")
 
 """
     Dato un codice fermata, vengono fornite le informazioni relative a quella fermata contattando direttamente il server atm
