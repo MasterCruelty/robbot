@@ -27,6 +27,7 @@ import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
 
+#Dizionario con l'elenco dei comandi utente
 dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/map'            : modules.gmaps.showmaps,
                     '/km'             : modules.gmaps.execute_km,
@@ -71,6 +72,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/bgg'            : modules.bgg.get_board_game_data,
                     '/helprob'        : usys.help}
 
+#Dizionario con l'elenco dei comandi admin
 dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/playlotto'      : usys.play_lotto,
                     '/ai'             : modules.openai.openai_completion,
@@ -78,6 +80,7 @@ dictionary_admin = {'/getmessage'     : usys.get_message,
                     '/aimg'           : modules.openai.openai_dalle,
                     '/pingrob'        : usys.ping}
 
+#Dizionario con l'elenco dei comandi superadmin
 dictionary_super = {'/setrobuser'     : udb.set_user,
                     '/delrobuser'     : udb.del_user,
                     '/updaterobuser'  : udb.update_user,
@@ -132,7 +135,7 @@ def parser(message):
     temp = message.split(" ",1)
     try:
         result = temp[1]
-    except:
+    except IndexError:
         result = temp[0]
     return result
 
