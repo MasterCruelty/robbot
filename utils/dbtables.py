@@ -14,6 +14,13 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+"""
+    id_user: id utente
+    name: nome utente
+    username: username telegram utente
+    admin: bool(1 è admin, 0 non lo è)
+    superadmin: bool(1 è superadmin, 0 non lo è)
+""" 
 class User(BaseModel):
     id_user = IntegerField(unique = True)
     name = CharField()
