@@ -49,7 +49,7 @@ Restituisce l'id utente
 def get_id_user(message):
     try:
         return message.from_user.id
-    except:
+    except AttributeError:
         return "id utente non disponibile"
 """
 Restituisce l'id della chat
@@ -75,7 +75,7 @@ Restituisce il nome utente
 def get_first_name(message):
     try:
         return message.from_user.first_name
-    except:
+    except AttributeError:
         return "Nome utente non disponibile"
 """
 Restituisce username dell'utente
@@ -83,7 +83,7 @@ Restituisce username dell'utente
 def get_username(message):
     try:
         return "@" + message.from_user.username
-    except:
+    except AttributeError:
         return "Non impostato"
 
 """
