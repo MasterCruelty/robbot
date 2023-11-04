@@ -82,7 +82,7 @@ Restituisce username dell'utente
 """
 def get_username(message):
     try:
-        return "@" + message.from_user.username
+        return "@" + str(message.from_user.username)
     except AttributeError:
         return "Non impostato"
 
