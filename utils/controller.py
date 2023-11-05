@@ -23,6 +23,7 @@ import modules.passport
 import modules.weatherextreme
 import modules.space
 import modules.bgg
+import modules.flight
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -70,6 +71,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/apod'           : modules.space.get_daily_apod,
                     '/bggsearch'      : modules.bgg.search_board_game,
                     '/bgg'            : modules.bgg.get_board_game_data,
+                    '/flight'         : modules.flight.get_flight_info,
                     '/helprob'        : usys.help}
 
 #Dizionario con l'elenco dei comandi admin
