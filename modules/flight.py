@@ -17,6 +17,7 @@ def get_flight_info(query,client,message):
         return sendMessage(client,message,"__Non risulta nessun volo in atto con quel numero al momento.__")
 
     flight_number = flight_data['identification']['number']['default']
+    aircraft_model = flight_data['aircraft']['model']['text']
     origin = flight_data['airport']['origin']['name']
     destination = flight_data['airport']['destination']['name']
     scheduled_departure = flight_data['time']['scheduled']['departure']
@@ -37,7 +38,8 @@ def get_flight_info(query,client,message):
     img = flight['result']['response']['aircraftImages'][0]['images']['thumbnails'][0]['src']
 
     flight_info = f"__Flight__: **{flight_number}**\n"
-    flight_info = f"__Airline__: **{flight_airline}**\n"
+    flight_info += f"__Airline__: **{flight_airline}**\n"
+    flight_info += f"__Aircraft model__: **{aircraft_model}**\n"
     flight_info += f"__Origin__: **{origin}**\n"
     flight_info += f"__Destination__: **{destination}**\n"
     flight_info += f"__Scheduled Departure__: **{scheduled_departure}**\n"
