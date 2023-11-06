@@ -3,7 +3,9 @@ from pyrogram import Client,errors
 import flightradar24
 import datetime
 
-
+"""
+    Restituisce informazioni relative al volo richiesto dato il numero di volo
+"""
 def get_flight_info(query,client,message):
     fr = flightradar24.Api()
     flight = fr.get_flight(query)
@@ -48,3 +50,20 @@ def get_flight_info(query,client,message):
     flight_info += "__Scheduled duration__: **" + formatted_duration + "**\n"
     flight_info += f"Flight Status: **{flight_status}**\n"
     sendPhoto(client,message,img,flight_info)
+
+"""
+    Restituisce i dati principali di una compagnia aerea data la parola chiave
+"""
+def get_airlines_info(query,client,message):
+    query = query.title()
+    fr = flightradar24.Api()
+    airlines = fr.get_airlines()
+    result = ""
+    for i in range(len(airlines["rows"])):
+        if query in airlines["rows"][i]['Name']:
+            result = "**Nome**: <code>" + airlines["rows"][i]['Name'] + "</code>\n**ICAO**: <code>" + airlines["rows"][i]['ICAO'] + "</code>"
+    if result != "": 
+        sendMessage(client,message,result)
+    else:
+        sendMessage(client,message,"__Nessuna compagnia aerea trovata.__")
+
