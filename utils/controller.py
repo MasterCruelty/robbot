@@ -72,6 +72,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/bggsearch'      : modules.bgg.search_board_game,
                     '/bgg'            : modules.bgg.get_board_game_data,
                     '/flight'         : modules.flight.get_flight_info,
+                    '/airline'        : modules.flight.get_airlines_info,
                     '/helprob'        : usys.help}
 
 #Dizionario con l'elenco dei comandi admin
