@@ -1,5 +1,6 @@
 from utils.get_config import sendMessage,sendPhoto
 from pyrogram import Client,errors
+from FlightRadar24 import FlightRadar24API
 import flightradar24
 import datetime
 
@@ -56,12 +57,12 @@ def get_flight_info(query,client,message):
 """
 def get_airlines_info(query,client,message):
     query = query.title()
-    fr = flightradar24.Api()
+    fr = FlightRadar24API()
     airlines = fr.get_airlines()
     result = ""
-    for i in range(len(airlines["rows"])):
-        if query in airlines["rows"][i]['Name']:
-            result = "**Nome**: <code>" + airlines["rows"][i]['Name'] + "</code>\n**ICAO**: <code>" + airlines["rows"][i]['ICAO'] + "</code>"
+    for i in range(len(airlines)):
+        if query in airlines[i]['Name']:
+            result += "**Nome**: <code>" + airlines[i]['Name'] + "</code>\n**ICAO**: <code>" + airlines[i]['ICAO'] + "</code>\n"
     if result != "": 
         sendMessage(client,message,result)
     else:
