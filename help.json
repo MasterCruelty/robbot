@@ -56,6 +56,6 @@
 	"passaporti": "** /passport 'nation' ** => restituisce info basilari sul passaporto selezionato.\n",
 	"nasa":"** /apod ** => restituisce l'immagine giornaliera apod(Astronomy Picture of the Day) dalle api della Nasa.",
 	"bgg":"** /bggsearch 'game' ** => restituisce i risultati della ricerca.\n **/bgg 'id' ** => restituisce i dati del gioco richiesto",
-	"flighradar": "** /flight 'numero volo' ** => restituisce alcuni dati sul volo se ne esiste uno in real time al momento. \n",
+	"flightradar": "** /flight 'numero volo' ** => restituisce alcuni dati sul volo se ne esiste uno in real time al momento. \n",
     "default": "Cerca un comando in particolare come ad esempio:\n /helprob wiki\n__Comandi: wiki, lyrics, covid, vaccine,  weather, urban, poll, reminder, tper, atm, treni, kart, trivial, stats, terremoti, ral, animali, video, latex, passaporti, nasa, bgg, flightradar e mappe.\n\ncomandi admin: **playlotto, getmessage, openai e pingrob.**\nVuoi usarli? Diventa un utente premium! Contatta @MasterCruelty__"
 }
