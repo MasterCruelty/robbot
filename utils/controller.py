@@ -74,6 +74,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/bgg'            : modules.bgg.get_board_game_data,
                     '/flight'         : modules.flight.get_flight_info,
                     '/airline'        : modules.flight.get_airlines_info,
+                    '/airport'        : modules.flight.get_airport_info,
                     '/joke'           : modules.jokes.get_random_joke,
                     '/helprob'        : usys.help}
 
