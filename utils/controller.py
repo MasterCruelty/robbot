@@ -24,6 +24,7 @@ import modules.weatherextreme
 import modules.space
 import modules.bgg
 import modules.flight
+import modules.jokes
 import utils.dbfunctions as udb
 import utils.sysfunctions as usys
 import utils.get_config as ugc
@@ -73,6 +74,7 @@ dictionary = {      '/wiki'           : modules.wiki.execute_wiki,
                     '/bgg'            : modules.bgg.get_board_game_data,
                     '/flight'         : modules.flight.get_flight_info,
                     '/airline'        : modules.flight.get_airlines_info,
+                    '/joke'           : modules.jokes.get_random_joke,
                     '/helprob'        : usys.help}
 
 #Dizionario con l'elenco dei comandi admin
