@@ -12,12 +12,14 @@ def get_flight_info(query,client,message):
     flight = fr.get_flight(query)
     flight_info = ""
     flight_data = []
+    #Getting only flight with estimated arrive or departure
     for i in range(len(flight['result']['response']['data'])):
         if "estimated" in flight['result']['response']['data'][i]['status']['generic']['status']['text']:
             flight_data.append(flight['result']['response']['data'][i])
     if flight_data == []:
         return sendMessage(client,message,"__Non risulta nessun volo in atto con quel numero al momento.__")
-
+    
+    #building result string for every flight matching my policy(estimated)
     for i in range(len(flight_data)):
         flight_number = flight_data[i]['identification']['number']['default']
         aircraft_model = flight_data[i]['aircraft']['model']['text']
@@ -59,6 +61,7 @@ def get_airlines_info(query,client,message):
     fr = FlightRadar24API()
     airlines = fr.get_airlines()
     result = ""
+    #I look for every airline matching my request
     for i in range(len(airlines)):
         if query in airlines[i]['Name']:
             result += "**Nome**: <code>" + airlines[i]['Name'] + "</code>\n**IATA**: <code>" + airlines[i]['Code'] + "</code>\n**ICAO**: <code>" + airlines[i]['ICAO'] + "</code>\n"
@@ -78,6 +81,7 @@ def get_airport_info(query,client,message):
         airport = airport["airport"]["pluginData"]
     except KeyError:
         return sendMessage(client,message,"__Errore nella richiesta dell'aereoporto.__")
+    #building different strings and collecting airport data
     name = "__" + str(airport["details"]["name"]) + "__ (<code>" + str(airport["details"]["code"]["iata"]) + "</code>)\n"
     rating = "**Media**: __" + str(airport["flightdiary"]["ratings"]["avg"]) + "__\n**Totale voti**: __" + str(airport["flightdiary"]["ratings"]["total"]) + "__\n" 
     aircrafts_ground = "**Totale aerei a terra**: __" + str(airport["aircraftCount"]["ground"]) + "__\n"
@@ -92,7 +96,8 @@ def get_airport_info(query,client,message):
             airlines_data += "<code>" + str(airline_data["name"]) + "</code>; " 
     except:
         airlines_data += "__None__"
-
+    
+    #collecting data about arrival and departure flights
     arrivals = airport["schedule"]["arrivals"]["data"]
     arrivals_data = "\n**Numeri voli in arrivo**:\n"
     for i in range(len(arrivals)):
