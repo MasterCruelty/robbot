@@ -76,6 +76,8 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * urbandictionary
 * pdf2image
 * pytube
+* flightradar24
+* FlightRadarAPI
 
 ### Progetti esterni usati
 
@@ -106,6 +108,9 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [Dati sui comuni italiani di open data Sicilia](https://github.com/opendatasicilia/comuni-italiani)
 * [Nasa apod API](https://github.com/nasa/apod-api)
 * [BGG API](https://boardgamegeek.com/wiki/page/BGG_XML_API2)
+* [flightradar24](https://github.com/mkorkmaz/flightradar24)
+* [FlightRadarAPI](https://github.com/JeanExtreme002/FlightRadarAPI)
+* [Joke API](https://sv443.net/jokeapi/v2/)
 
 # **[ENG]**
 
@@ -163,6 +168,8 @@ This json file is only in Italian, but you can translate it in every languages b
 * urbandictionary
 * pdf2image
 * pytube
+* flightradar24
+* FlightRadarAPI
 
 
 ### External projects used
@@ -194,3 +201,6 @@ This json file is only in Italian, but you can translate it in every languages b
 * [Open data about italian municipalities by Open data Sicilia](https://github.com/opendatasicilia/comuni-italiani)
 * [Nasa apod API](https://github.com/nasa/apod-api)
 * [BGG API](https://boardgamegeek.com/wiki/page/BGG_XML_API2)
+* [flightradar24](https://github.com/mkorkmaz/flightradar24)
+* [FlightRadarAPI](https://github.com/JeanExtreme002/FlightRadarAPI)
+* [Joke API](https://sv443.net/jokeapi/v2/)
