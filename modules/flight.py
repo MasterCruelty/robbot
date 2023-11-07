@@ -34,7 +34,6 @@ def get_flight_info(query,client,message):
     duration = scheduled_arrival - scheduled_departure
     hours, seconds = divmod(duration.seconds, 3600)
     minutes, seconds = divmod(seconds, 60)
-    duration_real = flight_data['time']['other']['duration']
     
     formatted_duration = f"{hours}:{minutes}"
 
