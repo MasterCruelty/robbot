@@ -13,10 +13,12 @@ import io
 config = get_config_file("config.json")
 api_url = config["api_url"]
 api_get = config["api_get"]
+cookie = config["cookie"]
 headers = { "Origin": "https://giromilano.atm.it/",
             "Referer": "https://giromilano.atm.it/",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
           }
+cookies = {'cookie_name': cookie}
 
 #strighe costanti da usare in certe situazioni
 not_available = "Non disponibile"
@@ -163,7 +165,7 @@ Fa la richiesta al server atm e restituisce il json corrispondente.
 def get_json_atm(stop_code):
     data = {"url": "tpPortal/geodata/pois/stops/" + stop_code + "?lang=it".format()}
     try:
-        resp = requests.post(api_url,data = data,headers = headers)
+        resp = requests.post(api_url,data = data,headers = headers,cookies = cookies)
     except requests.exceptions.ConnectionError as e:
         return "__Troppe richieste, riprova tra poco.__"
     return resp
@@ -175,7 +177,7 @@ def search_stop(query):
     data = {"url": "tpPortal/tpl/stops/search/" + query + "".format()}
     stops = []
     try:
-        for stop in (requests.post(api_url,data = data,headers = headers)).json():
+        for stop in (requests.post(api_url,data = data,headers = headers,cookies=cookies)).json():
             stops.append(stop)
     except:
         result = "__Nessuna fermata trovata.__"
