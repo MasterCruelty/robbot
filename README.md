@@ -29,7 +29,7 @@ Per un corretto funzionamento è necessario compilare a dovere il file ```config
 
 * Api keys di Telegram: ```api_id``` e ```api_hash```. Puoi generarle da [qui](https://my.telegram.org/apps)
 * Bot token: ```bot_token```. Puoi generarlo da [qui](https://t.me/BotFather)
-* Api url atm se si vogliono usare le loro api: ```api_url``` e ```api_get```. (Non essendo pubbliche non le condividerò)
+* Api url atm se si vogliono usare le loro api: ```api_url``` , ```api_get``` e ```cookie```. (Non essendo pubbliche non le condividerò)
 * Api key di OpenWeatherMap: ```api_weather```. Puoi generare la tua key dal sito principale di [OpenWeatherMap](https://openweathermap.org/)
 * Api di OpenAI: ```api_openai```. Puoi generare la tua key dal sito principale di [OpenAI](https://www.openai.com)
 * I dati telegram dell'amministratore del bot: ```id_super_admin```.
@@ -120,7 +120,7 @@ The correct way to setup this bot is to compile the file  ```config.json```. So 
 
 * Telegram api keys: ```api_id``` e ```api_hash```. You can generate them [here](https://my.telegram.org/apps)
 * Telegram bot token: ```bot_token```. You can generate it from [here](https://t.me/BotFather)
-* Atm api url if you wanna use their api: ```api_url``` e ```api_get```. (The api are not public so I won't share them here)
+* Atm api url if you wanna use their api: ```api_url``` , ```api_get``` and ```cookie```. (The api are not public so I won't share them here)
 * OpenWeatherMap api key: ```api_weather```. You can generate your key from the [OpenWeatherMap website.](https://openweathermap.org/)
 * OpenAI api key: ```api_openai```. You can generate your key from the [OpenAI](https://www.openai.com) website.
 * Telegram data of the owner of the bot: ```id_super_admin```.
