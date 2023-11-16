@@ -4,6 +4,7 @@
 	"bot_token": "YOUR BOT TOKEN",
 	"api_url": "ATM MILANO API URL",
 	"api_get": "ANOTHER ATM API URL TO DO ONLY GET",
+	"cookie": "cookie atm",
 	"api_weather":"OPEN WEATHER MAP API",
 	"api_openai":"OPENAI API KEY",
 	"id_super_admin": "ID_USER;NAME_USER;USERNAME_USER",
