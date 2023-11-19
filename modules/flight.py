@@ -88,7 +88,6 @@ def get_airport_info(query,client,message):
     except TypeError:
         rating = "-"
     aircrafts_ground = "**Totale aerei a terra**: __" + str(airport["aircraftCount"]["ground"]) + "__\n"
-    aircrafts_ground = "-"
     runways = airport["runways"]
     tot_runways = str(len(runways))
     runways_data = "\n**Totale Piste:** __" + tot_runways + "__\n"
