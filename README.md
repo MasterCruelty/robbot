@@ -69,6 +69,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 
 * Pyrogram
 * tgcrypto
+* peewee
 * utils_config
 * geopy
 * bs4
@@ -164,6 +165,7 @@ This json file is only in Italian, but you can translate it in every languages b
 
 * Pyrogram
 * tgcrypto
+* peewee
 * utils_config
 * geopy
 * bs4
