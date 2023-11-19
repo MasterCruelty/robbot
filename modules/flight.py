@@ -83,8 +83,12 @@ def get_airport_info(query,client,message):
         return sendMessage(client,message,"__Errore nella richiesta dell'aereoporto.__")
     #building different strings and collecting airport data
     name = "__" + str(airport["details"]["name"]) + "__ (<code>" + str(airport["details"]["code"]["iata"]) + "</code>)\n"
-    rating = "**Media**: __" + str(airport["flightdiary"]["ratings"]["avg"]) + "__\n**Totale voti**: __" + str(airport["flightdiary"]["ratings"]["total"]) + "__\n" 
+    try:
+        rating = "**Media**: __" + str(airport["flightdiary"]["ratings"]["avg"]) + "__\n**Totale voti**: __" + str(airport["flightdiary"]["ratings"]["total"]) + "__\n" 
+    except TypeError:
+        rating = "-"
     aircrafts_ground = "**Totale aerei a terra**: __" + str(airport["aircraftCount"]["ground"]) + "__\n"
+    aircrafts_ground = "-"
     runways = airport["runways"]
     tot_runways = str(len(runways))
     runways_data = "\n**Totale Piste:** __" + tot_runways + "__\n"
@@ -94,7 +98,7 @@ def get_airport_info(query,client,message):
     try:
         for airline_code, airline_data in airlines["codeshare"].items():
             airlines_data += "<code>" + str(airline_data["name"]) + "</code>; " 
-    except:
+    except AttributeError:
         airlines_data += "__None__"
     
     #collecting data about arrival and departure flights
