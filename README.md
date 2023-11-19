@@ -40,6 +40,11 @@ Per un corretto funzionamento è necessario compilare a dovere il file ```config
 I dati del super admin servono a colui che potrà usare le funzioni di interazione con il database e altre funzioni particolari.
 I nomi dei comandi da inserire nel ```config.json``` possono essere ricopiati dal codice oppure possono essere modificati sul codice e poi ricopiati nel file json.	
 
+Se siete su un'ambiente totalmente a linea di comando e vi accedete in ssh, consiglio il seguente comando per avviare il bot:
+```ruby
+python3 app.py 2>&1 > /dev/tty1 &
+```
+
 ### Come funzionano i comandi utente del bot
 
 Il funzionamento dei comandi utente è spiegato all'interno del file ```help.json```. Si tratta del file che viene usato dal bot per rispondere al comando ```/helprob <nome comando>```.
@@ -139,6 +144,11 @@ Name of commands to put inside ```config.json``` can be copied from source code 
 
 The features of the user commands are explained inside ```help.json```. It is the file which is used by the bot to reply at ```/helprob <command name>```.
 This json file is only in Italian, but you can translate it in every languages by changing the correct fields with your translations or even making the bot multi-language but in that case you have to develop the component for change the language runtime.
+
+If you're in a command-line env and you access with ssh, I suggest the following command to start the bot:
+```ruby
+python3 app.py 2>&1 > /dev/tty1 &
+```
 
 ### How the admin/super commands works
 
