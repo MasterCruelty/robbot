@@ -9,6 +9,7 @@ from pyrogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 from pyrogram.handlers import CallbackQueryHandler
 import pdf2image
 import io
+import re
 
 config = get_config_file("config.json")
 api_url = config["api_url"]
@@ -53,10 +54,24 @@ def get_time_table(client,message,pdf_url):
             with io.BytesIO() as img_buffer:
                 img.save(img_buffer, format="PNG")
                 img_buffer.name = f"time_table_page_{i + 1}.png"
-                sendPhoto(client, message, img_buffer, "__Pagina {} della tabella degli orari__".format(i + 1))
+                sendPhoto(client, message, img_buffer, "__Tabella degli orari per la linea {}__".format(estrai_numero_linea(pdf_url)))
     else:
         sendMessage(client,message,"__Nessun pdf degli orari trovato per questa fermata.__")
 
+"""
+    funzione ausiliaria per estrarre il numero della linea dal link della time table.
+    Utilizzata in get_time_table
+"""
+def estrai_numero_linea(link):
+    # Utilizza un'espressione regolare per cercare il numero della linea nel link
+    match = re.search(r'(\d+)_\d+\.pdf', link)
+
+    if match:
+        # Restituisci il primo gruppo corrispondente (il numero della linea)
+        return match.group(1)
+    else:
+        # Restituisci None se non viene trovato nessun match
+        return None
 """
     Dato un codice fermata, vengono fornite le informazioni relative a quella fermata contattando direttamente il server atm
     Dedicato ai dati delle fermate di mezzi di superficie/metro. Riporta dati parziali su altri tipi di richieste.
