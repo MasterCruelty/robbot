@@ -68,6 +68,8 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 ### Dipendenze
 
 * Pyrogram
+* tgcrypto
+* utils_config
 * geopy
 * bs4
 * wikipedia
@@ -160,6 +162,8 @@ This json file is only in Italian, but you can translate it in every languages b
 ### Dependencies
 
 * Pyrogram
+* tgcrypto
+* utils_config
 * geopy
 * bs4
 * wikipedia
