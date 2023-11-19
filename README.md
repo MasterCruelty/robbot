@@ -74,6 +74,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * bs4
 * wikipedia
 * pandas
+* matplotlib
 * openai
 * urbandictionary
 * pdf2image
@@ -168,6 +169,7 @@ This json file is only in Italian, but you can translate it in every languages b
 * bs4
 * wikipedia
 * pandas
+* matplotlib
 * openai
 * urbandictionary
 * pdf2image
