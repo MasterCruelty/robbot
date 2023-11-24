@@ -87,6 +87,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * pytube
 * flightradar24
 * FlightRadarAPI
+* pokebase
 
 ### Progetti esterni usati
 
@@ -120,6 +121,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [flightradar24](https://github.com/mkorkmaz/flightradar24)
 * [FlightRadarAPI](https://github.com/JeanExtreme002/FlightRadarAPI)
 * [Joke API](https://sv443.net/jokeapi/v2/)
+* [PokeAPI Python wrapper](https://github.com/PokeAPI/pokebase)
 
 # **[ENG]**
 
@@ -188,6 +190,7 @@ python3 app.py 2>&1 > /dev/tty1 &
 * pytube
 * flightradar24
 * FlightRadarAPI
+* pokebase
 
 
 ### External projects used
@@ -222,3 +225,4 @@ python3 app.py 2>&1 > /dev/tty1 &
 * [flightradar24](https://github.com/mkorkmaz/flightradar24)
 * [FlightRadarAPI](https://github.com/JeanExtreme002/FlightRadarAPI)
 * [Joke API](https://sv443.net/jokeapi/v2/)
+* [PokeAPI Python wrapper](https://github.com/PokeAPI/pokebase)
