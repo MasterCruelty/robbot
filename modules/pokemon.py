@@ -57,9 +57,9 @@ def get_pokemon_info(query,client,message):
     result += "\nAltezza: **{}** metri".format(pokemon_info['height'])
     result += "\nGenerazione: **{}**".format(pokemon_info['generation'])
     result += "\nNumero nel Pokédex: **{}**".format(pokemon_info['pokedex_number'])
-    result += "\nAbilità: **{}**".format(', '.join(pokemon_info['abilities']))
-    result += "\nAlcune mosse: **{}**".format(', '.join(pokemon_info['moves']))
-    result += "\nAlcune località: **{}**".format(', '.join(pokemon_info['locations']))
+    result += "\n\nAbilità: **{}**".format(', '.join(pokemon_info['abilities']))
+    result += "\n\nAlcune mosse: **{}**".format(', '.join(pokemon_info['moves']))
+    result += "\n\nAlcune località: **{}**".format(', '.join(pokemon_info['locations']))
     if 'description' in pokemon_info:
         result += "\nDescrizione: __{}__".format(pokemon_info['description'])
     else:
