@@ -214,7 +214,7 @@ def handle_except(resp):
     try:
         data_json = resp.json()
     except:
-        result = "404: page not found"
+        result = "Funzione non più supportata fino a data da destinarsi"
         return result
     return data_json
 
