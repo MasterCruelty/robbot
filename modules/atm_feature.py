@@ -15,7 +15,7 @@ config = get_config_file("config.json")
 api_url = config["api_url"]
 api_get = config["api_get"]
 cookie = config["cookie"]
-headers = { "Origin": "https://giromilano.atm.it/",
+headers = { "Origin": "https://giromilano.atm.it",
             "Referer": "https://giromilano.atm.it/",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
           }
@@ -84,6 +84,9 @@ def get_stop_info(stop_code,client=None,message=None):
         checkT = True
     resp = get_json_atm(stop_code)
     data_json = handle_except(resp)
+    #############################
+    sendMessage(client,message,data_json)
+    #############################
     if str(data_json).startswith("404") or "riprova tra poco" in str(data_json):
         return sendMessage(client,message,data_json)
     descrizione = data_json["Description"]
