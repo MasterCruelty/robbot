@@ -75,7 +75,10 @@ def wiki(keyword,client,message,lang="it"):
    wiki = wikipediaapi.Wikipedia('Robbot (example@ex.com)',lang,extract_format=wikipediaapi.ExtractFormat.WIKI) 
    page = wiki.page(keyword)
    result = "**" + page.title.title() +"**\n" 
-   result += page.summary[0:300] + "\n" + create_link_wikiapi(page)
+   try:
+       result += page.summary[0:300] + "\n" + create_link_wikiapi(page)
+   except KeyError:
+       result = "__Pagina non trovata__"
    return ugc.sendMessage(client,message,result)
 
 
@@ -89,7 +92,10 @@ def wikiall(keyword,client,message,lang="it"):
        return result
    result = "**" + page.title.title() + "**\n"
    result += page.text
-   result += "\n"+create_link_wikiapi(page)
+   try:
+       result += "\n"+create_link_wikiapi(page)
+   except KeyError:
+        result = "__Pagina non trovata__"
    return ugc.sendMessage(client,message,result)
 
 
