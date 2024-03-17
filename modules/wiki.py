@@ -1,16 +1,19 @@
 import wikipedia
+import wikipediaapi
 from pyrogram import Client
 import utils.get_config as ugc
 import utils.controller as uct
 from bs4 import BeautifulSoup
 
-
+wiki_link_starttext = "<a href="
+wiki_link_endtext = ">Guarda su Wikipedia</a>"
 
 #Restituisce il parametro lingua
 def get_lang(query):
     parole = query.split(" ")
     lingua = parole[0]
     return lingua
+
 #restituisce le parole chiavi della ricerca eliminando la lingua
 def get_keyword(query):
     words = query.split(" ")
@@ -24,8 +27,15 @@ def get_keyword(query):
 def create_link(keyword,lang):
     wikipedia.set_lang(lang)
     page = wikipedia.page(keyword)
-    link = "<a href="+page.url+">Guarda su Wikipedia</a>"
+    link = wiki_link_starttext + page.url + wiki_link_endtext
     return link
+
+#come sopra ma compatibile con la seconda libreria utilizzata "wikipediaapi"
+def create_link_wikiapi(page):
+    url = page.fullurl
+    link = wiki_link_starttext + url + wiki_link_endtext
+    return link
+    
 
 #Questa funzione esegue il comando wiki richiesto dall'app principale fetchato tramite la funzione in system.py
 @Client.on_message()
@@ -47,6 +57,7 @@ def execute_wiki(query,client,message):
     else:
         return wiki(word,client,message,lingua)
 
+
 #Esegue le funzioni wiki ma con lingua italiana come default
 def exec_wiki_ita(query,client,message):
     if "all " in query:
@@ -57,32 +68,38 @@ def exec_wiki_ita(query,client,message):
     else:
         return wiki(query,client,message)
 
+
+
 #data la lingua e la parola chiave da cercare, restituisce una frase della voce trovata
 def wiki(keyword,client,message,lang="it"):
-   wikipedia.set_lang(lang)
+   wiki = wikipediaapi.Wikipedia('Robbot (example@ex.com)',lang,extract_format=wikipediaapi.ExtractFormat.WIKI) 
+   page = wiki.page(keyword)
+   result = "**" + page.title.title() +"**\n" 
    try:
-       result = wikipedia.summary(keyword,sentences = 1) 
-       result += "\n"+create_link(keyword,lang)
-   except wikipedia.exceptions.DisambiguationError as wd:
-       result =  str(wd)
-   except wikipedia.exceptions.PageError as err:
-       result = str(err)
+       result += page.summary[0:300] + "\n" + create_link_wikiapi(page)
+   except KeyError:
+       result = "__Pagina non trovata__"
    return ugc.sendMessage(client,message,result)
-#data la lingua e la parola chiave da cercare, restituisce il numero massimo di frasi(limite della libreria) della voce trovata
+
+
+
+#data la lingua e la parola chiave da cercare, restituisce i primi paragrafi della voce trovata
 def wikiall(keyword,client,message,lang="it"):
-   wikipedia.set_lang(lang)
+   wiki = wikipediaapi.Wikipedia('Robbot (example@ex.com)',lang,extract_format=wikipediaapi.ExtractFormat.WIKI) 
+   page = wiki.page(keyword)
    if "-r" in keyword:
        result = wikirandom(10,client,message,lang)
        return result
+   result = "**" + page.title.title() + "**\n"
+   result += page.text
    try:
-       result = wikipedia.summary(keyword,sentences = 10)
-       result = result.replace("==","****")
-       result += "\n"+create_link(keyword,lang)
-   except wikipedia.exceptions.DisambiguationError as wd:
-       result =  "Forse volevi cercare: {0}".format(str(wd)[18:])
-   except wikipedia.exceptions.PageError as err:
-       result = str(err)
+       result += "\n"+create_link_wikiapi(page)
+   except KeyError:
+        result = "__Pagina non trovata__"
    return ugc.sendMessage(client,message,result)
+
+
+
 #data la lingua restituisce una frase di una pagina wikipedia casuale
 def wikirandom(sents,boole,client,message,lang="it"):
     wikipedia.set_lang(lang)
@@ -94,6 +111,9 @@ def wikirandom(sents,boole,client,message,lang="it"):
     else:
         result += "\n"+create_link(random,lang)
         return ugc.sendMessage(client,message,result)
+
+
+
 #Simpatica funzione che cerca un comune su Wikipedia e ne restituisce i dati evidenziando numero abitanti e numero pagine visitate per trovarlo.
 #Il numero di abitanti viene recuperato direttamente dalla pagina html tramite l'uso della zuppa
 @Client.on_message()
@@ -134,6 +154,6 @@ def comune(client,message):
             break
     result = "**" + title + "**" + "\n" + result + "\n\n" + "**" + "Abitanti:** " + "**" + abitanti + "**" + "\n\n__Voci consultate:__ " + str(count)
     title = title.replace(" ","_")
-    link = "<a href="+page.url+">Guarda su Wikipedia</a>"
+    link = wiki_link_starttext + page.url + wiki_link_endtext
     client.edit_message_text(chat,id_messaggio+1,result + "\n" + link,disable_web_page_preview=True)
     return

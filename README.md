@@ -88,6 +88,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * flightradar24
 * FlightRadarAPI
 * pokebase
+* wikipediaapi
 
 ### Progetti esterni usati
 
@@ -122,6 +123,7 @@ Le spiegazioni sono in Italiano, ma volendo si possono tradurre in qualsiasi lin
 * [FlightRadarAPI](https://github.com/JeanExtreme002/FlightRadarAPI)
 * [Joke API](https://sv443.net/jokeapi/v2/)
 * [PokeAPI Python wrapper](https://github.com/PokeAPI/pokebase)
+* [Another Wikipedia wrapper](https://github.com/martin-majlis/Wikipedia-API)
 
 # **[ENG]**
 
@@ -191,6 +193,7 @@ python3 app.py 2>&1 > /dev/tty1 &
 * flightradar24
 * FlightRadarAPI
 * pokebase
+* wikipediaapi
 
 
 ### External projects used
@@ -201,6 +204,7 @@ python3 app.py 2>&1 > /dev/tty1 &
 * [Covid19 vaccine Italian data](https://github.com/italia/covid19-opendata-vaccini)
 * [Geopy](https://github.com/geopy/geopy)
 * [Wikipedia wrapper](https://github.com/goldsmith/Wikipedia)
+* [Another Wikipedia wrapper](https://github.com/martin-majlis/Wikipedia-API)
 * [Peewee](https://github.com/coleifer/peewee)
 * [wttr.in](https://github.com/chubin/wttr.in)
 * [OpenAI](https://www.openai.com)
