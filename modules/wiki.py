@@ -5,8 +5,8 @@ import utils.get_config as ugc
 import utils.controller as uct
 from bs4 import BeautifulSoup
 
-
-wiki_link_text = ">Guarda su Wikipedia</a>"
+wiki_link_starttext = "<a href="
+wiki_link_endtext = ">Guarda su Wikipedia</a>"
 
 #Restituisce il parametro lingua
 def get_lang(query):
@@ -27,13 +27,13 @@ def get_keyword(query):
 def create_link(keyword,lang):
     wikipedia.set_lang(lang)
     page = wikipedia.page(keyword)
-    link = "<a href="+page.url + wiki_link_text
+    link = wiki_link_starttext + page.url + wiki_link_endtext
     return link
 
 #come sopra ma compatibile con la seconda libreria utilizzata "wikipediaapi"
 def create_link_wikiapi(page):
     url = page.fullurl
-    link = "<a href="+url + wiki_link_text
+    link = wiki_link_starttext + url + wiki_link_endtext
     return link
     
 
@@ -154,6 +154,6 @@ def comune(client,message):
             break
     result = "**" + title + "**" + "\n" + result + "\n\n" + "**" + "Abitanti:** " + "**" + abitanti + "**" + "\n\n__Voci consultate:__ " + str(count)
     title = title.replace(" ","_")
-    link = "<a href="+page.url + wiki_link_text
+    link = wiki_link_starttext + page.url + wiki_link_endtext
     client.edit_message_text(chat,id_messaggio+1,result + "\n" + link,disable_web_page_preview=True)
     return
