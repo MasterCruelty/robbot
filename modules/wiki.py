@@ -6,6 +6,7 @@ import utils.controller as uct
 from bs4 import BeautifulSoup
 
 
+wiki_link_text = ">Guarda su Wikipedia</a>"
 
 #Restituisce il parametro lingua
 def get_lang(query):
@@ -26,13 +27,13 @@ def get_keyword(query):
 def create_link(keyword,lang):
     wikipedia.set_lang(lang)
     page = wikipedia.page(keyword)
-    link = "<a href="+page.url+">Guarda su Wikipedia</a>"
+    link = "<a href="+page.url + wiki_link_text
     return link
 
 #come sopra ma compatibile con la seconda libreria utilizzata "wikipediaapi"
 def create_link_wikiapi(page):
     url = page.fullurl
-    link = "<a href="+url+">Guarda su Wikipedia</a>"
+    link = "<a href="+url + wiki_link_text
     return link
     
 
@@ -73,7 +74,7 @@ def exec_wiki_ita(query,client,message):
 def wiki(keyword,client,message,lang="it"):
    wiki = wikipediaapi.Wikipedia('Robbot (example@ex.com)',lang,extract_format=wikipediaapi.ExtractFormat.WIKI) 
    page = wiki.page(keyword)
-   result = "**" + page.title +"**\n" 
+   result = "**" + page.title.title() +"**\n" 
    result += page.summary[0:300] + "\n" + create_link_wikiapi(page)
    return ugc.sendMessage(client,message,result)
 
@@ -86,7 +87,7 @@ def wikiall(keyword,client,message,lang="it"):
    if "-r" in keyword:
        result = wikirandom(10,client,message,lang)
        return result
-   result = "**" + page.title() + "**\n"
+   result = "**" + page.title.title() + "**\n"
    result += page.text
    result += "\n"+create_link_wikiapi(page)
    return ugc.sendMessage(client,message,result)
@@ -147,6 +148,6 @@ def comune(client,message):
             break
     result = "**" + title + "**" + "\n" + result + "\n\n" + "**" + "Abitanti:** " + "**" + abitanti + "**" + "\n\n__Voci consultate:__ " + str(count)
     title = title.replace(" ","_")
-    link = "<a href="+page.url+">Guarda su Wikipedia</a>"
+    link = "<a href="+page.url + wiki_link_text
     client.edit_message_text(chat,id_messaggio+1,result + "\n" + link,disable_web_page_preview=True)
     return
