@@ -2,6 +2,7 @@
 	"wiki":{
 		"wiki_default":"**/wiki 'keyword'** => ricerca in italiano di default.\n**/wiki 'lang' 'keyword'** => ricerca nella lingua richiesta.\n",
 		"wikiall":"**/wiki all 'keyword'** => ricerca in italiano mostrando 10 paragrafi.\n**/wiki 'lang' all 'keyword'** => ricerca nella lingua richiesta.\n",
+                "wikisection": "**/wiki -s 'keyword' / 'section' ** => restituisce la sezione specifica rispetto alla pagina richiesta. \n <code>/wiki -s Buccinasco / Origini del nome</code>\n",
 		"wikirandom":"**/wiki random** => una pagina casuale in italiano.\n**/wiki 'lang' random** => una pagina casuale nella lingua richiesta.\n",
 		"wikicomune":"**/wiki /comune** => cerca in Wikipedia la pagina di un comune/città/centro abitato/etc.\n"
 	},

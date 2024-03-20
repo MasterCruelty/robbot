@@ -49,6 +49,8 @@ def execute_wiki(query,client,message):
     lingua = get_lang(query)
     if (lingua not in wikipedia.languages()) or lingua == "all":
         return exec_wiki_ita(query,client,message)
+    if "-s" in query:
+        return wikibysection(keyword,client,message,lingua)
     word = get_keyword(query)
     if " all " in query:
         return wikiall(word,client,message,lingua)
@@ -65,6 +67,9 @@ def exec_wiki_ita(query,client,message):
         return wikiall(query,client,message)
     if "-r" in query:
         return wikirandom(1,False,client,message)
+    if "-s" in query:
+        query = uct.parser(query)
+        return wikibysection(query,client,message)
     else:
         return wiki(query,client,message)
 
@@ -74,13 +79,32 @@ def exec_wiki_ita(query,client,message):
 def wiki(keyword,client,message,lang="it"):
    wiki = wikipediaapi.Wikipedia('Robbot (example@ex.com)',lang,extract_format=wikipediaapi.ExtractFormat.WIKI) 
    page = wiki.page(keyword)
+   if not page.exists():
+       return ugc.sendMessage(client,message,"__Page not found.__")
    result = "**" + page.title.title() +"**\n" 
-   try:
-       result += page.summary[0:300] + "\n" + create_link_wikiapi(page)
-   except KeyError:
-       result = "__Pagina non trovata__"
+   result += page.summary[0:300] + "\n" + create_link_wikiapi(page)
+   result += "\n\n**Sezioni:**\n<code>"
+   for item in page.sections:
+       result += item.title + "\n"
+   result += "</code>"
    return ugc.sendMessage(client,message,result)
 
+#Restituisce una sezione specifica della pagina wikipedia ricercata
+def wikibysection(keyword,client,message,lang="it"):
+   page_title, section_title = keyword.split("/")
+   page_title = page_title.strip()
+   section_title = section_title.strip()
+   wiki = wikipediaapi.Wikipedia('Robbot (example@ex.com)',lang,extract_format=wikipediaapi.ExtractFormat.WIKI) 
+   page = wiki.page(page_title)
+   try:
+       section = page.section_by_title(section_title).text
+   except AttributeError:
+        return ugc.sendMessage(client,message,"__Page not found.__")
+   if section != '':
+       result = "**" + page_title + "\n" + section_title + "**\n" + section 
+   else:
+       result = "**" + page_title + "**\n"  + str(page.section_by_title(section_title)).replace("Section:","**").replace("Subsections","**").replace("(1):","**").replace("(2):","**").replace("(0):","")
+   return ugc.sendMessage(client,message,result)
 
 
 #data la lingua e la parola chiave da cercare, restituisce i primi paragrafi della voce trovata
