@@ -96,8 +96,14 @@ def wikibysection(keyword,client,message,lang="it"):
    section_title = section_title.strip()
    wiki = wikipediaapi.Wikipedia('Robbot (example@ex.com)',lang,extract_format=wikipediaapi.ExtractFormat.WIKI) 
    page = wiki.page(page_title)
-   section = page.section_by_title(section_title).text
-   result = "**" + page_title + "\n" + section_title + "**\n" + section 
+   try:
+       section = page.section_by_title(section_title).text
+   except AttributeError:
+        return ugc.sendMessage(client,message,"__Page not found.__")
+   if section != '':
+       result = "**" + page_title + "\n" + section_title + "**\n" + section 
+   else:
+       result = "**" + page_title + "**\n"  + str(page.section_by_title(section_title)).replace("Section:","**").replace("Subsections","**").replace("(1):","**").replace("(2):","**").replace("(0):","")
    return ugc.sendMessage(client,message,result)
 
 
