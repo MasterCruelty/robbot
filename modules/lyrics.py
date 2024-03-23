@@ -105,6 +105,8 @@ def format_input(string):
     string = string.replace("-","")
     return string
 
+not_found = "404: page not found"
+
 """
 Questa funzione cattura ogni eventuale eccezione derivata da richiesta http errata a azlyrics.com 
 Funzione ausiliaria di get_lyrics_formated
@@ -113,7 +115,7 @@ def handle_except(url):
     try:
         page = urllib.request.urlopen(url)
     except:
-        result = "404: page not found"
+        result = not_found
         return result
     return page
 
