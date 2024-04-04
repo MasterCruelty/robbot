@@ -399,6 +399,48 @@ def check_group_command(match,message):
     else:
         return False
 
+##############################################################    
+#### FUNZIONI LEGATE ALLA GESTIONE DELLE FERMATE ATM SALVATE
+##############################################################    
+from modules.atm_feature import get_json_atm,handle_except
+
+"""
+    Salva sul db una fermata atm preferita dando solo il codice fermata.
+    Sulla tabella viene salvato il codice fermata indicato e una descrizione.
+    La descrizione contiene i numeri di linea che passano e le loro direzioni.
+"""
+def save_stop(client,message,query):
+    resp = get_json_atm(query)
+    data_json = handle_except(resp)
+    if str(data_json).startswith("404") or "riprova tra poco" in str(data_json):
+        return sendMessage(client,message,"__Non è stato possibile salvare la fermata.__")
+    descrizione = data_json["Description"]
+    Lines = data_json["Lines"]
+    line_code, line_description = ([] for i in range(2))
+    for item in Lines:
+        Line = item["Line"]
+        line_code.append(Line["LineCode"])
+        line_description.append(Line["LineDescription"])
+    stop_info = "**" + descrizione + "**" + "\n"
+    for i in range(len(line_code)):
+        stop_info += "__" + line_code[i] + " " + line_description[i] + "__\n**############**\n"
+    stop_info += "\n"
+
+    #query sql insert  
+    insert_sql = AtmFavStops(id_user = get_id_user(message), favstop_code= query, favstop_info = stop_info)  
+    try:
+        insert_sql.save()
+    except:
+        return sendMessage(client,message,"__Questa fermata è già salvata tra le tue preferite.__")
+    return sendMessage(client,message,"__La fermata con codice __"+str(query)+"__ è stata salvata.") 
+
+"""
+    Restituisce le proprie fermate preferite sotto forma di messaggio.
+    Così da poter essere consultate velocemente e usare quella che serve.
+"""
+def get_stop(client,message,query):
+
+def delete_stop(client,message,query):
 
 ##############################################################    
 #### FUNZIONI LEGATE ALLA GESTIONE DEGLI UTENTI SALVATI SUL DB
