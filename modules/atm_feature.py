@@ -84,9 +84,12 @@ def get_stop_info(stop_code,client=None,message=None):
         checkT = True
     resp = get_json_atm(stop_code)
     data_json = handle_except(resp)
+    
     #############################
-    sendMessage(client,message,data_json)
+    #In caso di malfunzionamento del comando, provare a de-commentare la riga seguente
+    #sendMessage(client,message,data_json)
     #############################
+    
     if str(data_json).startswith("404") or "riprova tra poco" in str(data_json):
         return sendMessage(client,message,data_json)
     descrizione = data_json["Description"]
