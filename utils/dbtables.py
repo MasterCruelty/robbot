@@ -40,12 +40,12 @@ class Stats(BaseModel):
 
 """
     favstop_code: codice fermata
-    favstop_title: Nome della fermata
+    favstop_lines_info: Nome della fermata
 """
 class AtmFavStops(BaseModel):
     id_user = ForeignKeyField(User)
-    favstop_code = CharField()
-    favstop_title = CharField()
+    favstop_code = CharField(unique=True)
+    favstop_lines_info = CharField()
 
 """
     category: categoria di domanda
