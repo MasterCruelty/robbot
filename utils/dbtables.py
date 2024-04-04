@@ -39,6 +39,15 @@ class Stats(BaseModel):
     times = IntegerField(default = 0)
 
 """
+    favstop_code: codice fermata
+    favstop_lines_info: Nome della fermata
+"""
+class AtmFavStops(BaseModel):
+    id_user = ForeignKeyField(User)
+    favstop_code = CharField(unique=True)
+    favstop_lines_info = CharField()
+
+"""
     category: categoria di domanda
     points: numero di punti acquisiti
 """
@@ -80,7 +89,7 @@ class OpenAICredit(BaseModel):
 
 
 db.connect()
-db.create_tables([User,Stats,Trivial,Group,TrivialSavedData,OpenAICredit])
+db.create_tables([User,Stats,Trivial,Group,TrivialSavedData,OpenAICredit,AtmFavStops])
 
 #Inizializzo il super admin da file di configurazione
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)
