@@ -427,7 +427,7 @@ def save_stop(client,message,query):
     stop_info += "\n"
 
     #query sql insert  
-    insert_sql = AtmFavStops(id_user = get_id_user(message), favstop_code= query, favstop_info = stop_info)  
+    insert_sql = AtmFavStops(id_user = get_id_user(message), favstop_code= query, favstop_lines_info = stop_info)  
     try:
         insert_sql.save()
     except:
@@ -453,7 +453,7 @@ def get_stop(client,message,query):
         return sendMessage(client,message,"__Nessuna fermata salvata.__")
     #building result string
     for item in query_sql:
-        result += item.favstop_code + "\n" + favstop_info + "\n---------------"
+        result += item.favstop_code + "\n" + favstop_lines_info + "\n---------------"
     return sendMessage(client,message,result)
 
 """
