@@ -39,6 +39,15 @@ class Stats(BaseModel):
     times = IntegerField(default = 0)
 
 """
+    favstop_code: codice fermata
+    favstop_title: Nome della fermata
+"""
+class AtmFavStops(BaseModel):
+    id_user = ForeignKeyField(User)
+    favstop_code = CharField()
+    favstop_title = CharField()
+
+"""
     category: categoria di domanda
     points: numero di punti acquisiti
 """
