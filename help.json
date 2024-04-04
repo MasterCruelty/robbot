@@ -15,7 +15,8 @@
 		"intro":"__Features disponibili per il trasporto pubblico di Milano__\n",
 		"atm_default":"**/atm 'stop_code'** => restituisce i dati relativi alla fermata associata al codice inserito.\n**Per le stazioni metropolitane non vi è un valore per il tempo d'attesa, verrà inviata la tabella degli orari come immagine.**\nSe si desidera la tabella degli orari anche per una fermata in particolare, aggiungere l'opzione -t al comando.\nEsempio: <code>/atm -t 13200</code>\n\n",
 		"geoatm":"**/geoatm 'stop_code'** => restituisce la posizione dell'oggetto atm associato al codice fermata inserito\n\n",
-		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__\n"
+		"searchatm":"**/searchatm 'address'**  => Restituisce tutte le fermate trovate con quell'indirizzo.\n__/searchatm via vigevano__\n",
+                "save_atm" : "**/saveatm 11187 ** => Salva la fermata 11187 tra le preferite.\n**/getatm** => Visualizza le fermate preferite.\n**/delatm 11187** => Cancella la fermata 11187 dalle fermate preferite."
 	},
 	"tper":{
 		"intro":"__Features disponibili per il trasporto pubblico in quasi tutta la Regione Emilia-Romagna.__\n",
