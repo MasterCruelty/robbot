@@ -409,7 +409,7 @@ from modules.atm_feature import get_json_atm,handle_except
     Sulla tabella viene salvato il codice fermata indicato e una descrizione.
     La descrizione contiene i numeri di linea che passano e le loro direzioni.
 """
-def save_stop(client,message,query):
+def save_stop(query,client,message):
     resp = get_json_atm(query)
     data_json = handle_except(resp)
     if str(data_json).startswith("404") or "riprova tra poco" in str(data_json):
@@ -423,7 +423,7 @@ def save_stop(client,message,query):
         line_description.append(Line["LineDescription"])
     stop_info = "**" + descrizione + "**" + "\n"
     for i in range(len(line_code)):
-        stop_info += "__Codice fermata: " + line_code[i] + "\nDirezione: " + line_description[i] + "__\n**############**\n"
+        stop_info += "__Linea: " + line_code[i] + "\nDirezione: " + line_description[i] + "__\n"
     stop_info += "\n"
 
     #query sql insert  
@@ -438,7 +438,7 @@ def save_stop(client,message,query):
     Restituisce le proprie fermate preferite sotto forma di messaggio.
     Così da poter essere consultate velocemente e usare quella che serve.
 """
-def get_stop(client,message,query):
+def get_stop(query,client,message):
     id_utente = get_id_user(message)
     result = "Le tue fermate preferite:\n"
     query_sql = (AtmFavStops
@@ -453,14 +453,18 @@ def get_stop(client,message,query):
         return sendMessage(client,message,"__Nessuna fermata salvata.__")
     #building result string
     for item in query_sql:
-        result += item.favstop_code + "\n" + favstop_lines_info + "\n---------------"
+        result += "\n__CODICE FERMATA: " + item.favstop_code + "__\n" + item.favstop_lines_info
+        result += "Puoi Digitare <code>/atm " + item.favstop_code + "</code>\n\n"
     return sendMessage(client,message,result)
 
 """
     Elimina una fermata atm tra quelle salvate dando il codice fermata
 """
-def delete_stop(client,message,query):
-    AtmFavStops.delete().where(AtmFavStops.favstop_code == query).execute()
+def delete_stop(query,client,message):
+    try:
+        AtmFavStops.delete().where(AtmFavStops.favstop_code == query).execute()
+    except:
+        return sendMessage(client,message,"__Non esiste nessuna fermata salvata con questo codice.__")
     return sendMessage(client,message,"__Fermata con codice " + query + " eliminata.")
 
 
