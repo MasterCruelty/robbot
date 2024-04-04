@@ -423,7 +423,7 @@ def save_stop(client,message,query):
         line_description.append(Line["LineDescription"])
     stop_info = "**" + descrizione + "**" + "\n"
     for i in range(len(line_code)):
-        stop_info += "__" + line_code[i] + " " + line_description[i] + "__\n**############**\n"
+        stop_info += "__Codice fermata: " + line_code[i] + "\nDirezione: " + line_description[i] + "__\n**############**\n"
     stop_info += "\n"
 
     #query sql insert  
@@ -439,8 +439,31 @@ def save_stop(client,message,query):
     Così da poter essere consultate velocemente e usare quella che serve.
 """
 def get_stop(client,message,query):
+    id_utente = get_id_user(message)
+    result = "Le tue fermate preferite:\n"
+    query_sql = (AtmFavStops
+                 .select()
+                 .join(User, on=(User.id_user == AtmFavStops.id_user))
+                 .where(AtmFavStops.id_user == id_utente))
+    #check if there's at least a record
+    i = 0
+    for _ in query_sql:
+        i = i + 1
+    if i == 0:
+        return sendMessage(client,message,"__Nessuna fermata salvata.__")
+    #building result string
+    for item in query_sql:
+        result += item.favstop_code + "\n" + favstop_info + "\n---------------"
+    return sendMessage(client,message,result)
 
+"""
+    Elimina una fermata atm tra quelle salvate dando il codice fermata
+"""
 def delete_stop(client,message,query):
+    AtmFavStops.delete().where(AtmFavStops.favstop_code == query).execute()
+    return sendMessage(client,message,"__Fermata con codice " + query + " eliminata.")
+
+
 
 ##############################################################    
 #### FUNZIONI LEGATE ALLA GESTIONE DEGLI UTENTI SALVATI SUL DB
