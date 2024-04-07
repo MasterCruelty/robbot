@@ -112,18 +112,16 @@ def get_stop_info(stop_code,client=None,message=None):
         result += line_code[i] + " " + line_description[i] + ": " + "**" + wait_time[i] + "**" + "\n"
     result += "\n"
     for i in range(len(line_code)):
-        time_table[i] = check_none(time_table[i]
-                )
+        time_table[i] = check_none(time_table[i])
         #Se non c'è il tempo d'attesa, mando gli orari del pdf come immagine
         if wait_time[i] == not_available and time_table[i] != not_available:
             #scarico gli orari con una get, poi converto in immagine in memory senza scrivere su disco con get_time_table definita qui sopra
             pdf_url = time_table[i]
+            sendMessage(client,message,"__WaitTime non disponibile, inviando la tabella degli orari tra una manciata di secondi...__")
             get_time_table(client,message,pdf_url)
             #stringa da restituire così che la funzione send_stop_info sappia che è già stata mandata la tabella degli orari come immagine
             return pdfimage
-        
         result += "Orari linea " + line_code[i] + ": " + time_table[i] + "\n"
-    
     return result
 
 """
