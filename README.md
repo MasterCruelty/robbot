@@ -32,6 +32,7 @@ Per un corretto funzionamento è necessario compilare a dovere il file ```config
 * Api url atm se si vogliono usare le loro api: ```api_url``` , ```api_get``` e ```cookie```. (Non essendo pubbliche non le condividerò)
 * Api key di OpenWeatherMap: ```api_weather```. Puoi generare la tua key dal sito principale di [OpenWeatherMap](https://openweathermap.org/)
 * Api di OpenAI: ```api_openai```. Puoi generare la tua key dal sito principale di [OpenAI](https://www.openai.com)
+* Unsplash Access Key: ```unsplash_key```. Puoi generare la tua personale creando un'applicazione su [unsplash.com](https://www.unsplash.com)
 * I dati telegram dell'amministratore del bot: ```id_super_admin```.
 * Il percorso dove si trova il file .db: ```path_db```.
 * Nome della sessione: ```session_name```.
@@ -137,6 +138,7 @@ The correct way to setup this bot is to compile the file  ```config.json```. So 
 * Atm api url if you wanna use their api: ```api_url``` , ```api_get``` and ```cookie```. (The api are not public so I won't share them here)
 * OpenWeatherMap api key: ```api_weather```. You can generate your key from the [OpenWeatherMap website.](https://openweathermap.org/)
 * OpenAI api key: ```api_openai```. You can generate your key from the [OpenAI](https://www.openai.com) website.
+* Unsplash Access Key: ```unsplash_key```. You can generate yours by creating an application on [unsplash.com](https://www.unsplash.com)
 * Telegram data of the owner of the bot: ```id_super_admin```.
 * The path where is the .db file: ```path_db```.
 * The session name: ```session_name```.
