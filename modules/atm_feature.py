@@ -15,10 +15,22 @@ config = get_config_file("config.json")
 api_url = config["api_url"]
 api_get = config["api_get"]
 cookie = config["cookie"]
-headers = { "Origin": "https://giromilano.atm.it",
-            "Referer": "https://giromilano.atm.it/",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"
-          }
+cookie_parts = cookie.split("=")
+cookie = {cookie_parts[0]: cookie_parts[1]}
+headers = {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "it-IT,it;q=0.9,de-DE;q=0.8,de;q=0.7,en-US;q=0.6,en;q=0.5",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-CH-UA": '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+    "Sec-CH-UA-Mobile": "?0",
+    "Sec-CH-UA-Platform": '"Windows"',
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1"
+}
 cookies = {'cookie_name': cookie}
 
 #strighe costanti da usare in certe situazioni
@@ -182,9 +194,11 @@ def geodata_stop(stop_code,client,message):
 Fa la richiesta al server atm e restituisce il json corrispondente.
 """
 def get_json_atm(stop_code):
-    data = {"url": "tpPortal/geodata/pois/stops/" + stop_code + "?lang=it".format()}
+    url = api_url + 'tpPortal/geodata/pois/stops/' + stop_code
+    #data = {"url": "tpPortal/geodata/pois/stops/" + stop_code + "?lang=it".format()}
     try:
-        resp = requests.post(api_url,data = data,headers = headers,cookies = cookies)
+        #resp = requests.post(api_url,data = data,headers = headers,cookies = cookies)
+        resp = requests.get(url,headers=headers,cookies=cookie)
     except requests.exceptions.ConnectionError as e:
         return "__Troppe richieste, riprova tra poco.__"
     return resp
@@ -193,10 +207,12 @@ def get_json_atm(stop_code):
 cerca qualsiasi fermata esistente a partire da un indirizzo
 """
 def search_stop(query):
-    data = {"url": "tpPortal/tpl/stops/search/" + query + "".format()}
+    url = api_url + 'tpPortal/tpl/stops/' + stop_code
+    #data = {"url": "tpPortal/tpl/stops/search/" + query + "".format()}
     stops = []
     try:
-        for stop in (requests.post(api_url,data = data,headers = headers,cookies=cookies)).json():
+        #for stop in (requests.post(api_url,data = data,headers = headers,cookies=cookies)).json():
+        for stop in (requests.get(url,headers=headers)).json():
             stops.append(stop)
     except:
         result = "__Nessuna fermata trovata.__"
