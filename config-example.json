@@ -7,6 +7,7 @@
 	"cookie": "cookie atm",
 	"api_weather":"OPEN WEATHER MAP API",
 	"api_openai":"OPENAI API KEY",
+        "unsplash_key":"YOUR UNSPLASH ACCESS KEY",
 	"id_super_admin": "ID_USER;NAME_USER;USERNAME_USER",
 	"path_db":"YOUR PATH/DATABASE.db",
 	"session_name":"YOUR SESSION NAME",
