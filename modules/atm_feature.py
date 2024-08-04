@@ -207,12 +207,12 @@ def get_json_atm(stop_code):
 cerca qualsiasi fermata esistente a partire da un indirizzo
 """
 def search_stop(query):
-    url = api_url + 'tpPortal/tpl/stops/' + stop_code
+    url = api_url + 'tpPortal/tpl/stops/search/' + query
     #data = {"url": "tpPortal/tpl/stops/search/" + query + "".format()}
     stops = []
     try:
         #for stop in (requests.post(api_url,data = data,headers = headers,cookies=cookies)).json():
-        for stop in (requests.get(url,headers=headers)).json():
+        for stop in (requests.get(url,headers=headers,cookies=cookie)).json():
             stops.append(stop)
     except:
         result = "__Nessuna fermata trovata.__"
