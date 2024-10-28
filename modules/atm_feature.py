@@ -130,10 +130,12 @@ def get_stop_info(stop_code,client=None,message=None):
             #scarico gli orari con una get, poi converto in immagine in memory senza scrivere su disco con get_time_table definita qui sopra
             pdf_url = time_table[i]
             sendMessage(client,message,"__WaitTime non disponibile, inviando la tabella degli orari tra una manciata di secondi...__")
+            checkT = True
             get_time_table(client,message,pdf_url)
             #stringa da restituire così che la funzione send_stop_info sappia che è già stata mandata la tabella degli orari come immagine
-            return pdfimage
         result += "Orari linea " + line_code[i] + ": " + time_table[i] + "\n"
+    if checkT == True:
+        return pdfimage
     return result
 
 """
