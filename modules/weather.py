@@ -29,7 +29,7 @@ def call_api_weather(query):
         return coordinates
     lat = coordinates[0]
     lon = coordinates[1]
-    url = "https://api.openweathermap.org/data/2.5/onecall?lat=%s&lon=%s&lang=it&appid=%s&units=metric" %(lat,lon,api_weather)
+    url = "https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&lang=it&appid=%s&units=metric" %(lat,lon,api_weather)
     response = requests.get(url)
     data = json.loads(response.text)
     return data
@@ -74,17 +74,17 @@ def get_weather(query,client,message):
     if("404:" in str(data)):
         return sendMessage(client,message,data)
     data_air = call_api_airPollution(query)
-    current_temp = str(data["current"]["temp"])
-    feels_temp = str(data["current"]["feels_like"])
-    umidita = str(data["current"]["humidity"]) # % of umidity
-    clouds = str(data["current"]["clouds"])    # % of cloudiness
-    visibility = str(data["current"]["visibility"]) # Visibility in metres
-    wind_speed = data["current"]["wind_speed"] * 3.6 #speed in m/s
+    current_temp = str(data["main"]["temp"])
+    feels_temp = str(data["main"]["feels_like"])
+    umidita = str(data["main"]["humidity"]) # % of umidity
+    clouds = str(data["clouds"])    # % of cloudiness
+    visibility = str(data["visibility"]) # Visibility in metres
+    wind_speed = data["wind"]["speed"] * 3.6 #speed in m/s
     wind_speed = str(round(wind_speed,2))
-    weather = data["current"]["weather"][0]["description"]
+    weather = data["weather"][0]["description"]
     #sunrise and sunset UNIX time
-    sunset = data["current"]["sunset"]
-    sunrise = data["current"]["sunrise"]
+    sunset = data["sys"]["sunset"]
+    sunrise = data["sys"]["sunrise"]
     #Conversion to Europe/Rome timezone
     sunset = str(dt.fromtimestamp(sunset, pytz.timezone('Europe/Rome')))[10:]
     sunrise = str(dt.fromtimestamp(sunrise, pytz.timezone('Europe/Rome')))[10:]
@@ -94,7 +94,7 @@ def get_weather(query,client,message):
     pm10 = str(data_air["list"][0]["components"]["pm10"]) + " μg/m3  [Limite soglia giornaliera = 50 μg/m3]"
     pm25 = str(data_air["list"][0]["components"]["pm2_5"]) + " μg/m3  [Limite annuo = 25 μg/m3]"
     #Result string
-    result = "**" + query.title() + "**" + "\n**Meteo:** __" + weather + "__\n**Temperatura attuale:** __" + current_temp + " C°__.\n**Temperatura percepita:** __" + feels_temp + " C°__.\n**Umidità:** __" + umidita + "%__.\n**Nuvole:** __" + clouds + "%__.\n**Visibilità:** __" + visibility + " metri__.\n**Velocità del vento:** __" + wind_speed + " km/h__.\n**Ora alba:** __" + sunrise + "__\n**Ora tramonto:** __" + sunset + "__\n\n**Qualità dell'aria:** __" + air_quality + "__\n**PM10:** __" + pm10 + "__\n**PM2.5:** __" + pm25 + "__"
+    result = "**" + data["name"] + "**" + "\n**Meteo:** __" + weather + "__\n**Temperatura attuale:** __" + current_temp + " C°__.\n**Temperatura percepita:** __" + feels_temp + " C°__.\n**Umidità:** __" + umidita + "%__.\n**Nuvole:** __" + clouds + "%__.\n**Visibilità:** __" + visibility + " metri__.\n**Velocità del vento:** __" + wind_speed + " km/h__.\n**Ora alba:** __" + sunrise + "__\n**Ora tramonto:** __" + sunset + "__\n\n**Qualità dell'aria:** __" + air_quality + "__\n**PM10:** __" + pm10 + "__\n**PM2.5:** __" + pm25 + "__"
     return sendMessage(client,message,result)
 
 
