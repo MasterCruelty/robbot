@@ -14,7 +14,10 @@ def get_pokemon_info(query,client,message):
     # Ottieni informazioni sul Pokémon
     pokemon = pokebase.pokemon(query.lower())
     # Ottieni informazioni aggiuntive
-    species = pokebase.pokemon_species(pokemon.id)
+    try:
+        species = pokebase.pokemon_species(pokemon.id)
+    except AttributeError:
+        return sendMessage(client,message,"__No pokémon found.__")
     abilities = [ability.ability.name for ability in pokemon.abilities]
     location_urls = [encounter.location_area.url for encounter in pokemon.location_area_encounters]
     types_name = [item.type.name for item in pokemon.types]

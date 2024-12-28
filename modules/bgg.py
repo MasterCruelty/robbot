@@ -80,4 +80,7 @@ def search_board_game(query,client,message):
     for match in matches:
         object_id, name, year_published = match
         result += f"**Titolo**: __{name}__\n**Anno**: __{year_published}__\n**ID**: <code>{object_id}</code>\n" + "\n"
+        if len(result) >= 4096:
+            sendMessage(client,message,result)
+            result = ""
     return sendMessage(client,message,result)

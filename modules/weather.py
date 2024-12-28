@@ -29,7 +29,21 @@ def call_api_weather(query):
         return coordinates
     lat = coordinates[0]
     lon = coordinates[1]
-    url = "https://api.openweathermap.org/data/2.5/onecall?lat=%s&lon=%s&lang=it&appid=%s&units=metric" %(lat,lon,api_weather)
+    url = "https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&lang=it&appid=%s&units=metric" %(lat,lon,api_weather)
+    response = requests.get(url)
+    data = json.loads(response.text)
+    return data
+
+"""
+    Support function which call api for forecasts
+"""
+def call_api_weather_forecast(query):
+    coordinates = showmaps(query,"client","message") #showmaps will raise an exception and return only coordinates
+    if("404:" in str(coordinates)):
+        return coordinates
+    lat = coordinates[0]
+    lon = coordinates[1]
+    url ="https://api.openweathermap.org/data/2.5/forecast?lat=%s&lon=%s&lang=it&appid=%s&units=metric" %(lat,lon,api_weather)
     response = requests.get(url)
     data = json.loads(response.text)
     return data
@@ -74,17 +88,25 @@ def get_weather(query,client,message):
     if("404:" in str(data)):
         return sendMessage(client,message,data)
     data_air = call_api_airPollution(query)
-    current_temp = str(data["current"]["temp"])
-    feels_temp = str(data["current"]["feels_like"])
-    umidita = str(data["current"]["humidity"]) # % of umidity
-    clouds = str(data["current"]["clouds"])    # % of cloudiness
-    visibility = str(data["current"]["visibility"]) # Visibility in metres
-    wind_speed = data["current"]["wind_speed"] * 3.6 #speed in m/s
+    current_temp = str(data["main"]["temp"])
+    feels_temp = str(data["main"]["feels_like"])
+    umidita = str(data["main"]["humidity"]) # % of umidity
+    clouds = str(data["clouds"])    # % of cloudiness
+    visibility = str(data["visibility"]) # Visibility in metres
+    wind_speed = data["wind"]["speed"] * 3.6 #speed in m/s
     wind_speed = str(round(wind_speed,2))
-    weather = data["current"]["weather"][0]["description"]
+    #get rain/snow mm/h if available
+    rain = "0 mm/h"
+    snow = "0 mm/h"
+    try:
+        rain = str(data["rain"]["1h"])
+        snow = str(data["snow"]["1h"])
+    except:
+        print("pioggia non presente")
+    weather = data["weather"][0]["description"]
     #sunrise and sunset UNIX time
-    sunset = data["current"]["sunset"]
-    sunrise = data["current"]["sunrise"]
+    sunset = data["sys"]["sunset"]
+    sunrise = data["sys"]["sunrise"]
     #Conversion to Europe/Rome timezone
     sunset = str(dt.fromtimestamp(sunset, pytz.timezone('Europe/Rome')))[10:]
     sunrise = str(dt.fromtimestamp(sunrise, pytz.timezone('Europe/Rome')))[10:]
@@ -94,7 +116,11 @@ def get_weather(query,client,message):
     pm10 = str(data_air["list"][0]["components"]["pm10"]) + " μg/m3  [Limite soglia giornaliera = 50 μg/m3]"
     pm25 = str(data_air["list"][0]["components"]["pm2_5"]) + " μg/m3  [Limite annuo = 25 μg/m3]"
     #Result string
-    result = "**" + query.title() + "**" + "\n**Meteo:** __" + weather + "__\n**Temperatura attuale:** __" + current_temp + " C°__.\n**Temperatura percepita:** __" + feels_temp + " C°__.\n**Umidità:** __" + umidita + "%__.\n**Nuvole:** __" + clouds + "%__.\n**Visibilità:** __" + visibility + " metri__.\n**Velocità del vento:** __" + wind_speed + " km/h__.\n**Ora alba:** __" + sunrise + "__\n**Ora tramonto:** __" + sunset + "__\n\n**Qualità dell'aria:** __" + air_quality + "__\n**PM10:** __" + pm10 + "__\n**PM2.5:** __" + pm25 + "__"
+    result = "**" + data["name"] + "**" + "\n**Meteo:** __" + weather + "__\n**Temperatura attuale:** __" + current_temp + " C°__.\n**Temperatura percepita:** __" + feels_temp + " C°__.\n**Umidità:** __" + umidita + "%__.\n**Nuvole:** __" + clouds + "%__.\n**Visibilità:** __" + visibility + " metri__.\n**Velocità del vento:** __" + wind_speed + " km/h__.\n**Ora alba:** __" + sunrise + "__\n**Ora tramonto:** __" + sunset + "__\n\n**Qualità dell'aria:** __" + air_quality + "__\n**PM10:** __" + pm10 + "__\n**PM2.5:** __" + pm25 + "__"
+    if rain != "0 mm/h":
+        result +="\n\n**Pioggia:**  __" + rain + " mm/h.__"
+    elif snow != "0 mm/h":
+        result +="\n\n**Neve:** __" + snow + " mm/h.__"
     return sendMessage(client,message,result)
 
 
@@ -108,33 +134,29 @@ global k1 #indice globale per gestire gli elementi di pages da restituire premen
 def get_today_forecasts(query,client,message):
     global pages_t
     global k1
-    data = call_api_weather(query)
-    array_hourly = data["hourly"]
-    today = date.today()
-    today = str(today.strftime("%Y-%m-%d"))
-    result = "**" + query.title() + "** __" + str(today) + "__\n\n"
+    data = call_api_weather_forecast(query)
+    array_data = data["list"]
     pages_t = []
     z = 0 #variabile ausiliaria locale per popolare pages
     
 
     #Costruisco la stringa formattata e popolo la globale pages 
-    for item in array_hourly:
-        giorno = str(dt.fromtimestamp(item["dt"],pytz.timezone('Europe/Rome')))
-        if(giorno[0:10] != today):
-            break
-        giorno = giorno[10:]
-        temp = str(item["temp"]) + " C°"
-        feels_temp = str(item["feels_like"]) + " C°"
-        clouds = str(item["clouds"]) + "%"
+    for item in array_data:
+        #giorno = str(dt.fromtimestamp(item["dt"],pytz.timezone('Europe/Rome')))
+        giorno = item["dt_txt"]
+        temp = str(item["main"]["temp"]) + " C°"
+        feels_temp = str(item["main"]["feels_like"]) + " C°"
+        temp_min = str(item["main"]["temp_min"])+ " C°"
+        temp_max = str(item["main"]["temp_max"])+ " C°"
+        wind = item["wind"]["speed"] * 3.6 #speed in m/s
+        wind = str(round(wind,2))
         weather = item["weather"][0]["description"]
-        result += giorno + "\n**Meteo:** __" + weather + "__\n**Temperatura:** __" + temp + "__\n**Temperatura percepita:** __" + feels_temp + "__\n**Nuvole:** __" + clouds + "__\n##################\n\n" 
+        result = giorno + "\n**Meteo:** __" + weather + "__\n**Velocità vento:** __" + wind + " km/h.__\n**Temperatura:** __" + temp + "__\n**Temperatura percepita:** __" + feels_temp + "__\n**Temp minima:** __" + temp_min + "__\n**Temp massima:** __" + temp_max + "__\n##################\n\n" 
         z = z + 1
         if(z % 2 == 0):
             pages_t.append(result)
-            result = "**" + query.title() + "** __" + str(today) + "__\n\n"
         elif("23" in giorno):
             pages_t.append(result)
-            result = "**" + query.title() + "** __" + str(today) + "__\n\n"
 
 
     
@@ -162,68 +184,6 @@ def press_forecastoday(client,message):
         message.edit_message_text("__Fine__")
 
 
-"""
-    Json ottenuto in modo analogo a "get_weather" e vengono rilasciati i dati meteo principali della settimana che verrà.
-"""
-global pages_f
-global k2
-@Client.on_message()
-def get_future_forecasts(query,client,message):
-    global pages_f
-    global k2
-    data = call_api_weather(query)
-    array_daily = data["daily"]
-    result = "**" + query.title() + "**\n\n"
-    pages_f = []
-    for item in array_daily:
-        giorno = str(dt.fromtimestamp(item["dt"],pytz.timezone('Europe/Rome')))[0:10]
-        sunset = str(dt.fromtimestamp(item["sunset"], pytz.timezone('Europe/Rome')))[10:]
-        sunrise = str(dt.fromtimestamp(item["sunrise"], pytz.timezone('Europe/Rome')))[10:]
-        morning = str(item["temp"]["morn"]) + " C°"
-        day = str(item["temp"]["day"]) + " C°"
-        evening = str(item["temp"]["eve"]) + " C°"
-        night = str(item["temp"]["night"]) + " C°"
-        feels_morning = str(item["feels_like"]["morn"]) + " C°"
-        feels_day = str(item["feels_like"]["day"]) + " C°"
-        feels_evening = str(item["feels_like"]["eve"]) + " C°"
-        feels_night = str(item["feels_like"]["night"]) + " C°"
-        temp_min = str(item["temp"]["min"])+ " C°"
-        temp_max = str(item["temp"]["max"])+ " C°"
-        umidita = str(item["humidity"]) + "%" # % of umidity
-        wind_speed = item["wind_speed"] * 3.6 #speed in m/s
-        wind_speed = str(round(wind_speed,2))
-        clouds = str(item["clouds"]) + "%"
-        weather = item["weather"][0]["description"]
-        result += "**__" + giorno + "**__\n**Meteo:** __" + weather + "__\n**Temperatura reale/percepita\n\nMattina:** __" + morning + " / " + feels_morning + "__\n**Giorno:** __" + day + " / " + feels_day + "__\n**Sera:** __" +  evening + " / " + feels_evening + "\n**Notte:** __" + night + " / " + feels_night + "\n**Minima:** __" + temp_min + "__\n**Massima:** __" + temp_max + "__\n**Umidità:** __" + umidita + "__\n**Velocità del vento:** __" + wind_speed + " km/h__\n**Nuvole:** __" + clouds + "__\n--**#################**--\n\n"
-        pages_f.append(result)
-        result = "**" + query.title() + "**\n\n"
-    
-
-    #Tiro su la tastiera e aggiungo l'handler
-    kb = InlineKeyboardMarkup([[
-        InlineKeyboardButton("Prossimo giorno",callback_data="forecastFuture")]])
-    client.add_handler(CallbackQueryHandler(callback=press_forecastfuture,filters=filters.regex("forecastFuture")))
-    k2 = 0
-    client.send_message(get_chat(message),pages_f[k2],reply_markup=kb,reply_to_message_id=get_id_msg(message))
-
-
-"""
-    Funzione che viene chiamata quando è premuto il bottone associato alla funzione get_future_forecasts.
-    A ogni pressione si scorrono le pagine ovvero gli elementi contenuti nella variabile globale pages.
-"""
-@Client.on_callback_query(filters = filters.regex("forecastFuture"))
-def press_forecastfuture(client,message):
-    print("Giro pagine in /forecastfuture")
-    global k2
-    if k2 < len(pages_f)-1:
-        k2 = k2 + 1
-        kb = InlineKeyboardMarkup([[
-            InlineKeyboardButton("Prossimo giorno",callback_data="forecastFuture")]])
-        message.edit_message_text(pages_f[k2],reply_markup=kb)
-    else:
-        message.edit_message_text("__Fine__")
-
-    
 
 """
 Data una richiesta, restituisce l'immagine della mappa corrispondente con il meteo attuale offerto da wttr.in
