@@ -81,6 +81,14 @@ def get_weather(query,client,message):
     visibility = str(data["visibility"]) # Visibility in metres
     wind_speed = data["wind"]["speed"] * 3.6 #speed in m/s
     wind_speed = str(round(wind_speed,2))
+    #get rain/snow mm/h if available
+    rain = "0 mm/h"
+    snow = "0 mm/h"
+    try:
+        rain = str(data["rain"]["1h"])
+        snow = str(data["snow"]["1h"])
+    except AttributeError:
+        print("pioggia non presente")
     weather = data["weather"][0]["description"]
     #sunrise and sunset UNIX time
     sunset = data["sys"]["sunset"]
@@ -95,6 +103,10 @@ def get_weather(query,client,message):
     pm25 = str(data_air["list"][0]["components"]["pm2_5"]) + " μg/m3  [Limite annuo = 25 μg/m3]"
     #Result string
     result = "**" + data["name"] + "**" + "\n**Meteo:** __" + weather + "__\n**Temperatura attuale:** __" + current_temp + " C°__.\n**Temperatura percepita:** __" + feels_temp + " C°__.\n**Umidità:** __" + umidita + "%__.\n**Nuvole:** __" + clouds + "%__.\n**Visibilità:** __" + visibility + " metri__.\n**Velocità del vento:** __" + wind_speed + " km/h__.\n**Ora alba:** __" + sunrise + "__\n**Ora tramonto:** __" + sunset + "__\n\n**Qualità dell'aria:** __" + air_quality + "__\n**PM10:** __" + pm10 + "__\n**PM2.5:** __" + pm25 + "__"
+    if rain != "0 mm/h":
+        result +="\n\n**Pioggia:**  __" + rain + " mm/h.__"
+    elif snow != "0 mm/h":
+        result +="\n\n**Neve:** __" + snow + " mm/h.__"
     return sendMessage(client,message,result)
 
 
